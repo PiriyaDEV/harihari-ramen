@@ -2,16 +2,18 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import {BrowserRouter} from 'react-router-dom';
-//Component
-// import TableQR from '../src/components/TableQR.js';
 
-//CSS
-import './css/index.css';
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+import postReducer from './reducers/postReducer'
+const store = createStore(postReducer);
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      <Provider store={store}>
+        <App />
+      </Provider >
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
