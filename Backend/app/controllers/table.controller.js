@@ -12,6 +12,7 @@ exports.generate = (req, res) => {
   Table.create(table, (err, result) => {
     if (err) {
       return res.status(500).json({
+        success: false,
         message: err.message || "Failed creating a new table",
       });
     }
@@ -20,14 +21,36 @@ exports.generate = (req, res) => {
   });
 };
 
-exports.getAlls = (req, res) => {
-  Table.getAlls((err, result) => {
+exports.getTables = (req, res) => {
+  Table.getTables((err, result) => {
     if (err) {
       return res.status(500).json({
+        success: false,
         message: err.message || "Failed getting all tables",
       });
     }
 
     return res.status(200).json(result);
+  });
+};
+
+exports.checkin = (req, res) => {
+  let table = {
+    table_uid: req.query.id,
+    reserve: true,
+  }
+
+  Table.update(table, (err, result) => {
+    if (err) {
+      return res.status(500).json({
+        success: false,
+        message: err.message || "Failed check-in table",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Checked-in successfully"
+    });
   });
 };

@@ -16,9 +16,6 @@ CREATE TABLE IF NOT EXISTS bills(
   bill_id                 INT             NOT NULL  AUTO_INCREMENT,
   table_id                INT             NOT NULL,
   subtotal                DECIMAL(12,2)   NOT NULL,
-  tax                     DECIMAL(12,2)   NOT NULL,
-  service_charge          DECIMAL(12,2)   NOT NULL,
-  total                   DECIMAL(12,2)   NOT NULL,
   status                  BOOLEAN         NOT NULL,
   checkout_at             BIGINT          NOT NULL,
   created_at              BIGINT          NOT NULL,
@@ -43,7 +40,6 @@ CREATE TABLE IF NOT EXISTS order_menus(
   product_id              INT             NULL,
   ramen_id                INT             NULL,
   quantity                INT             NOT NULL,
-  amount                  DECIMAL(12,2)   NOT NULL,
   status                  BOOLEAN         NOT NULL,
   created_at              BIGINT          NOT NULL,
   updated_at              BIGINT          NOT NULL,
@@ -77,7 +73,6 @@ CREATE TABLE IF NOT EXISTS info_main_menus(
 -- Create Custom_ramens Table
 CREATE TABLE IF NOT EXISTS custom_ramens(
   ramen_id                INT             NOT NULL AUTO_INCREMENT,
-  amount                  DECIMAL(12,2)   NOT NULL,
   status                  BOOLEAN         NOT NULL,
   created_at              BIGINT          NOT NULL,
   updated_at              BIGINT          NOT NULL,

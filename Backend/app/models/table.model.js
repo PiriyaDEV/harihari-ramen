@@ -15,7 +15,7 @@ Table.create = (table, result) => {
   sql.query(`INSERT INTO tables SET ?`, table, (err, res) => {
     if (err) {
       console.log(
-        `${"\x1b[1m"}${"\x1b[38;5;105m"}[${Date()}]${"\x1b[0m"} : `,
+        `${"\x1b[1m"}${"\x1b[38;5;105m"}[${Date()}]${"\x1b[0m"} `,
         err
       );
       result(err, null);
@@ -23,20 +23,47 @@ Table.create = (table, result) => {
     }
 
     console.log(
-      `${"\x1b[1m"}${"\x1b[38;5;105m"}[${Date()}]${"\x1b[0m"} : Inserted ${
+      `${"\x1b[1m"}${"\x1b[38;5;105m"}[${Date()}]${"\x1b[0m"} Inserted ${
         res.affectedRows
-      } table(s) >>> id: ${res.insertId}`
+      } table >>> id: ${res.insertId}`
     );
     result(null, { table_id: res.insertId, ...table });
     return;
   });
 };
 
-Table.getAlls = (result) => {
-  sql.query(`SELECT * FROM tables`, (err, res) => {
+Table.update = (table, result) => {
+  table.updated_at = Date.now();
+
+  sql.query(
+    `UPDATE tables SET ? WHERE table_uid = '${table.table_uid}'`,
+    table,
+    (err, res) => {
+      if (err) {
+        console.log(
+          `${"\x1b[1m"}${"\x1b[38;5;105m"}[${Date()}]${"\x1b[0m"} `,
+          err
+        );
+        result(err, null);
+        return;
+      }
+
+      console.log(
+        `${"\x1b[1m"}${"\x1b[38;5;105m"}[${Date()}]${"\x1b[0m"} Updated table >>> id: ${
+          table.table_id
+        }`
+      );
+      result(null, table);
+      return;
+    }
+  );
+};
+
+Table.getTables = (result) => {
+  sql.query(`SELECT table_id, table_uid, reserve FROM tables WHERE status = 1`, (err, res) => {
     if (err) {
       console.log(
-        `${"\x1b[1m"}${"\x1b[38;5;105m"}[${Date()}]${"\x1b[0m"} : `,
+        `${"\x1b[1m"}${"\x1b[38;5;105m"}[${Date()}]${"\x1b[0m"} `,
         err
       );
       result(err, null);
@@ -44,7 +71,7 @@ Table.getAlls = (result) => {
     }
 
     console.log(
-      `${"\x1b[1m"}${"\x1b[38;5;105m"}[${Date()}]${"\x1b[0m"} : Selected ${
+      `${"\x1b[1m"}${"\x1b[38;5;105m"}[${Date()}]${"\x1b[0m"} Selected ${
         res.length
       } table(s)`
     );

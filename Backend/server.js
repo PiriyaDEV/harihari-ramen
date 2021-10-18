@@ -9,8 +9,13 @@ dotenv.config();
 // create an application object
 const app = express();
 
+// define cors options
+const corsOptions = {
+  origin: ["http://localhost:3000"]
+};
+
 // enable cross-origin resource sharing
-app.use(cors());
+app.use(cors(corsOptions));
 
 // parse requests of content-type: application/json
 app.use(bodyParser.json({ limit: "20mb" }));
@@ -31,6 +36,6 @@ app.use((req, res) => {
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(
-    `${"\x1b[1m"}${"\x1b[38;5;105m"}[${Date()}]${"\x1b[0m"} : Hari Hari Ramen's API server is running on port ${PORT}.`
+    `${"\x1b[1m"}${"\x1b[38;5;105m"}[${Date()}]${"\x1b[0m"} Hari Hari Ramen's API server is running on port ${PORT}.`
   );
 });
