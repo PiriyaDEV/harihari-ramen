@@ -1,0 +1,57 @@
+.timeline {
+  border-radius: 25px;
+  width: 100%;
+  margin: 40px 0px 0px 0px;
+  position: relative;
+  /* background-color: #d0ccd0; */
+  border-top: 1px solid #232322;
+  border-bottom: 1px solid #232322;
+  border-right: 0px;
+  height: 3px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 0;
+}
+
+.timeline__progress {
+  min-width: 15px;
+  z-index: 0;
+  border-radius: 500px;
+  position: absolute;
+  background-color: #e14842;
+  /* border: 1px solid #232322; */
+  border-top: 1px solid #232322;
+  border-bottom: 1px solid #232322;
+  height: 5px;
+  -o-transition: all 0.5s ease;
+  -ms-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -webkit-transition: all 0.5s ease;
+  transition: all 0.2s ease;
+}
+
+.timeline__ball {
+  z-index: 2;
+  background-color: #e14842;
+  height: 30px;
+  width: 30px;
+  border: 1px solid #232322;
+  border-radius: 100px;
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+#tl-ball{
+  z-index: 2;
+  position: relative;
+  text-align: center;
+}
+
+.pg-text {
+  position: absolute;
+  left: -10px;
+}

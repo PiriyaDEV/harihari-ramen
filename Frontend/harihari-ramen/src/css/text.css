@@ -1,0 +1,79 @@
+.nm-text {
+  font-family: heisei-maru-gothic-std, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 3em;
+  margin: 0;
+  line-height: 30px;
+}
+
+.sm-text {
+  font-family: heisei-maru-gothic-std, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 2.25em;
+  margin: 0;
+  line-height: 28px;
+}
+
+.ssm-text {
+  font-family: heisei-maru-gothic-std, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 1.75em;
+  margin: 0;
+  line-height: 22px;
+}
+
+.md-text {
+  font-family: heisei-maru-gothic-std, sans-serif;
+  font-weight: 800;
+  font-style: normal;
+  font-size: 3.25em;
+  margin: 0;
+  line-height: 41px;
+}
+
+.bracket {
+  font-family: heisei-maru-gothic-std, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 1.625em;
+  margin: 0;
+  line-height: 20px;
+}
+
+.bg-text {
+  font-family: heisei-maru-gothic-std, sans-serif;
+  font-weight: 800;
+  font-style: normal;
+  font-size: 7.5em;
+  margin: 0;
+  line-height: 100px;
+}
+
+.title {
+  font-family: heisei-maru-gothic-std, sans-serif;
+  font-weight: 800;
+  font-style: normal;
+  font-size: 5em;
+  margin: 0;
+  line-height: 48px;
+}
+
+.red-btn {
+  color: #ffffff;
+  font-size: 3em;
+  font-weight: 800;
+  font-style: normal;
+  border: 3px solid var(--unnamed-color-232322);
+  background: #e14842 0% 0% no-repeat padding-box;
+  border: 3px solid #232322;
+  border-radius: 10px;
+  padding: 8px 60px;
+  cursor: pointer;
+}
+
+.center-text {
+  text-align: center;
+}

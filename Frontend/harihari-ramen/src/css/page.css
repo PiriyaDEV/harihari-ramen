@@ -5,10 +5,11 @@ textarea,
 button {
   padding: 0;
   margin: 0;
-  font-family: "Mitr", sans-serif;
+  font-family: heisei-maru-gothic-std, sans-serif;
+  font-style: normal;
   font-size: 8px;
   overflow-x: hidden;
-  color: #1a1a1a;
+  color: #232322;
 }
 
 .section {
