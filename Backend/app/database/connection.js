@@ -18,7 +18,7 @@ function handleDisconnect() {
   connection.connect((err) => {
     if (err) {
       console.log(
-        `${"\x1b[1m"}${"\x1b[38;5;105m"}[${Date()}]${"\x1b[0m"} : `,
+        `${"\x1b[1m"}${"\x1b[38;5;105m"}[${Date()}]${"\x1b[0m"} `,
         err
       );
       setTimeout(handleDisconnect, 2000);
@@ -44,7 +44,7 @@ connection.connect((err) => {
   }
 
   console.log(
-    `${"\x1b[1m"}${"\x1b[38;5;105m"}[${Date()}]${"\x1b[0m"} : Successfully connected to ${
+    `${"\x1b[1m"}${"\x1b[38;5;105m"}[${Date()}]${"\x1b[0m"} Successfully connected to ${
       dbConfig.DB
     } database on port ${dbConfig.PORT}.`
   );
