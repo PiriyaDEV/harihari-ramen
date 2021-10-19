@@ -7,16 +7,18 @@ import tableService from "../services/table.service.js";
 import "../css/page.css";
 import "../css/page/TableQR.css";
 
-const link = ["2", "3", "4", "1", "10", "20"];
-
 export default class TableQR extends Component {
+  
+  constructor(props) {
+    super(props);
+    this.state = {
+      link: [],
+    };
+  }
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            link : [],
-        }
-    }
+  componentWillMount() {
+    this.getLink();
+  }
 
   makeQR(value) {
     let web = "http://localhost:3000/";
@@ -39,20 +41,27 @@ export default class TableQR extends Component {
   async getLink() {
     return await tableService
       .getTables()
-      .then((data) => this.setState( {link: data} ));
+      .then((data) => this.setState({ link: data }));
   }
-  
+
   render() {
-      
-    // let linked = this.state.link;
-    // console.log(this.state.link)
+    let link = this.state.link;
+
     return (
       <div id="table-qr" className="section">
         <div className="page-container">
-          {link.map((index) => (
-            <div key={index}>
-              <h1 onClick={() => this.openLink(index)}>{index}</h1>
-              <img className="qr-code" src={this.makeQR(index)} alt=""></img>
+          {/* <button onClick={() => this.getLink()}>Click Get Link</button> */}
+          {link.map((table) => (
+            <div key={table.guest_uid}>
+              <h1 onClick={() => this.openLink(table.guest_uid)}>
+                {" "}
+                Table {table.table_id}
+              </h1>
+              <img
+                className="qr-code"
+                src={this.makeQR(table.guest_uid)}
+                alt=""
+              ></img>
             </div>
           ))}
         </div>
