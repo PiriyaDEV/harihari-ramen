@@ -1,0 +1,22 @@
+.lg-box > div > p:not(.slash) {
+  cursor: pointer;
+}
+
+.lg-box {
+  display: flex;
+  text-align: center;
+  justify-content: flex-end;
+}
+
+.lg-text {
+  gap: 10px;
+}
+
+.lg-box > div {
+  background: #e14842 0% 0% no-repeat padding-box;
+  border-radius: 5px;
+  padding: 1px 10px;
+  text-align: right;
+  color: #ffffff;
+  width: fit-content;
+}

@@ -3,7 +3,7 @@
   height: 100vh;
 }
 
-#landing-container{
+#landing-container {
   gap: 60px;
 }
 
@@ -12,10 +12,15 @@
 }
 
 .table-p {
-  margin-bottom: 40px;
+  margin-bottom: 25px;
   /* width: 320px; */
 }
 
 #ramen-pics {
   width: 349px;
+}
+
+.lg-box {
+  margin-top: 15px;
+  width: calc(100% - 35px);
 }

@@ -6,16 +6,29 @@ import "../css/page.css";
 import "../css/text.css";
 import "../css/page/Home.css";
 import "../css/element/progressBar.css";
+import "../css/element/languageBtn.css";
 
 //Image
 import RamenPic from "../images/ramen_main@2x.png";
 
-export default function Home() {
+import Invalid from "../components/Invalid";
+
+export default function Home(props) {
   const { id } = useParams();
   const { useState } = React;
   const [width, setWidth] = useState(0);
   const intermediaryBalls = 2;
   const calculatedWidth = (width / (intermediaryBalls + 1)) * 100;
+
+  let numTable = useState(0);
+  let haveTable = 0;
+
+  for (const index in props.table) {
+    if (props.table[index].guest_uid === id) {
+      numTable = props.table[index].table_id;
+      haveTable = 1;
+    }
+  }
 
   return (
     <div id="home" className="section">
@@ -34,7 +47,7 @@ export default function Home() {
                 <img id="ramen-icon" src={RamenPic} alt="" />
               </div>
               <div>
-                <h1 className="title">TABLE {id}</h1>
+                <h1 className="title">TABLE {numTable}</h1>
                 <h2 className="sm-text">Check-in time: 15:45:03</h2>
               </div>
             </div>
