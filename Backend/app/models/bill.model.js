@@ -3,8 +3,6 @@ const sql = require("../database/connection");
 const Bill = function (bill) {
   this.table_id = bill.table_id;
   this.subtotal = bill.subtotal;
-  this.tax = bill.tax;
-  this.service_charge = bill.service_charge;
   this.status = bill.status;
   this.checkout_at = bill.checkout_at;
   this.created_at = bill.created_at;
@@ -16,8 +14,7 @@ Bill.create = (bill, result) => {
   bill.updated_at = Date.now();
   bill.checkout_at = Date.now();
   bill.subtotal = 0;
-  bill.tax = 0;
-  bill.service_charge = 0.1;
+
 
   sql.query(`INSERT INTO bills SET ?`, bill, (err, res) => {
     if (err) {
