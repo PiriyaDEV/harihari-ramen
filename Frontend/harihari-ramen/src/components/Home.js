@@ -1,5 +1,7 @@
-import React from "react";
+import React, { Component, useState, useEffect } from "react";
+import tableService from "../services/table.service.js";
 import { useParams } from "react-router";
+import { setDefaults, useTranslation, withTranslation } from "react-i18next";
 
 //CSS
 import "../css/page.css";
@@ -13,12 +15,19 @@ import RamenPic from "../images/ramen_main@2x.png";
 
 import Invalid from "../components/Invalid";
 
-export default function Home(props) {
+function Home(props) {
   const { id } = useParams();
-  const { useState } = React;
   const [width, setWidth] = useState(0);
   const intermediaryBalls = 2;
   const calculatedWidth = (width / (intermediaryBalls + 1)) * 100;
+  const { t, i18n } = useTranslation();
+
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+    setLg(" " + lng);
+  };
+
+  const [lg, setLg] = useState(" en");
 
   let numTable = useState(0);
   let haveTable = 0;
@@ -30,6 +39,21 @@ export default function Home(props) {
     }
   }
 
+  const timeLineBalls = (n, onClick, current, text) =>
+    Array(n)
+      .fill(0)
+      //ใช้ index ในการเปลี่ยน bar
+      .map((index) => (
+        <div id="tl-ball">
+          <div
+            key={index}
+            className={`timeline__ball ${current >= index ? "active" : null}`}
+            onClick={() => onClick(1)}
+          ></div>
+          <h1 className={"pg-text bracket" + lg}>{text}</h1>
+        </div>
+      ));
+
   return (
     <div id="home" className="section">
       <div id="home-container" className="page-container">
@@ -37,9 +61,19 @@ export default function Home(props) {
           <div id="table-box">
             <div className="lg-box">
               <div className="lg-text section">
-                <p className="ssm-text">TH</p>
+                {lg === " " + "en" ? (
+                  <p className="ssm-text" onClick={() => changeLanguage("th")}>
+                    TH
+                  </p>
+                ) : (
+                  <p className="ssm-text" onClick={() => changeLanguage("en")}>
+                    EN
+                  </p>
+                )}
                 <p className="ssm-text slash">|</p>
-                <p className="ssm-text">JP</p>
+                <p className="ssm-text" onClick={() => changeLanguage("jp")}>
+                  JP
+                </p>
               </div>
             </div>
             <div id="table-text-box" className="section">
@@ -47,19 +81,23 @@ export default function Home(props) {
                 <img id="ramen-icon" src={RamenPic} alt="" />
               </div>
               <div>
-                <h1 className="title">TABLE {numTable}</h1>
-                <h2 className="sm-text">Check-in time: 15:45:03</h2>
+                <h1 className={"title" + lg}>
+                  {t("table")} {numTable}
+                </h1>
+                <h2 className={"sm-text" + lg}>{t("checkIn")}: 15:45:03</h2>
               </div>
             </div>
           </div>
 
           <div id="order-status">
-            <h1 className="md-text">Order Status</h1>
-            <p className="bracket">(1 order left)</p>
+            <h1 className={"md-text" + lg}>{t("orderStatus")}</h1>
+            <p className={"bracket" + lg}>
+              {t("orderLeft.1")} 1 {t("orderLeft.2")}
+            </p>
 
-            <p className="sm-text order-p">
-              We have received your order <br /> Please wait for your order to
-              be prepare
+            <p className={"sm-text order-p" + lg}>
+              {t("phaseOrder.1")} <br />
+              {t("phaseOrder.2")}
             </p>
 
             <div className="timeline">
@@ -78,32 +116,32 @@ export default function Home(props) {
         </div>
 
         <div id="menu-section">
-          <div class="menu-container">
+          <div className="menu-container">
             <div className="menu-box">
-              <h1 className="md-text">
-                Order <br />
-                Food
+              <h1 className={"md-text" + lg}>
+                {t("orderFood.1")} <br />
+                {t("orderFood.2")}
               </h1>
             </div>
             <div className="menu-box">
-              <h1 className="md-text">
-                Order <br />
-                History
+              <h1 className={"md-text" + lg}>
+                {t("orderHistory.1")} <br />
+                {t("orderHistory.2")}
               </h1>
             </div>
           </div>
 
-          <div class="menu-container">
+          <div className="menu-container">
             <div className="menu-box">
-              <h1 className="md-text">
-                Call <br />
-                Waiter
+              <h1 className={"md-text" + lg}>
+                {t("callWaiter.1")} <br />
+                {t("callWaiter.2")}
               </h1>
             </div>
             <div className="menu-box">
-              <h1 className="md-text">
-                Check <br />
-                Out
+              <h1 className={"md-text" + lg}>
+                {t("checkOut.1")} <br />
+                {t("checkOut.2")}
               </h1>
             </div>
           </div>
@@ -113,17 +151,52 @@ export default function Home(props) {
   );
 }
 
-const timeLineBalls = (n, onClick, current, text) =>
-  Array(n)
-    .fill(0)
-    //ใช้ index ในการเปลี่ยน bar
-    .map((i, index) => (
-      <div id="tl-ball">
-        <div
-          key={index}
-          className={`timeline__ball ${current >= index ? "active" : null}`}
-          onClick={() => onClick(1)}
-        ></div>
-        <h1 className="pg-text bracket">{text}</h1>
+export default class MainHome extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      link: [
+        {
+          table_id: "1",
+          guest_uid: "aed1",
+        },
+        {
+          table_id: "2",
+          guest_uid: "aed2",
+        },
+        {
+          table_id: "3",
+          guest_uid: "aed3",
+        },
+        {
+          table_id: "4",
+          guest_uid: "aed4",
+        },
+        {
+          table_id: "5",
+          guest_uid: "aed5",
+        },
+      ],
+    };
+  }
+
+  // componentWillMount() {
+  //     this.getLink();
+  // }
+
+  // async getLink() {
+  //     return await tableService
+  //       .getTables()
+  //       .then((data) => this.setState({ link: data }));
+  //   }
+
+  render() {
+    let linked = this.state.link;
+
+    return (
+      <div>
+        <Home table={linked} />
       </div>
-    ));
+    );
+  }
+}

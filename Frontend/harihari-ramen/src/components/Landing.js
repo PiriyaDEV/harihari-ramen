@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState , Component } from "react";
+import tableService from "../services/table.service.js";
 import { useParams } from "react-router";
+import { useTranslation } from 'react-i18next';
 
 //CSS
 import "../css/page.css";
@@ -10,7 +12,11 @@ import "../css/element/languageBtn.css";
 //Image
 import RamenPic from "../images/ramen_main@2x.png";
 
-export default function Landing(props) {
+function Landing(props) {
+  const { t, i18n } = useTranslation();
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+  };
   const { id } = useParams();
   let numTable = useState(0);
   let haveTable = 0;
@@ -34,7 +40,7 @@ export default function Landing(props) {
         </div>
         <div>
           {numTable !== 0 ? (
-            <h1 className="bg-text center-text table-text">TABLE {numTable}</h1>
+            <h1 className="bg-text center-text table-text">{t('table')} {numTable}</h1>
           ) : (
             <h1 className="bg-text center-text table-text">INVALID</h1>
           )}
@@ -61,9 +67,9 @@ export default function Landing(props) {
           </div>
           <div className="lg-box">
             <div className="lg-text section">
-              <p className="ssm-text">TH</p>
+              <p className="ssm-text" onClick={() => changeLanguage('th')}>TH</p>
               <p className="ssm-text slash">|</p>
-              <p className="ssm-text">JP</p>
+              <p className="ssm-text" onClick={() => changeLanguage('jp')}>JP</p>
             </div>
           </div>
         </div>
@@ -77,3 +83,52 @@ let linkToHome = (value) => {
   let path = "home/" + value;
   window.location = web + path;
 };
+
+export default class MainLanding extends Component {
+
+  constructor(props) {
+      super(props);
+      this.state = {
+        link: [{
+          "table_id": '1',
+          "guest_uid": 'aed1',
+        },
+        {
+          "table_id": '2',
+          "guest_uid": 'aed2',
+        },
+        {
+          "table_id": '3',
+          "guest_uid": 'aed3',
+        },
+        {
+          "table_id": '4',
+          "guest_uid": 'aed4',
+        },
+        {
+          "table_id": '5',
+          "guest_uid": 'aed5',
+        },],
+      };
+    }
+
+  // componentWillMount() {
+  //     this.getLink(); 
+  // }
+
+  // async getLink() {
+  //     return await tableService
+  //       .getTables()
+  //       .then((data) => this.setState({ link: data }));
+  //   }
+
+  render() {
+    let linked = this.state.link
+      return (
+          <div>
+              <Landing table={linked}/>
+          </div>
+      )
+  }
+}
+

@@ -8,7 +8,6 @@ import "../css/page.css";
 import "../css/page/TableQR.css";
 
 export default class TableQR extends Component {
-  
   constructor(props) {
     super(props);
     this.state = {
@@ -50,13 +49,12 @@ export default class TableQR extends Component {
     return (
       <div id="table-qr" className="section">
         <div className="page-container">
-          {/* <button onClick={() => this.getLink()}>Click Get Link</button> */}
           {link.map((table) => (
             <div key={table.guest_uid}>
               <h1 onClick={() => this.openLink(table.guest_uid)}>
-                {" "}
                 Table {table.table_id}
               </h1>
+              <h1>Reserved: {table.reserve}</h1>
               <img
                 className="qr-code"
                 src={this.makeQR(table.guest_uid)}

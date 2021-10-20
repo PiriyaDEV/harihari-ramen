@@ -3,10 +3,9 @@ import { Route, Switch } from "react-router-dom";
 import Loading from "./lazyloading/Loading";
 import "./css/App.css";
 
-
 const TableQR = lazy(() => import("./components/TableQR"));
-const MainLanding = lazy(() => import("./functions/MainLanding"));
-const Home = lazy(() => import("./functions/MainHome"));
+const Landing = lazy(() => import("./components/Landing"));
+const Home = lazy(() => import("./components/Home"));
 
 function App() {
   return (
@@ -40,7 +39,7 @@ function App() {
             <TableQR />
           </Route>
           <Route path="/table/:id">
-            <MainLanding />
+            <Landing />
           </Route>
           {/* <Route path="/:id">
           <p>ไม่มี pathนี้</p>
