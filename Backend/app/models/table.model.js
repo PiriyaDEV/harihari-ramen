@@ -1,117 +1,64 @@
-const sql =  require("../database/connection");
+const sql = require("../database/connection");
 
-// const Table = function (table) {
-//   this.guest_uid = table.guest_uid;
-//   this.reserve = table.reserve;
-//   this.status = table.status;
-//   this.created_at = table.created_at;
-//   this.updated_at = table.updated_at;
-// };
-
-module.exports.create = async (table) => {
+exports.create = async (table) => {
   table.created_at = Date.now();
   table.updated_at = Date.now();
 
-  sql.query(`INSERT INTO tables SET ?`, table, (err, result) => {
-    if (err) {
-      console.log(
-        `${"\x1b[1m"}${"\x1b[38;5;105m"}[${Date()}]${"\x1b[0m"} `,
-        err
-      );
-      return err;
-    }
+  try {
+    const [result, fields] = await sql.query(`INSERT INTO tables SET ?`, table);
 
     console.log(
-      `${"\x1b[1m"}${"\x1b[38;5;105m"}[${Date()}]${"\x1b[0m"} Inserted ${
-        result.affectedRows
-      } table >>> id: ${result.insertId}`
+      `Inserted ${result.affectedRows} table >>> id: ${result.insertId}`
     );
     return { table_id: result.insertId, ...table };
-  });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-module.exports.update = async (table, result) => {
+exports.update = async (table) => {
   table.updated_at = Date.now();
 
-  sql.query(
-    `UPDATE tables SET ? WHERE table_id = '${table.table_id}'`,
-    table,
-    (err, res) => {
-      if (err) {
-        console.log(
-          `${"\x1b[1m"}${"\x1b[38;5;105m"}[${Date()}]${"\x1b[0m"} `,
-          err
-        );
-        result(err, null);
-        return;
-      }
+  try {
+    const [result, fields] = await sql.query(
+      `UPDATE tables SET ? WHERE table_id = '${table.table_id}'`,
+      table
+    );
 
-      console.log(
-        `${"\x1b[1m"}${"\x1b[38;5;105m"}[${Date()}]${"\x1b[0m"} Updated table >>> id: ${
-          table.table_id
-        }`
-      );
-      result(null, table);
-      return;
-    }
-  );
+    console.log(`Updated table >>> id: ${table.table_id}`);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-module.exports.find = async (table, result) => {
-  sql.query(
-    `SELECT * FROM tables WHERE guest_uid = '${table.guest_uid}'`,
-    table,
-    (err, res) => {
-      if (err) {
-        console.log(
-          `${"\x1b[1m"}${"\x1b[38;5;105m"}[${Date()}]${"\x1b[0m"} `,
-          err
-        );
-        result(err, null);
-        return;
-      }
+exports.find = async (table) => {
+  try {
+    const [result, fields] = await sql.query(
+      `SELECT * FROM tables WHERE guest_uid = '${table.guest_uid}'`,
+      table
+    );
 
-      if (res.length) {
-        console.log(
-          `${"\x1b[1m"}${"\x1b[38;5;105m"}[${Date()}]${"\x1b[0m"} Found table >>> id: ${
-            res.table_id
-          }`
-        );
-        result(null, { isFound: true, data: res });
-        return;
-      }
-
-      console.log(
-        `${"\x1b[1m"}${"\x1b[38;5;105m"}[${Date()}]${"\x1b[0m"} Not found table >>> id: ${
-          table.guest_uid
-        }`
-      );
-      result(null, { isFound: false });
-      return;
+    if (result.length) {
+      console.log(`Found table >>> id: ${result[0].table_id}`);
+      return { isFound: true, ...result[0] };
+    } else {
+      console.log(`Not found table >>> id: ${table.guest_uid}`);
+      return { isFound: false };
     }
-  );
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-module.exports.getTables = async (result) => {
-  sql.query(
-    `SELECT table_id, guest_uid, reserve FROM tables WHERE status = 1`,
-    (err, res) => {
-      if (err) {
-        console.log(
-          `${"\x1b[1m"}${"\x1b[38;5;105m"}[${Date()}]${"\x1b[0m"} `,
-          err
-        );
-        result(err, null);
-        return;
-      }
+exports.getTables = async (result) => {
+  try {
+    const [result, fields] = await sql.query(
+      `SELECT table_id, guest_uid, reserve FROM tables WHERE status = 1`
+    );
 
-      console.log(
-        `${"\x1b[1m"}${"\x1b[38;5;105m"}[${Date()}]${"\x1b[0m"} Selected ${
-          res.length
-        } table(s)`
-      );
-      result(null, res);
-      return;
-    }
-  );
+    console.log(`Selected ${result.length} table(s)`);
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
 };

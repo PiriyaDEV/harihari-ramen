@@ -1,59 +1,32 @@
 const sql = require("../database/connection");
 
-const Bill = function (bill) {
-  this.table_id = bill.table_id;
-  this.subtotal = bill.subtotal;
-  this.status = bill.status;
-  this.checkout_at = bill.checkout_at;
-  this.created_at = bill.created_at;
-  this.updated_at = bill.updated_at;
-};
-
-Bill.create = (bill, result) => {
+exports.create = async (bill) => {
+  bill.subtotal = 0;
+  bill.checkout_at = Date.now();
   bill.created_at = Date.now();
   bill.updated_at = Date.now();
-  bill.checkout_at = Date.now();
-  bill.subtotal = 0;
 
-
-  sql.query(`INSERT INTO bills SET ?`, bill, (err, res) => {
-    if (err) {
-      console.log(
-        `${"\x1b[1m"}${"\x1b[38;5;105m"}[${Date()}]${"\x1b[0m"} `,
-        err
-      );
-      result(err, null);
-      return;
-    }
+  try {
+    const [result, fields] = await sql.query(`INSERT INTO bills SET ?`, bill);
 
     console.log(
-      `${"\x1b[1m"}${"\x1b[38;5;105m"}[${Date()}]${"\x1b[0m"} Inserted ${
-        res.affectedRows
-      } bill >>> id: ${res.insertId}`
+      `Inserted ${result.affectedRows} bill >>> id: ${result.insertId}`
     );
-    result(null, { bill_id: res.insertId, ...bill });
-    return;
-  });
+    return { bill_id: result.insertId, ...bill };
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-Bill.getBills = (result) => {
-  sql.query(`SELECT subtotal FROM tables WHERE status = 1 AND `, (err, res) => {
-    if (err) {
-      console.log(
-        `${"\x1b[1m"}${"\x1b[38;5;105m"}[${Date()}]${"\x1b[0m"} `,
-        err
-      );
-      result(err, null);
-      return;
-    }
+// exports.getBills = async (result) => {
+//   try {
+//     const [result, fields] = await sql.query(
+//       `SELECT subtotal FROM tables WHERE status = 1`
+//     );
 
-    console.log(
-      `${"\x1b[1m"}${"\x1b[38;5;105m"}[${Date()}]${"\x1b[0m"} Selected ${
-        res.length
-      } table(s)`
-    );
-    result(null, res);
-    return;
-  });
-};
-module.exports = Bill;
+//     console.log(`Selected ${res.length} bill(s)`);
+//     return result;
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };

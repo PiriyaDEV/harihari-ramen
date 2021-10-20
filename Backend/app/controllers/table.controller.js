@@ -2,26 +2,6 @@ const uuid = require("uuid");
 
 const Table = require("../models/table.model");
 
-// exports.generate = async (req, res) => {
-//   let table = new Table("");
-
-//   table.guest_uid = uuid.v4();
-//   table.reserve = false;
-//   table.status = true;
-
-//   Table.create(table, (err, result) => {
-//     if (err) {
-//       return res.status(500).json({
-//         success: false,
-//         message: err.message
-//       });
-//     }
-
-//     return res
-//       .status(201)
-//       .send(`<h1>New table generated : ${result.guest_uid}</h1>`);
-//   });
-// };
 exports.generate = async (req, res) => {
   let table = {
     guest_uid: uuid.v4(),
@@ -30,30 +10,32 @@ exports.generate = async (req, res) => {
   };
 
   try {
-    result = await Table.create(table);
-    
-    return await res
-      .status(201)
-      .send(`<h1>New table generated : ${result.guest_uid}</h1>`);
-  } catch (err) {
+    let result = await Table.create(table);
+
+    return res.status(201).json({
+      success: true,
+      message: "Generated Successfully",
+      guest_uid: result.guest_uid,
+    });
+  } catch (error) {
     return res.status(500).json({
       success: false,
-      message: err.message,
+      message: error.message,
     });
   }
 };
 
-exports.getTables = (req, res) => {
-  Table.getTables((err, result) => {
-    if (err) {
-      return res.status(500).json({
-        success: false,
-        message: err.message,
-      });
-    }
+exports.getTables = async (req, res) => {
+  try {
+    let result = await Table.getTables();
 
     return res.status(200).json(result);
-  });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
 
 exports.checkin = async (req, res) => {
@@ -61,21 +43,32 @@ exports.checkin = async (req, res) => {
 
   let table = {
     guest_uid: guest_uid,
-    reserve: true,
   };
 
-  Table.update(table, (err, result) => {
-    if (err) {
-      return res.status(500).json({
+  try {
+    let findResult = await Table.find(table);
+
+    if (!findResult.isFound || findResult.reserve) {
+      return res.status(200).json({
         success: false,
-        message: err.message,
+        message: "Table not available",
+        guest_uid: guest_uid,
       });
     }
 
+    table.table_id = findResult.table_id;
+    table.reserve = true;
+    await Table.update(table);
+
     return res.status(200).json({
       success: true,
-      message: "Checked-in successfully",
-      guest_uid: table.guest_uid,
+      message: "Checked in successfully",
+      guest_uid: guest_uid,
     });
-  });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
