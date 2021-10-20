@@ -1,7 +1,7 @@
 import React, { Component, useState, useEffect } from "react";
 import tableService from "../services/table.service.js";
 import { useParams } from "react-router";
-import { setDefaults, useTranslation, withTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 //CSS
 import "../css/page.css";
@@ -13,21 +13,29 @@ import "../css/element/languageBtn.css";
 //Image
 import RamenPic from "../images/ramen_main@2x.png";
 
-import Invalid from "../components/Invalid";
+// import Invalid from "../components/Invalid";
 
-function Home(props) {
-  const { id } = useParams();
+const Home = (props) => {
+  const { id, lgs } = useParams();
   const [width, setWidth] = useState(0);
   const intermediaryBalls = 2;
   const calculatedWidth = (width / (intermediaryBalls + 1)) * 100;
   const { t, i18n } = useTranslation();
 
-  const changeLanguage = (lng) => {
-    i18n.changeLanguage(lng);
-    setLg(" " + lng);
+  useEffect(() => {
+    i18n.changeLanguage(lgs);
+    setLg(" " + lgs);
+  }, [i18n, lgs]);
+
+  const clickChangeLanguage = (lng) => {
+    let web = "http://localhost:3000/";
+    let path = "/home/";
+    window.location = web + lng + path + id;
   };
 
-  const [lg, setLg] = useState(" en");
+  // alert(lgs);
+
+  const [lg, setLg] = useState(" " + lgs);
 
   let numTable = useState(0);
   let haveTable = 0;
@@ -39,21 +47,24 @@ function Home(props) {
     }
   }
 
+  // if (haveTable === 0) {
+  //   numTable = 0;
+  //   window.location = "http://localhost:3000/invalid";
+  // }
+
   const timeLineBalls = (n, onClick, current, text) =>
     Array(n)
       .fill(0)
       //ใช้ index ในการเปลี่ยน bar
-      .map((index) => (
-        <div id="tl-ball">
+      .map((i, index) => (
+        <div id="tl-ball" key={index}>
           <div
-            key={index}
             className={`timeline__ball ${current >= index ? "active" : null}`}
             onClick={() => onClick(1)}
           ></div>
           <h1 className={"pg-text bracket" + lg}>{text}</h1>
         </div>
       ));
-
   return (
     <div id="home" className="section">
       <div id="home-container" className="page-container">
@@ -62,16 +73,25 @@ function Home(props) {
             <div className="lg-box">
               <div className="lg-text section">
                 {lg === " " + "en" ? (
-                  <p className="ssm-text" onClick={() => changeLanguage("th")}>
+                  <p
+                    className="ssm-text"
+                    onClick={() => clickChangeLanguage("th")}
+                  >
                     TH
                   </p>
                 ) : (
-                  <p className="ssm-text" onClick={() => changeLanguage("en")}>
+                  <p
+                    className="ssm-text"
+                    onClick={() => clickChangeLanguage("en")}
+                  >
                     EN
                   </p>
                 )}
                 <p className="ssm-text slash">|</p>
-                <p className="ssm-text" onClick={() => changeLanguage("jp")}>
+                <p
+                  className="ssm-text"
+                  onClick={() => clickChangeLanguage("jp")}
+                >
                   JP
                 </p>
               </div>
@@ -155,48 +175,22 @@ export default class MainHome extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      link: [
-        {
-          table_id: "1",
-          guest_uid: "aed1",
-        },
-        {
-          table_id: "2",
-          guest_uid: "aed2",
-        },
-        {
-          table_id: "3",
-          guest_uid: "aed3",
-        },
-        {
-          table_id: "4",
-          guest_uid: "aed4",
-        },
-        {
-          table_id: "5",
-          guest_uid: "aed5",
-        },
-      ],
+      link: [],
     };
   }
 
-  // componentWillMount() {
-  //     this.getLink();
-  // }
+  componentDidMount() {
+    this.getLink();
+  }
 
-  // async getLink() {
-  //     return await tableService
-  //       .getTables()
-  //       .then((data) => this.setState({ link: data }));
-  //   }
+  async getLink() {
+    return await tableService
+      .getTables()
+      .then((data) => this.setState({ link: data }));
+  }
 
   render() {
     let linked = this.state.link;
-
-    return (
-      <div>
-        <Home table={linked} />
-      </div>
-    );
+    return <Home table={linked} />;
   }
 }

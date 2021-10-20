@@ -6,6 +6,7 @@ import "./css/App.css";
 const TableQR = lazy(() => import("./components/TableQR"));
 const Landing = lazy(() => import("./components/Landing"));
 const Home = lazy(() => import("./components/Home"));
+const Invalid = lazy(() => import("./components/Invalid"));
 
 function App() {
   return (
@@ -32,14 +33,17 @@ function App() {
           {/* <Route exact path="/">
             <Home />
           </Route> */}
-          <Route path="/home/:id">
+          <Route path="/:lgs/home/:id">
             <Home />
           </Route>
           <Route path="/qr">
             <TableQR />
           </Route>
-          <Route path="/table/:id">
+          <Route path="/:lgs/table/:id">
             <Landing />
+          </Route>
+          <Route path="/invalid">
+            <Invalid />
           </Route>
           {/* <Route path="/:id">
           <p>ไม่มี pathนี้</p>

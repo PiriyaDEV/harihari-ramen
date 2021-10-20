@@ -1,7 +1,7 @@
-import React, { useState , Component } from "react";
+import React, { useState, useEffect, Component } from "react";
 import tableService from "../services/table.service.js";
 import { useParams } from "react-router";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 //CSS
 import "../css/page.css";
@@ -12,12 +12,23 @@ import "../css/element/languageBtn.css";
 //Image
 import RamenPic from "../images/ramen_main@2x.png";
 
-function Landing(props) {
+const Landing = (props) => {
   const { t, i18n } = useTranslation();
-  const changeLanguage = (lng) => {
-    i18n.changeLanguage(lng);
+  const { id, lgs } = useParams();
+
+  useEffect(() => {
+    i18n.changeLanguage(lgs);
+    setLg(" " + lgs);
+  }, [i18n, lgs]);
+
+  const clickChangeLanguage = (lng) => {
+    let web = "http://localhost:3000/";
+    let path = "/table/";
+    window.location = web + lng + path + id;
   };
-  const { id } = useParams();
+
+  const [lg, setLg] = useState(" " + lgs);
+
   let numTable = useState(0);
   let haveTable = 0;
 
@@ -28,9 +39,10 @@ function Landing(props) {
     }
   }
 
-  if (haveTable === 0) {
-    numTable = 0;
-  }
+  // if (haveTable === 0) {
+  //   numTable = 0;
+  //   window.location = "http://localhost:3000/invalid";
+  // }
 
   return (
     <div id="landing" className="section">
@@ -40,36 +52,56 @@ function Landing(props) {
         </div>
         <div>
           {numTable !== 0 ? (
-            <h1 className="bg-text center-text table-text">{t('table')} {numTable}</h1>
+            <h1 className={"bg-text center-text table-text" + lg}>
+              {t("table")} {numTable}
+            </h1>
           ) : (
-            <h1 className="bg-text center-text table-text">INVALID</h1>
+            <h1 className={"bg-text center-text table-text" + lg}>
+              {t("invalide")}
+            </h1>
           )}
 
           {numTable !== 0 ? (
-            <p className="nm-text center-text table-p">
-              Do you which to continue <br /> with this table number?
+            <p className={"nm-text center-text table-p" + lg}>
+              {t("AskContinue.1")} <br /> {t("AskContinue.2")}
             </p>
           ) : (
-            <p className="nm-text center-text table-p">
-              Do you come to wrong site? <br /> contact the waiter
+            <p className={"nm-text center-text table-p" + lg}>
+              {t("invalidePath.1")} <br /> {t("invalidePath.2")}
             </p>
           )}
 
           <div className="section">
             {numTable !== 0 && (
               <button
-                onClick={() => linkToHome(id)}
-                className="red-btn center-text"
+                onClick={() => linkToHome(id, lgs)}
+                className={"red-btn center-text" + lg}
               >
-                continue
+                {t("continue")}
               </button>
             )}
           </div>
           <div className="lg-box">
             <div className="lg-text section">
-              <p className="ssm-text" onClick={() => changeLanguage('th')}>TH</p>
+              {lg === " " + "en" ? (
+                <p
+                  className="ssm-text"
+                  onClick={() => clickChangeLanguage("th")}
+                >
+                  TH
+                </p>
+              ) : (
+                <p
+                  className="ssm-text"
+                  onClick={() => clickChangeLanguage("en")}
+                >
+                  EN
+                </p>
+              )}
               <p className="ssm-text slash">|</p>
-              <p className="ssm-text" onClick={() => changeLanguage('jp')}>JP</p>
+              <p className="ssm-text" onClick={() => clickChangeLanguage("jp")}>
+                JP
+              </p>
             </div>
           </div>
         </div>
@@ -78,57 +110,36 @@ function Landing(props) {
   );
 }
 
-let linkToHome = (value) => {
+let linkToHome = (value, lgs) => {
   let web = "http://localhost:3000/";
-  let path = "home/" + value;
-  window.location = web + path;
+  let path = "/home/";
+  window.location = web + lgs + path + value;
 };
 
 export default class MainLanding extends Component {
-
   constructor(props) {
-      super(props);
-      this.state = {
-        link: [{
-          "table_id": '1',
-          "guest_uid": 'aed1',
-        },
-        {
-          "table_id": '2',
-          "guest_uid": 'aed2',
-        },
-        {
-          "table_id": '3',
-          "guest_uid": 'aed3',
-        },
-        {
-          "table_id": '4',
-          "guest_uid": 'aed4',
-        },
-        {
-          "table_id": '5',
-          "guest_uid": 'aed5',
-        },],
-      };
-    }
+    super(props);
+    this.state = {
+      link: [],
+    };
+  }
 
-  // componentWillMount() {
-  //     this.getLink(); 
-  // }
+  componentDidMount() {
+    this.getLink();
+  }
 
-  // async getLink() {
-  //     return await tableService
-  //       .getTables()
-  //       .then((data) => this.setState({ link: data }));
-  //   }
+   async getLink() {
+    return await tableService
+      .getTables()
+      .then((data) => this.setState({ link: data }));
+  }
 
   render() {
-    let linked = this.state.link
-      return (
-          <div>
-              <Landing table={linked}/>
-          </div>
-      )
+    let linked = this.state.link;
+    return (
+      <div>
+        <Landing table={linked} />
+      </div>
+    );
   }
 }
-

@@ -26,5 +26,15 @@
     "checkOut" : {
         "1": "Check",
         "2": "Out"
+    },
+    "AskContinue" : {
+        "1": "Do you which to continue",
+        "2": "with this table number?"
+    },
+    "continue": "continue",
+    "invalide" : "Invalide",
+    "invalidePath" : {
+        "1": "Do you come to wrong site?",
+        "2": "contact the waiter"
     } 
 }

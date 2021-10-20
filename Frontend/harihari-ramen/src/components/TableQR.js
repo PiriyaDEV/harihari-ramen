@@ -15,7 +15,7 @@ export default class TableQR extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.getLink();
   }
 
@@ -24,6 +24,7 @@ export default class TableQR extends Component {
     let qrlink =
       "https://chart.googleapis.com/chart?cht=qr&chl=" +
       web +
+      "en/" +
       "table/" +
       value +
       "&chs=160x160&chld=L|0";
@@ -33,7 +34,7 @@ export default class TableQR extends Component {
 
   openLink(value) {
     let web = "http://localhost:3000/";
-    let path = web + "table/" + value;
+    let path = web + "en/table/" + value;
     window.location = path;
   }
 
@@ -49,15 +50,15 @@ export default class TableQR extends Component {
     return (
       <div id="table-qr" className="section">
         <div className="page-container">
-          {link.map((table) => (
-            <div key={table.guest_uid}>
-              <h1 onClick={() => this.openLink(table.guest_uid)}>
-                Table {table.table_id}
+          {link.map((index) => (
+            <div key={index.guest_uid}>
+              <h1 onClick={() => this.openLink(index.guest_uid)}>
+                Table {index.table_id}
               </h1>
-              <h1>Reserved: {table.reserve}</h1>
+              <h1>Reserved: {index.reserve}</h1>
               <img
                 className="qr-code"
-                src={this.makeQR(table.guest_uid)}
+                src={this.makeQR(index.guest_uid)}
                 alt=""
               ></img>
             </div>
