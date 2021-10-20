@@ -7,6 +7,15 @@
   line-height: 30px;
 }
 
+.th {
+  font-family: "K2D", sans-serif !important;
+}
+
+.jp,
+.en {
+  font-family: heisei-maru-gothic-std, sans-serif !important;
+}
+
 .sm-text {
   font-family: heisei-maru-gothic-std, sans-serif;
   font-weight: 400;

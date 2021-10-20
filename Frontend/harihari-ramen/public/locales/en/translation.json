@@ -1,0 +1,40 @@
+{
+    "id": "en",
+    "table": "TABLE",
+    "checkIn": "Check-in time",
+    "orderStatus": "Order Status",
+    "orderLeft": {
+        "1": "order left",
+        "2": ""
+    },
+    "phaseOrder": {
+        "1": "We have received your order",
+        "2": "Please wait for your order to be prepare"
+    },
+    "orderFood" : {
+        "1": "Order",
+        "2": "Food"
+    },
+    "orderHistory" : {
+        "1": "Order",
+        "2": "History"
+    },
+    "callWaiter" : {
+        "1": "Call",
+        "2": "Waiter"
+    },
+    "checkOut" : {
+        "1": "Check",
+        "2": "Out"
+    },
+    "AskContinue" : {
+        "1": "Do you which to continue",
+        "2": "with this table number?"
+    },
+    "continue": "continue",
+    "invalide" : "Invalide",
+    "invalidePath" : {
+        "1": "Do you come to wrong site?",
+        "2": "contact the waiter"
+    } 
+}
