@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Component } from "react";
+import React, { useState, useEffect } from "react";
 import tableService from "../services/table.service.js";
 import { useParams } from "react-router";
 import { useTranslation } from "react-i18next";
@@ -12,14 +12,20 @@ import "../css/element/languageBtn.css";
 //Image
 import RamenPic from "../images/ramen_main@2x.png";
 
-const Landing = (props) => {
+export default function Landing() {
   const { t, i18n } = useTranslation();
   const { id, lgs } = useParams();
+  const [link, setLink] = useState();
 
   useEffect(() => {
+    getLink();
     i18n.changeLanguage(lgs);
     setLg(" " + lgs);
   }, [i18n, lgs]);
+
+  const getLink = async () => {
+    return await tableService.getTables().then((data) => setLink(data));
+  };
 
   const clickChangeLanguage = (lng) => {
     let web = "http://localhost:3000/";
@@ -30,19 +36,9 @@ const Landing = (props) => {
   const [lg, setLg] = useState(" " + lgs);
 
   let numTable = useState(0);
-  let haveTable = 0;
 
-  for (const index in props.table) {
-    if (props.table[index].guest_uid === id) {
-      numTable = props.table[index].table_id;
-      haveTable = 1;
-    }
-  }
-
-  // if (haveTable === 0) {
-  //   numTable = 0;
-  //   window.location = "http://localhost:3000/invalid";
-  // }
+  numTable = CheckTable(link, id);
+  CheckHaveTable(numTable, link);
 
   return (
     <div id="landing" className="section">
@@ -52,8 +48,12 @@ const Landing = (props) => {
         </div>
         <div>
           {numTable !== 0 ? (
-            <h1 className={"bg-text center-text table-text" + lg}>
-              {t("table")} {numTable}
+            <h1
+              id="table-title-box"
+              className={"bg-text center-text table-text" + lg}
+            >
+              <span id="b-table">{t("table")}</span> <br className="mb-br"/>{" "}
+              <span id="table-number">{numTable}</span>
             </h1>
           ) : (
             <h1 className={"bg-text center-text table-text" + lg}>
@@ -83,7 +83,7 @@ const Landing = (props) => {
           </div>
           <div className="lg-box">
             <div className="lg-text section">
-              {lg === " " + "en" ? (
+              {lg === " en" ? (
                 <p
                   className="ssm-text"
                   onClick={() => clickChangeLanguage("th")}
@@ -116,30 +116,16 @@ let linkToHome = (value, lgs) => {
   window.location = web + lgs + path + value;
 };
 
-export default class MainLanding extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      link: [],
-    };
+function CheckTable(link, id) {
+  for (const index in link) {
+    if (link[index].guest_uid === id) {
+      return link[index].table_id;
+    }
   }
+}
 
-  componentDidMount() {
-    this.getLink();
-  }
-
-   async getLink() {
-    return await tableService
-      .getTables()
-      .then((data) => this.setState({ link: data }));
-  }
-
-  render() {
-    let linked = this.state.link;
-    return (
-      <div>
-        <Landing table={linked} />
-      </div>
-    );
+function CheckHaveTable(numTable, link) {
+  if (!numTable && link) {
+    window.location = "http://localhost:3000/invalid";
   }
 }
