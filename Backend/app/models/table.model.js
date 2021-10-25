@@ -1,83 +1,66 @@
 const sql = require("../database/connection");
 
-const Table = function (table) {
-  this.table_uid = table.table_uid;
-  this.reserve = table.reserve;
-  this.status = table.status;
-  this.created_at = table.created_at;
-  this.updated_at = table.updated_at;
-};
-
-Table.create = (table, result) => {
+exports.create = async (table) => {
+  table.reserve = false;
+  table.status = true;
   table.created_at = Date.now();
   table.updated_at = Date.now();
 
-  sql.query(`INSERT INTO tables SET ?`, table, (err, res) => {
-    if (err) {
-      console.log(
-        `${"\x1b[1m"}${"\x1b[38;5;105m"}[${Date()}]${"\x1b[0m"} `,
-        err
-      );
-      result(err, null);
-      return;
-    }
+  try {
+    const [result, fields] = await sql.query(`INSERT INTO tables SET ?`, table);
 
     console.log(
-      `${"\x1b[1m"}${"\x1b[38;5;105m"}[${Date()}]${"\x1b[0m"} Inserted ${
-        res.affectedRows
-      } table >>> id: ${res.insertId}`
+      `Inserted ${result.affectedRows} table >>> id: ${result.insertId}`
     );
-    result(null, { table_id: res.insertId, ...table });
-    return;
-  });
+    return { table_id: result.insertId, ...table };
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-Table.update = (table, result) => {
+exports.update = async (table) => {
   table.updated_at = Date.now();
 
-  sql.query(
-    `UPDATE tables SET ? WHERE table_uid = '${table.table_uid}'`,
-    table,
-    (err, res) => {
-      if (err) {
-        console.log(
-          `${"\x1b[1m"}${"\x1b[38;5;105m"}[${Date()}]${"\x1b[0m"} `,
-          err
-        );
-        result(err, null);
-        return;
-      }
-
-      console.log(
-        `${"\x1b[1m"}${"\x1b[38;5;105m"}[${Date()}]${"\x1b[0m"} Updated table >>> id: ${
-          table.table_id
-        }`
-      );
-      result(null, table);
-      return;
-    }
-  );
-};
-
-Table.getTables = (result) => {
-  sql.query(`SELECT table_id, table_uid, reserve FROM tables WHERE status = 1`, (err, res) => {
-    if (err) {
-      console.log(
-        `${"\x1b[1m"}${"\x1b[38;5;105m"}[${Date()}]${"\x1b[0m"} `,
-        err
-      );
-      result(err, null);
-      return;
-    }
-
-    console.log(
-      `${"\x1b[1m"}${"\x1b[38;5;105m"}[${Date()}]${"\x1b[0m"} Selected ${
-        res.length
-      } table(s)`
+  try {
+    const [result, fields] = await sql.query(
+      `UPDATE tables SET ? WHERE table_id = '${table.table_id}'`,
+      table
     );
-    result(null, res);
-    return;
-  });
+
+    console.log(`Updated table >>> id: ${table.table_id}`);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-module.exports = Table;
+exports.find = async (table) => {
+  try {
+    const [result, fields] = await sql.query(
+      `SELECT * FROM tables WHERE guest_uid = '${table.guest_uid}'`,
+      table
+    );
+
+    if (result.length) {
+      console.log(`Found table >>> id: ${result[0].table_id}`);
+      return { isFound: true, ...result[0] };
+    } else {
+      console.log(`Not found table >>> id: ${table.guest_uid}`);
+      return { isFound: false };
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+exports.getTables = async (result) => {
+  try {
+    const [result, fields] = await sql.query(
+      `SELECT table_id, guest_uid, reserve FROM tables WHERE status = 1`
+    );
+
+    console.log(`Selected ${result.length} table(s)`);
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+};

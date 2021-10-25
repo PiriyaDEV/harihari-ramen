@@ -53,5 +53,11 @@
 
 .pg-text {
   position: absolute;
-  left: -10px;
+  left: -35px;
+}
+
+@media screen and (max-width: 1650px) {
+  .pg-text {
+    left: -10px;
+  }
 }

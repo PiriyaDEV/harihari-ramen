@@ -1,5 +1,7 @@
 const dotenv = require("dotenv");
+const http = require("http");
 const express = require("express");
+const socketIO = require("socket.io");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 
@@ -11,11 +13,14 @@ const app = express();
 
 // define cors options
 const corsOptions = {
-  origin: ["http://localhost:3000"]
+  origin: ["http://localhost:3000"],
 };
 
 // enable cross-origin resource sharing
 app.use(cors(corsOptions));
+
+// serve static files
+app.use("/images", express.static("public"));
 
 // parse requests of content-type: application/json
 app.use(bodyParser.json({ limit: "20mb" }));
@@ -34,8 +39,29 @@ app.use((req, res) => {
 
 // set port and start a server
 const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-  console.log(
-    `${"\x1b[1m"}${"\x1b[38;5;105m"}[${Date()}]${"\x1b[0m"} Hari Hari Ramen's API server is running on port ${PORT}.`
-  );
+const server = http.createServer(app);
+
+server.listen(PORT, () => {
+  console.log(`Hari Hari Ramen's API server is running on port ${PORT}.`);
 });
+
+const io = socketIO(server, {
+  transports:['polling'],
+  cors:{
+    cors: {
+      origin: "http://localhost:3000"
+    }
+  }
+})
+
+io.on('connection', (socket) => {
+  console.log('A user is connected');
+
+  socket.on('message', (message) => {
+    console.log(`message from ${socket.id} : ${message}`);
+  })
+
+  socket.on('disconnect', () => {
+    console.log(`socket ${socket.id} disconnected`);
+  })
+})
