@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import tableService from "../services/table.service.js";
 import { useParams } from "react-router";
 import { useTranslation } from "react-i18next";
@@ -15,17 +15,23 @@ import RamenPic from "../images/ramen_main@2x.png";
 
 // import Invalid from "../components/Invalid";
 
-const Home = (props) => {
+export default function Home() {
   const { id, lgs } = useParams();
   const [width, setWidth] = useState(0);
   const intermediaryBalls = 2;
   const calculatedWidth = (width / (intermediaryBalls + 1)) * 100;
   const { t, i18n } = useTranslation();
+  const [link, setLink] = useState();
 
   useEffect(() => {
+    getLink();
     i18n.changeLanguage(lgs);
     setLg(" " + lgs);
   }, [i18n, lgs]);
+
+  const getLink = async () => {
+    return await tableService.getTables().then((data) => setLink(data));
+  };
 
   const clickChangeLanguage = (lng) => {
     let web = "http://localhost:3000/";
@@ -36,16 +42,19 @@ const Home = (props) => {
   // alert(lgs);
 
   const [lg, setLg] = useState(" " + lgs);
-
   let numTable = useState(0);
-  let haveTable = 0;
 
-  for (const index in props.table) {
-    if (props.table[index].guest_uid === id) {
-      numTable = props.table[index].table_id;
-      haveTable = 1;
-    }
-  }
+  numTable = CheckTable(link, id);
+
+  // let numTable = useState(0);
+  // // let haveTable = 0;
+
+  // for (const index in link) {
+  //   if (link[index].guest_uid === id) {
+  //     numTable = link[index].table_id;
+  //     // haveTable = 1;
+  //   }
+  // }
 
   // if (haveTable === 0) {
   //   numTable = 0;
@@ -72,7 +81,7 @@ const Home = (props) => {
           <div id="table-box">
             <div className="lg-box">
               <div className="lg-text section">
-                {lg === " " + "en" ? (
+                {lg === " en" ? (
                   <p
                     className="ssm-text"
                     onClick={() => clickChangeLanguage("th")}
@@ -171,26 +180,13 @@ const Home = (props) => {
   );
 }
 
-export default class MainHome extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      link: [],
-    };
-  }
+function CheckTable(link, id) {
+  // let haveTable = 0;
 
-  componentDidMount() {
-    this.getLink();
-  }
-
-  async getLink() {
-    return await tableService
-      .getTables()
-      .then((data) => this.setState({ link: data }));
-  }
-
-  render() {
-    let linked = this.state.link;
-    return <Home table={linked} />;
+  for (const index in link) {
+    if (link[index].guest_uid === id) {
+      return link[index].table_id;
+      // haveTable = 1;
+    }
   }
 }
