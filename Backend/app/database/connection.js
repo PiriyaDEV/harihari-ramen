@@ -1,4 +1,4 @@
-const mysql = require("mysql2");
+const mysql = require("mysql2/promise");
 
 const dbConfig = require("../config/db.config");
 
@@ -10,44 +10,19 @@ const config = {
   database: dbConfig.DB,
 };
 
-var connection;
+function handleConnection() {
+  try {
+    let pool = mysql.createPool(config);
 
-function handleDisconnect() {
-  connection = mysql.createConnection(config);
-
-  connection.connect((err) => {
-    if (err) {
-      console.log(
-        `${"\x1b[1m"}${"\x1b[38;5;105m"}[${Date()}]${"\x1b[0m"} `,
-        err
-      );
-      setTimeout(handleDisconnect, 2000);
-    }
-  });
-
-  connection.on("error", (err) => {
-    if (err.code === "PROTOCOL_CONNECTION_LOST") {
-      handleDisconnect();
-    } else {
-      throw err;
-    }
-  });
+    console.log(
+      `Successfully connected to ${dbConfig.DB} database on port ${dbConfig.PORT}.`
+    );
+    return pool;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
-handleDisconnect();
+const pool = handleConnection();
 
-connection = mysql.createConnection(config);
-
-connection.connect((err) => {
-  if (err) {
-    handleDisconnect();
-  }
-
-  console.log(
-    `${"\x1b[1m"}${"\x1b[38;5;105m"}[${Date()}]${"\x1b[0m"} Successfully connected to ${
-      dbConfig.DB
-    } database on port ${dbConfig.PORT}.`
-  );
-});
-
-module.exports = connection;
+module.exports = pool;
