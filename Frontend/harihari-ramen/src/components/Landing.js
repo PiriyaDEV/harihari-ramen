@@ -38,6 +38,7 @@ export default function Landing() {
   let numTable = useState(0);
 
   numTable = CheckTable(link, id);
+  CheckHaveTable(numTable, link);
 
   return (
     <div id="landing" className="section">
@@ -47,8 +48,12 @@ export default function Landing() {
         </div>
         <div>
           {numTable !== 0 ? (
-            <h1 className={"bg-text center-text table-text" + lg}>
-              {t("table")} {numTable}
+            <h1
+              id="table-title-box"
+              className={"bg-text center-text table-text" + lg}
+            >
+              <span id="b-table">{t("table")}</span> <br class="mb-br"/>{" "}
+              <span id="table-number">{numTable}</span>
             </h1>
           ) : (
             <h1 className={"bg-text center-text table-text" + lg}>
@@ -116,5 +121,11 @@ function CheckTable(link, id) {
     if (link[index].guest_uid === id) {
       return link[index].table_id;
     }
+  }
+}
+
+function CheckHaveTable(numTable, link) {
+  if (!numTable && link) {
+    window.location = "http://localhost:3000/invalid";
   }
 }

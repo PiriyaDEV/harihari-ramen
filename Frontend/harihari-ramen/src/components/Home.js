@@ -45,18 +45,9 @@ export default function Home() {
   let numTable = useState(0);
 
   numTable = CheckTable(link, id);
+  CheckHaveTable(numTable, link);
 
-  // let numTable = useState(0);
-  // // let haveTable = 0;
-
-  // for (const index in link) {
-  //   if (link[index].guest_uid === id) {
-  //     numTable = link[index].table_id;
-  //     // haveTable = 1;
-  //   }
-  // }
-
-  // if (haveTable === 0) {
+  // if (numTable === 0) {
   //   numTable = 0;
   //   window.location = "http://localhost:3000/invalid";
   // }
@@ -74,6 +65,7 @@ export default function Home() {
           <h1 className={"pg-text bracket" + lg}>{text}</h1>
         </div>
       ));
+
   return (
     <div id="home" className="section">
       <div id="home-container" className="page-container">
@@ -181,12 +173,17 @@ export default function Home() {
 }
 
 function CheckTable(link, id) {
-  // let haveTable = 0;
-
   for (const index in link) {
     if (link[index].guest_uid === id) {
       return link[index].table_id;
-      // haveTable = 1;
     }
   }
 }
+
+
+function CheckHaveTable(numTable, link) {
+  if (!numTable && link) {
+    window.location = "http://localhost:3000/invalid";
+  }
+}
+
