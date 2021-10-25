@@ -52,7 +52,7 @@ export default function Landing() {
               id="table-title-box"
               className={"bg-text center-text table-text" + lg}
             >
-              <span id="b-table">{t("table")}</span> <br class="mb-br"/>{" "}
+              <span id="b-table">{t("table")}</span> <br className="mb-br"/>{" "}
               <span id="table-number">{numTable}</span>
             </h1>
           ) : (

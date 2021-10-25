@@ -136,4 +136,23 @@
   #ramen-icon {
     width: 64px;
   }
+
+  .menu-box {
+    height: 155px;
+  }
+
+  .menu-box > h1 {
+    left: 10px;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .menu-box > h1 {
+    left: 5px;
+    bottom: 5px;
+  }
+
+  .menu-box {
+    height: 125px;
+  }
 }
