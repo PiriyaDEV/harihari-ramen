@@ -1,12 +1,11 @@
 const uuid = require("uuid");
 
 const Table = require("../models/table.model");
+const Bill = require("../models/bill.model");
 
 exports.generate = async (req, res) => {
   let table = {
     guest_uid: uuid.v4(),
-    reserve: false,
-    status: true,
   };
 
   try {
@@ -48,7 +47,7 @@ exports.checkin = async (req, res) => {
   try {
     let findResult = await Table.find(table);
 
-    if (!findResult.isFound || findResult.reserve) {
+    if (!findResult.isFound) {
       return res.status(200).json({
         success: false,
         message: "Table not available",
@@ -56,14 +55,24 @@ exports.checkin = async (req, res) => {
       });
     }
 
-    table.table_id = findResult.table_id;
-    table.reserve = true;
-    await Table.update(table);
+    let bill = {
+      table_id: findResult.table_id,
+    };
+
+    let insertResult = {}
+
+    if (!findResult.reserve) {
+      table.table_id = findResult.table_id;
+      table.reserve = true;
+      await Table.update(table);
+      insertResult = await Bill.create(bill);
+    }
 
     return res.status(200).json({
       success: true,
       message: "Checked in successfully",
       guest_uid: guest_uid,
+      checkin_at: insertResult.created_at,
     });
   } catch (error) {
     return res.status(500).json({

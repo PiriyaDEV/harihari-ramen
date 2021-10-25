@@ -1,6 +1,8 @@
 const sql = require("../database/connection");
 
 exports.create = async (table) => {
+  table.reserve = false;
+  table.status = true;
   table.created_at = Date.now();
   table.updated_at = Date.now();
 
