@@ -2,7 +2,8 @@ const sql = require("../database/connection");
 
 exports.create = async (bill) => {
   bill.subtotal = 0;
-  bill.checkout_at = Date.now();
+  bill.status = true;
+  bill.checkout_at = 0;
   bill.created_at = Date.now();
   bill.updated_at = Date.now();
 
@@ -18,7 +19,7 @@ exports.create = async (bill) => {
   }
 };
 
-// exports.getBills = async (result) => {
+// exports.getBills = async (result, bill_id, table_id) => {
 //   try {
 //     const [result, fields] = await sql.query(
 //       `SELECT subtotal FROM tables WHERE status = 1`

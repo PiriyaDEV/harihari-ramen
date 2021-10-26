@@ -4,25 +4,32 @@ exports.addMain = async (req, res) => {
   let menu = {
     image_url: req.body.image_url,
     price: req.body.price,
-    status: true,
-  }
+  };
 
   let info = req.body.info;
 
   try {
     let menuResult = await Menu.createMainMenu(menu);
+    let infoArr = [];
 
-    info.forEach((info) => {
-      info.product_id = menuResult.product_id;
-      info.status = true;
-    })
-    
-    let infoResult = await Menu.createInfoMainMenu(info);
-    
+    infoArr = info.map((info) => [
+      menuResult.product_id,
+      info.language,
+      info.name,
+      info.category,
+      info.description,
+      true,
+      Date.now(),
+      Date.now(),
+    ]);
+
+    let infoResult = await Menu.createInfoMainMenu(infoArr);
+
     return res.status(201).json({
       success: true,
       message: "Created Successfully",
-      name: menuResult.name,
+      name: infoResult.name,
+      language: infoResult.inserted,
     });
   } catch (error) {
     return res.status(500).json({
@@ -30,9 +37,42 @@ exports.addMain = async (req, res) => {
       message: error.message,
     });
   }
-  return res.send(req.body);
 };
 
 exports.addChoice = async (req, res) => {
-  return res.send(req.body);
+  let choice = {
+    image_url: req.body.image_url,
+    price: req.body.price,
+  };
+
+  let info = req.body.info;
+
+  try {
+    let choiceResult = await Menu.createChoice(choice);
+    let infoArr = [];
+
+    infoArr = info.map((info) => [
+      choiceResult.choice_id,
+      info.language,
+      info.name,
+      info.description,
+      true,
+      Date.now(),
+      Date.now(),
+    ]);
+
+    let infoResult = await Menu.createInfoChoice(infoArr);
+
+    return res.status(201).json({
+      success: true,
+      message: "Created Successfully",
+      name: infoResult.name,
+      language: infoResult.inserted,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
