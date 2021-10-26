@@ -80,15 +80,15 @@ exports.createInfoChoice = async (info) => {
   }
 };
 
-// exports.getMenus = async (result) => {
-//   try {
-//     const [result, fields] = await sql.query(
-//       `SELECT * FROM tables WHERE status = 1`
-//     );
+exports.getMainMenus = async (result) => {
+  try {
+    const [result, fields] = await sql.query(
+      `SELECT * FROM main_menus WHERE status = 1`
+    );
 
-//     console.log(`Selected ${result.length} menu(s)`);
-//     return result;
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
+    console.log(`Selected ${result.length} menu(s)`);
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+};
