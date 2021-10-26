@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 //CSS
 import "../css/page.css";
 import "../css/text.css";
-import "../css/page/Landing.css";
+import "../css/components/Landing.css";
 import "../css/element/languageBtn.css";
 
 //Image
@@ -18,10 +18,12 @@ export default function Landing() {
   const [link, setLink] = useState();
 
   useEffect(() => {
-    getLink();
+    if (!link) {
+      getLink();
+    }
     i18n.changeLanguage(lgs);
     setLg(" " + lgs);
-  }, [i18n, lgs]);
+  }, [i18n, lgs , link]);
 
   const getLink = async () => {
     return await tableService.getTables().then((data) => setLink(data));
@@ -52,7 +54,7 @@ export default function Landing() {
               id="table-title-box"
               className={"bg-text center-text table-text" + lg}
             >
-              <span id="b-table">{t("table")}</span> <br className="mb-br"/>{" "}
+              <span id="b-table">{t("table")}</span> <br className="mb-br" />{" "}
               <span id="table-number">{numTable}</span>
             </h1>
           ) : (
