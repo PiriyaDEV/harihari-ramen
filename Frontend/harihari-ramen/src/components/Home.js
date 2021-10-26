@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 //CSS
 import "../css/page.css";
 import "../css/text.css";
-import "../css/page/Home.css";
+import "../css/components/Home.css";
 import "../css/element/progressBar.css";
 import "../css/element/languageBtn.css";
 
@@ -24,13 +24,16 @@ export default function Home() {
   const [link, setLink] = useState();
 
   useEffect(() => {
-    getLink();
+    if (!link) {
+      getLink();
+    }
     i18n.changeLanguage(lgs);
     setLg(" " + lgs);
-  }, [i18n, lgs]);
+  }, [i18n, lgs , link]);
+
 
   const getLink = async () => {
-    return await tableService.getTables().then((data) => setLink(data));
+    await tableService.getTables().then((data) => setLink(data));
   };
 
   const clickChangeLanguage = (lng) => {
@@ -138,7 +141,10 @@ export default function Home() {
 
         <div id="menu-section">
           <div className="menu-container">
-            <div className="menu-box">
+            <div
+              className="menu-box"
+              onClick={() => MenuSelect("menu", id, lgs)}
+            >
               <h1 className={"md-text" + lg}>
                 {t("orderFood.1")} <br />
                 {t("orderFood.2")}
@@ -180,10 +186,14 @@ function CheckTable(link, id) {
   }
 }
 
+function MenuSelect(page, value, lgs) {
+  let web = "http://localhost:3000/";
+  let path = "/" + page + "/";
+  window.location = web + lgs + path + value;
+}
 
 function CheckHaveTable(numTable, link) {
   if (!numTable && link) {
     window.location = "http://localhost:3000/invalid";
   }
 }
-
