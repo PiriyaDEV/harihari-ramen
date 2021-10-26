@@ -26,6 +26,7 @@ export default function Menu() {
   const { t, i18n } = useTranslation();
   const { id, lgs } = useParams();
   const [link, setLink] = useState();
+  // const [mainMenu, setMainMenu] = useState();
 
   useEffect(() => {
     getLink();
@@ -46,10 +47,7 @@ export default function Menu() {
   const [lg, setLg] = useState(" " + lgs);
 
   let numTable = useState(0);
-  let dataMenu = GetMainMenu();
-
-  console.log([dataMenu])
-
+  
   numTable = CheckTable(link, id);
   CheckHaveTable(numTable, link);
 
@@ -68,7 +66,7 @@ export default function Menu() {
 
           <div id="table-box">
             <h1 className="bracket">TABLE</h1>
-            <h1 className="md-text">12</h1>
+            <h1 className="md-text">{numTable}</h1>
             <div className="lg-box">
               <div className="lg-text section">
                 {lg === " en" ? (
@@ -107,14 +105,14 @@ export default function Menu() {
 
         <div id="menu-main-container">
           <div id="menu-list-container">
-            {[...Array(4)].map((x, i) => (
+            {GetMainMenu("Appitizer").map((element, i ) => (
               <div className="menu-box" key={i}>
-                <img className="menu-pics" src={Pic1} alt=""></img>
+                <img className="menu-pics" src={GetMainMenu("Appitizer")[i].image_url} alt=""></img>
                 <div className="menu-name-container">
-                  <div className="vl"></div>
+                  {/* <div className="vl"></div> */}
                   <div>
                     <h1 className="sm-text menu-name">
-                      <span>X1</span> Karaage EiEi za haha
+                      {/*<span>X1</span>*/} {GetMainMenu("Appitizer")[i].name}
                     </h1>
                     <h1 className="bracket menu-price k2d">฿ 160.00</h1>
                   </div>
@@ -192,51 +190,63 @@ function CheckHaveTable(numTable, link) {
   }
 }
 
-function GetMainMenu() {
-  const [menu, setMenu] = useState();
-  if (!menu) {
-    setMenu([
+function GetMainMenu(value) {
+  return [
       {
+        name:"test",
+        category: "Appitizer",
         description: "อร่อย",
         image_url: Pic1,
         price: "300",
       },
       {
+        name:"test1",
+        category: "Appitizer",
         description: "อร่อย",
         image_url: Pic2,
         price: "400",
       },
       {
+        name:"test2",
+        category: "Ramen",
         description: "อร่อย",
         image_url: Pic3,
         price: "500",
       },
       {
+        name:"test3",
+        category: "Dessert",
         description: "อร่อย",
         image_url: Pic4,
         price: "600",
       },
       {
+        name:"test4",
+        category: "Ramen",
         description: "อร่อย",
         image_url: Pic5,
         price: "700",
       },
       {
+        name:"test5",
+        category: "Dessert",
         description: "อร่อย",
         image_url: Pic6,
         price: "800",
       },
       {
+        name:"test6",
+        category: "Drink",
         description: "อร่อย",
         image_url: Pic7,
         price: "900",
       },
       {
+        name:"test7",
+        category: "Drink",
         description: "อร่อย",
         image_url: Pic8,
         price: "1000",
       },
-    ]);
-  }
-  return menu;
+    ].filter(menu => menu.category === value)
 }
