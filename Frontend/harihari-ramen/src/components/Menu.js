@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from "react";
+//Import
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import tableService from "../services/table.service.js";
+import menuService from "../services/menu.service.js";
 import { useParams } from "react-router";
 import { useTranslation } from "react-i18next";
 
@@ -9,33 +11,50 @@ import "../css/text.css";
 import "../css/components/Menu.css";
 import "../css/element/languageBtn.css";
 
+//Icon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
-
-//Temp Img
-import Pic1 from "../images/tempMenu/merlin_141075300_74569dec-9fc2-4174-931d-019dddef3bb8-articleLarge.jpeg";
-import Pic2 from "../images/tempMenu/1c071b0eaa1158e766957d975e55748d.jpeg";
-import Pic3 from "../images/tempMenu/char-siu-pork-and-noodle-salad-105414-1.jpeg";
-import Pic4 from "../images/tempMenu/download.jpeg";
-import Pic5 from "../images/tempMenu/iro-roll-spicy-tempura-ebi.jpeg";
-import Pic6 from "../images/tempMenu/Kinders_Teriyaki_Chicken_Skewers_-_WEB_1024x1024.jpeg";
-import Pic7 from "../images/tempMenu/Reheat-Edamame.png";
-import Pic8 from "../images/tempMenu/unnamed_0fee512e-0c46-4966-a2cb-719614098063_3000x.jpeg";
 
 export default function Menu() {
   const { t, i18n } = useTranslation();
   const { id, lgs } = useParams();
   const [link, setLink] = useState();
-  // const [mainMenu, setMainMenu] = useState();
+  const [category, setCategory] = useState("Appetizer");
+  const [mainMenu, setMainMenu] = useState([]);
+  const [tempMenu, setTempMenu] = useState([]);
+  const [lg, setLg] = useState(" " + lgs);
 
   useEffect(() => {
     getLink();
     i18n.changeLanguage(lgs);
     setLg(" " + lgs);
-  }, [i18n, lgs ]);
+    getMainMenu();
+  }, [i18n, lgs]);
+
+  useLayoutEffect(() => {
+    if (lgs === "en") {
+      setMainMenu(tempMenu.filter((menu) => menu.en.category === "Appetizer"));
+    } else if (lgs === "th") {
+      setMainMenu(tempMenu.filter((menu) => menu.th.category === "อาหารเรียกน้ำย่อย"));
+    } else {
+      setMainMenu(tempMenu.filter((menu) => menu.jp.category === "前菜"));
+    }
+  }, [lgs, tempMenu]);
+
+  function changeCategory(value) {
+    setMainMenu(tempMenu.filter((menu) => menu.en.category === value));
+    setCategory(value);
+  }
 
   const getLink = async () => {
     return await tableService.getTables().then((data) => setLink(data));
+  };
+
+  const getMainMenu = async () => {
+    return await menuService.getMainMenus().then((data) => {
+      setMainMenu(data);
+      setTempMenu(data);
+    });
   };
 
   const clickChangeLanguage = (lng) => {
@@ -44,10 +63,15 @@ export default function Menu() {
     window.location = web + lng + path + id;
   };
 
-  const [lg, setLg] = useState(" " + lgs);
+  const checkCategory = (value) => {
+    if (value === category) {
+      return "md-text ";
+    }
+    return "md-text inactive";
+  };
 
   let numTable = useState(0);
-  
+
   numTable = CheckTable(link, id);
   CheckHaveTable(numTable, link);
 
@@ -61,11 +85,11 @@ export default function Menu() {
               className="menu-header fa"
               onClick={() => linkToHome(id, lgs)}
             />
-            <h1 className={"menu-header" + lg}>Order Food</h1>
+            <h1 className={"menu-header" + lg}>{t("orderFoodIn")}</h1>
           </div>
 
           <div id="table-box">
-            <h1 className="bracket">TABLE</h1>
+            <h1 className="bracket">{t("table")}</h1>
             <h1 className="md-text">{numTable}</h1>
             <div className="lg-box">
               <div className="lg-text section">
@@ -97,24 +121,50 @@ export default function Menu() {
         </div>
 
         <div id="menu-choice-container">
-          <h1 className="md-text">Appetizer</h1>
-          <h1 className="md-text inactive">Ramen</h1>
-          <h1 className="md-text inactive">Dessert</h1>
-          <h1 className="md-text inactive">Drink</h1>
+          <h1
+            className={checkCategory("Appetizer") + lg}
+            onClick={() => changeCategory("Appetizer")}
+          >
+            {t("categortyMenu.appetizer")}
+          </h1>
+          <h1
+            className={checkCategory("Ramen") + lg}
+            onClick={() => changeCategory("Ramen")}
+          >
+            {t("categortyMenu.ramen")}
+          </h1>
+          <h1
+            className={checkCategory("Dessert") + lg}
+            onClick={() => changeCategory("Dessert")}
+          >
+            {t("categortyMenu.dessert")}
+          </h1>
+          <h1
+            className={checkCategory("Beverage") + lg}
+            onClick={() => changeCategory("Beverage")}
+          >
+            {t("categortyMenu.beverage")}
+          </h1>
         </div>
 
         <div id="menu-main-container">
           <div id="menu-list-container">
-            {GetMainMenu("Appitizer").map((element, i ) => (
+            {mainMenu.map((element, i) => (
               <div className="menu-box" key={i}>
-                <img className="menu-pics" src={GetMainMenu("Appitizer")[i].image_url} alt=""></img>
+                <img
+                  className="menu-pics"
+                  src={mainMenu[i].image_url}
+                  alt=""
+                ></img>
                 <div className="menu-name-container">
                   {/* <div className="vl"></div> */}
                   <div>
                     <h1 className="sm-text menu-name">
-                      {/*<span>X1</span>*/} {GetMainMenu("Appitizer")[i].name}
+                      {/*<span>X1</span>*/} {mainMenu[i].en.name}
                     </h1>
-                    <h1 className="bracket menu-price k2d">฿ 160.00</h1>
+                    <h1 className="bracket menu-price k2d">
+                      ฿ {mainMenu[i].price}
+                    </h1>
                   </div>
                 </div>
               </div>
@@ -124,22 +174,24 @@ export default function Menu() {
           <div>
             <div id="basket-container">
               <h1 className="md-text">YOUR BASKET</h1>
-              {[...Array(4)].map((x, i) => (
-                <div className="basket-item" key={i}>
-                  <div className="basket-name">
-                    <h1 className="md-text basket-no">X1</h1>
+              <div id="basket-item-box">
+                {[...Array(10)].map((x, i) => (
+                  <div className="basket-item" key={i}>
+                    <div className="basket-name">
+                      <h1 className="md-text basket-no">X1</h1>
+                      <div>
+                        <h1 className="sm-text menu-name">Karaage</h1>
+                        <h1 className="bracket">Sweet 50%</h1>
+                      </div>
+                    </div>
+
                     <div>
-                      <h1 className="sm-text menu-name">Karaage</h1>
-                      <h1 className="bracket">Sweet 50%</h1>
+                      <h1 className="sm-text k2d basket-price">160.00</h1>
+                      <h1 className="bracket bracket-edit">Edit</h1>
                     </div>
                   </div>
-
-                  <div>
-                    <h1 className="sm-text k2d basket-price">160.00</h1>
-                    <h1 className="bracket bracket-edit">Edit</h1>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
 
               <hr className="hr-black"></hr>
               <div className="price-box">
@@ -188,65 +240,4 @@ function CheckHaveTable(numTable, link) {
   if (!numTable && link) {
     window.location = "http://localhost:3000/invalid";
   }
-}
-
-function GetMainMenu(value) {
-  return [
-      {
-        name:"test",
-        category: "Appitizer",
-        description: "อร่อย",
-        image_url: Pic1,
-        price: "300",
-      },
-      {
-        name:"test1",
-        category: "Appitizer",
-        description: "อร่อย",
-        image_url: Pic2,
-        price: "400",
-      },
-      {
-        name:"test2",
-        category: "Ramen",
-        description: "อร่อย",
-        image_url: Pic3,
-        price: "500",
-      },
-      {
-        name:"test3",
-        category: "Dessert",
-        description: "อร่อย",
-        image_url: Pic4,
-        price: "600",
-      },
-      {
-        name:"test4",
-        category: "Ramen",
-        description: "อร่อย",
-        image_url: Pic5,
-        price: "700",
-      },
-      {
-        name:"test5",
-        category: "Dessert",
-        description: "อร่อย",
-        image_url: Pic6,
-        price: "800",
-      },
-      {
-        name:"test6",
-        category: "Drink",
-        description: "อร่อย",
-        image_url: Pic7,
-        price: "900",
-      },
-      {
-        name:"test7",
-        category: "Drink",
-        description: "อร่อย",
-        image_url: Pic8,
-        price: "1000",
-      },
-    ].filter(menu => menu.category === value)
 }

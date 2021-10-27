@@ -1,0 +1,14 @@
+import http from "./../http-common";
+
+export default new (class MenuService {
+  async getMainMenus(value) {
+    return await http
+      .get("/menu/getMainMenus")
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        return error.response;
+      });
+  }
+})();
