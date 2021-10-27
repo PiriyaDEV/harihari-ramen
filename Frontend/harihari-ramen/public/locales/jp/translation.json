@@ -36,5 +36,12 @@
     "invalidePath" : {
         "1": "あなたは間違った場所に来ますか？",
         "2": "ウェイターに連絡する"
-    } 
+    },
+    "orderFoodIn" : "注文食べ物",
+    "categortyMenu" : {
+        "appetizer" : "前菜",
+        "ramen" : "ラーメン",
+        "dessert" : "デザート",
+        "beverage" : "飲む"
+    }
 }

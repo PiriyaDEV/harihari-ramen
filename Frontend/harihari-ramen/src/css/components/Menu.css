@@ -1,17 +1,20 @@
 #menu-container {
-  margin: 50px 0px 100px 0px;
+  /* margin: 50px 0px 100px 0px; */
+  height: 100vh;
+  /* overflow: hidden; */
 }
 
 #menu-header-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: 30px;
 }
 
 #table-box {
   border: 3px solid #232322;
   border-radius: 10px;
-  padding: 15px 10px;
+  padding: 10px 10px;
 }
 
 #table-box > h1 {
@@ -38,7 +41,7 @@
 }
 
 #menu-main-container {
-  margin-top: 30px;
+  margin-top: 25px;
   display: grid;
   grid-template-columns: 6fr 4fr;
   grid-gap: 25px;
@@ -58,7 +61,7 @@
   width: 100%;
   border-top: 1px solid #232322;
   border-bottom: none;
-  margin-top: 100px;
+  margin-top: 0px;
 }
 
 .price-box {
@@ -81,7 +84,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
 }
 
 #order-box {
@@ -111,6 +114,7 @@
   object-fit: cover;
   border: 3px solid #232322;
   border-radius: 10px;
+  cursor: pointer;
 }
 
 #menu-list-container {
@@ -120,6 +124,12 @@
   height: fit-content;
   flex-wrap: wrap;
   gap: 25px;
+  margin-bottom: 30px;
+
+  height: 500px;
+  overflow-y: auto;
+
+  min-height: inherit;
 }
 
 .menu-name-container {
@@ -185,4 +195,32 @@
   font-weight: 800;
   text-align: end;
   cursor: pointer;
+}
+
+/* Scroll Box */
+#basket-item-box {
+  height: 210px;
+  overflow-y: auto;
+  box-shadow: inset 0 -7px 9px -7px rgba(0, 0, 0, 0.2);
+  padding-right: 10px;
+}
+
+#basket-item-box::-webkit-scrollbar,
+#menu-list-container::-webkit-scrollbar {
+  height: 5px;
+  width: 5px;
+  padding-bottom: 30px;
+}
+
+#basket-item-box::-webkit-scrollbar-track,
+#menu-list-container::-webkit-scrollbar-track {
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+#basket-item-box::-webkit-scrollbar-thumb,
+#menu-list-container::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.5);
+  /* box-shadow: 0 0 1px rgba(255, 255, 255, 1); */
 }
