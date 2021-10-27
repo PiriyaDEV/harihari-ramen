@@ -83,7 +83,6 @@ CREATE TABLE IF NOT EXISTS custom_ramens(
 CREATE TABLE IF NOT EXISTS custom_ramen_details(
   ramen_id                INT             NOT NULL,
   choice_id               INT             NOT NULL,
-  type                    VARCHAR(255)    NOT NULL,
   status                  BOOLEAN         NOT NULL,
   created_at              BIGINT          NOT NULL,
   updated_at              BIGINT          NOT NULL,
@@ -106,6 +105,7 @@ CREATE TABLE IF NOT EXISTS info_ramen_choices(
   choice_id               INT             NOT NULL,
   language                VARCHAR(2)      NOT NULL,
   name                    VARCHAR(255)    NOT NULL,
+  category                VARCHAR(255)    NOT NULL,
   description             VARCHAR(255)    NOT NULL,
   status                  BOOLEAN         NOT NULL,
   created_at              BIGINT          NOT NULL,

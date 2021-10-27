@@ -1,10 +1,12 @@
 const router = require("express").Router();
 
 const controller = require("../controllers/menu.controller");
-const uploader = require("../middleware/upload")
+const uploader = require("../middleware/upload");
 
-router.post("/addMain", uploader.singleImage, controller.addMain);
+router.post("/addMain", uploader, controller.addMain);
 
-router.post("/addChoice", uploader.singleImage, controller.addChoice);
+router.post("/addChoice", uploader, controller.addChoice);
+
+router.get("/getMainMenus", controller.getMainMenus);
 
 module.exports = router;

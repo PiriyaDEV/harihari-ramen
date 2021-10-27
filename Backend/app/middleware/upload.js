@@ -18,7 +18,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-exports.singleImage = (req, res, next) => {
+module.exports = (req, res, next) => {
   const type = [
     { name: "menu", maxCount: 1 },
     { name: "choice", maxCount: 1 },
@@ -35,6 +35,7 @@ exports.singleImage = (req, res, next) => {
       } else if (file.choice) {
         req.body.image_url = "/images/choices/" + file.choice[0].filename;
       }
+      
       next();
     } else {
       return res.status(500).json({
