@@ -83,7 +83,65 @@ exports.createInfoChoice = async (info) => {
 exports.getMainMenus = async (result) => {
   try {
     const [result, fields] = await sql.query(
-      `SELECT * FROM main_menus WHERE status = 1`
+      `SELECT
+        M.product_id,
+        M.image_url,
+        M.price,
+        (
+            SELECT
+                JSON_OBJECT(
+                    'name',
+                    I.name,
+                    'category',
+                    I.category,
+                    'description',
+                    I.description
+                )
+            FROM
+                info_main_menus I
+            WHERE
+                I.product_id = M.product_id
+                AND I.language = 'en'
+                AND I.status = 1
+        ) AS en,
+        (
+            SELECT
+                JSON_OBJECT(
+                    'name',
+                    I.name,
+                    'category',
+                    I.category,
+                    'description',
+                    I.description
+                )
+            FROM
+                info_main_menus I
+            WHERE
+                I.product_id = M.product_id
+                AND I.language = 'jp'
+                AND I.status = 1
+        ) AS jp,
+        (
+            SELECT
+                JSON_OBJECT(
+                    'name',
+                    I.name,
+                    'category',
+                    I.category,
+                    'description',
+                    I.description
+                )
+            FROM
+                info_main_menus I
+            WHERE
+                I.product_id = M.product_id
+                AND I.language = 'th'
+                AND I.status = 1
+        ) AS th
+        FROM
+            main_menus M
+        WHERE
+            M.status = 1`
     );
 
     console.log(`Selected ${result.length} menu(s)`);

@@ -27,8 +27,7 @@ exports.getLatestBillByTable = async (bill) => {
           table_id = ${bill.table_id}
           AND checkout_at = 0
         ORDER BY created_at DESC
-        LIMIT 1
-      `
+        LIMIT 1`
     );
 
     if (result.length) {

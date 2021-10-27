@@ -55,6 +55,7 @@ exports.addChoice = async (req, res) => {
       choiceResult.choice_id,
       info.language,
       info.name,
+      info.category,
       info.description,
       true,
       Date.now(),
@@ -78,8 +79,12 @@ exports.addChoice = async (req, res) => {
 };
 
 exports.getMainMenus = async (req, res) => {
+  const base_url = process.env.BASE_URL;
+
   try {
     let result = await Menu.getMainMenus();
+
+    result.map((menu) => (menu.image_url = `${base_url}${menu.image_url}`));
 
     return res.status(200).json(result);
   } catch (error) {
