@@ -2,8 +2,8 @@ const Order = require("../models/order.model");
 const Bill = require("../models/bill.model");
 
 exports.create = async (req, res) => {
-  const table = req.body.table;
-  const bill = {
+  let table = req.body.table;
+  let bill = {
     table_id: table.table_id,
   };
 
@@ -32,11 +32,19 @@ exports.create = async (req, res) => {
 
     let orderMenuResult = await Order.createOrderMenu(infoArr);
 
+    let newSubtotal = await Order.getSubtotalByOrder(orderResult);
+
+    let updateBill = {
+      bill_id: billResult.bill_id,
+      subtotal: Number(billResult.subtotal) + Number(newSubtotal),
+    };
+    await Bill.update(updateBill);
+
     return res.status(201).json({
       success: true,
       message: "Created Successfully",
       order_id: orderMenuResult.order_id,
-      menuCount: orderMenuResult.inserted
+      menuCount: orderMenuResult.inserted,
     });
   } catch (error) {
     return res.status(500).json({

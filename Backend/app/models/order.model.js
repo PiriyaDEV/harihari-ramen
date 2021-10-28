@@ -35,3 +35,26 @@ exports.createOrderMenu = async (info) => {
     console.log(error);
   }
 };
+
+exports.getSubtotalByOrder = async (order) => {
+  try {
+    const [result, fields] = await sql.query(
+      `SELECT
+          SUM(O.quantity * M.price) AS subtotal
+        FROM
+          order_menus O
+          LEFT JOIN main_menus M ON O.product_id = M.product_id
+        WHERE
+          O.order_id = ${order.order_id}
+          AND O.status = 1`
+    );
+    
+    console.log(
+      `Subtotal ${result[0].subtotal} baht >>> order id: ${order.order_id}`
+    );
+
+    return result[0].subtotal;
+  } catch (error) {
+    console.log(error);
+  }
+};

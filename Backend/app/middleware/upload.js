@@ -35,7 +35,7 @@ module.exports = (req, res, next) => {
       } else if (file.choice) {
         req.body.image_url = "/images/choices/" + file.choice[0].filename;
       }
-      
+
       next();
     } else {
       return res.status(500).json({

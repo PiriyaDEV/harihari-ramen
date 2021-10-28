@@ -88,60 +88,60 @@ exports.getMainMenus = async (result) => {
         M.image_url,
         M.price,
         (
-            SELECT
-                JSON_OBJECT(
-                    'name',
-                    I.name,
-                    'category',
-                    I.category,
-                    'description',
-                    I.description
-                )
-            FROM
-                info_main_menus I
-            WHERE
-                I.product_id = M.product_id
-                AND I.language = 'en'
-                AND I.status = 1
+          SELECT
+            JSON_OBJECT(
+              'name',
+              I.name,
+              'category',
+              I.category,
+              'description',
+              I.description
+            )
+          FROM
+            info_main_menus I
+          WHERE
+            I.product_id = M.product_id
+            AND I.language = 'en'
+            AND I.status = 1
         ) AS en,
         (
-            SELECT
-                JSON_OBJECT(
-                    'name',
-                    I.name,
-                    'category',
-                    I.category,
-                    'description',
-                    I.description
-                )
-            FROM
-                info_main_menus I
-            WHERE
-                I.product_id = M.product_id
-                AND I.language = 'jp'
-                AND I.status = 1
+          SELECT
+            JSON_OBJECT(
+              'name',
+              I.name,
+              'category',
+              I.category,
+              'description',
+              I.description
+            )
+          FROM
+            info_main_menus I
+          WHERE
+            I.product_id = M.product_id
+            AND I.language = 'jp'
+            AND I.status = 1
         ) AS jp,
         (
-            SELECT
-                JSON_OBJECT(
-                    'name',
-                    I.name,
-                    'category',
-                    I.category,
-                    'description',
-                    I.description
-                )
-            FROM
-                info_main_menus I
-            WHERE
-                I.product_id = M.product_id
-                AND I.language = 'th'
-                AND I.status = 1
+          SELECT
+            JSON_OBJECT(
+              'name',
+              I.name,
+              'category',
+              I.category,
+              'description',
+              I.description
+            )
+          FROM
+            info_main_menus I
+          WHERE
+            I.product_id = M.product_id
+            AND I.language = 'th'
+            AND I.status = 1
         ) AS th
         FROM
-            main_menus M
+          main_menus M
         WHERE
-            M.status = 1`
+          M.status = 1`
     );
 
     console.log(`Selected ${result.length} menu(s)`);
