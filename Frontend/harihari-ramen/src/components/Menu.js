@@ -32,14 +32,9 @@ export default function Menu() {
   }, [i18n, lgs]);
 
   useLayoutEffect(() => {
-    if (lgs === "en") {
-      setMainMenu(tempMenu.filter((menu) => menu.en.category === "Appetizer"));
-    } else if (lgs === "th") {
-      setMainMenu(tempMenu.filter((menu) => menu.th.category === "อาหารเรียกน้ำย่อย"));
-    } else {
-      setMainMenu(tempMenu.filter((menu) => menu.jp.category === "前菜"));
-    }
+    setMainMenu(tempMenu.filter((menu) => menu.en.category === "Appetizer"));
   }, [lgs, tempMenu]);
+
 
   function changeCategory(value) {
     setMainMenu(tempMenu.filter((menu) => menu.en.category === value));
@@ -159,8 +154,11 @@ export default function Menu() {
                 <div className="menu-name-container">
                   {/* <div className="vl"></div> */}
                   <div>
-                    <h1 className="sm-text menu-name">
-                      {/*<span>X1</span>*/} {mainMenu[i].en.name}
+                    <h1 className={"sm-text menu-name" + lg}>
+                      {/* <span>X1  </span> */}
+                      {lgs === "th" && <span>{mainMenu[i].th.name}</span>}
+                      {lgs === "en" && <span>{mainMenu[i].en.name}</span>}
+                      {lgs === "jp" && <span>{mainMenu[i].jp.name}</span>}
                     </h1>
                     <h1 className="bracket menu-price k2d">
                       ฿ {mainMenu[i].price}
