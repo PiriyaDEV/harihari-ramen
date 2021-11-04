@@ -23,7 +23,18 @@ exports.createMainMenu = async (menu) => {
 exports.createInfoMainMenu = async (info) => {
   try {
     const [result, fields] = await sql.query(
-      `INSERT INTO info_main_menus VALUES ?`,
+      `INSERT INTO
+        info_main_menus (
+          product_id,
+          language,
+          name,
+          category,
+          description,
+          status,
+          created_at,
+          updated_at
+        )
+        VALUES ?`,
       [info]
     );
 
@@ -63,7 +74,18 @@ exports.createChoice = async (choice) => {
 exports.createInfoChoice = async (info) => {
   try {
     const [result, fields] = await sql.query(
-      `INSERT INTO info_ramen_choices VALUES ?`,
+      `INSERT INTO
+        info_ramen_choices (
+          choice_id,
+          language,
+          name,
+          category,
+          description,
+          status,
+          created_at,
+          updated_at
+        )
+        VALUES ?`,
       [info]
     );
 

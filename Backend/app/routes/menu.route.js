@@ -7,6 +7,6 @@ router.post("/addMain", uploader, controller.addMain);
 
 router.post("/addChoice", uploader, controller.addChoice);
 
-router.get("/getMainMenus", controller.getMainMenus);
+router.get("/mainMenus", controller.getMainMenus);
 
 module.exports = router;

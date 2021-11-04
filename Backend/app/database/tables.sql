@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS bills(
 CREATE TABLE IF NOT EXISTS orders(
   order_id                INT             NOT NULL  AUTO_INCREMENT,
   bill_id                 INT             NOT NULL,
-  status                  BOOLEAN         NOT NULL,
+  status                  VARCHAR(10)     NOT NULL,
   created_at              BIGINT          NOT NULL,
   updated_at              BIGINT          NOT NULL,
   PRIMARY KEY (order_id)
@@ -40,6 +40,7 @@ CREATE TABLE IF NOT EXISTS order_menus(
   product_id              INT             NULL,
   ramen_id                INT             NULL,
   quantity                INT             NOT NULL,
+  comment                 VARCHAR(255)    NULL,
   status                  BOOLEAN         NOT NULL,
   created_at              BIGINT          NOT NULL,
   updated_at              BIGINT          NOT NULL,

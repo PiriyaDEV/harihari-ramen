@@ -25,6 +25,7 @@ exports.create = async (req, res) => {
       info.product_id,
       null,
       info.quantity,
+      info.comment,
       true,
       Date.now(),
       Date.now(),
@@ -46,6 +47,34 @@ exports.create = async (req, res) => {
       order_id: orderMenuResult.order_id,
       menuCount: orderMenuResult.inserted,
     });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+exports.getOrderHistory = async (req, res) => {
+  const base_url = process.env.BASE_URL;
+
+  let table = req.body.table;
+  let bill = {
+    table_id: table.table_id,
+  };
+
+  try {
+    let billResult = await Bill.getLatestBillByTable(bill);
+
+    let order = {
+      bill_id: billResult.bill_id,
+    };
+
+    let result = await Order.getOrderHistory(order);
+
+    //result.map((menu) => (menu.image_url = `${base_url}${menu.image_url}`));
+
+    return res.status(200).json(result);
   } catch (error) {
     return res.status(500).json({
       success: false,

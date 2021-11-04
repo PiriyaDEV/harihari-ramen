@@ -5,7 +5,7 @@ const auth = require("../middleware/auth");
 
 router.post("/generate", controller.generate);
 
-router.get("/getTables", controller.getTables);
+router.get("/allTables", controller.getTables);
 
 router.put("/checkin", auth, controller.checkin);
 
