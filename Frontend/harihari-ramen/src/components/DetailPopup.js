@@ -36,11 +36,9 @@ export default function DetailPopup(props) {
   function clickAmount(type) {
     if (type === "plus") {
       setAmount(amountNum + 1);
-      console.log("add");
     } else {
-      if (amountNum !== 1) {
+      if (amountNum !== 0) {
         setAmount(amountNum - 1);
-        console.log("minus");
       }
     }
   }
@@ -105,10 +103,10 @@ export default function DetailPopup(props) {
             </div>
           </div>
 
-          <div id="add-box-section">
+          <div id="add-box-section" onClick={props.back}>
             <div id="add-box" className="info-padding">
-              <h1 className="sm-text">{t("basket.addBasket")}</h1>
-              <h1 className="bracket">
+              <h1 className={"sm-text" + lg}>{t("basket.addBasket")}</h1>
+              <h1 className={"bracket" + lg}>
                 + {amountNum} {t("basket.item")}
               </h1>
             </div>

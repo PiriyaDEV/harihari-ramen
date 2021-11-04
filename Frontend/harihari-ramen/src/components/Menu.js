@@ -200,7 +200,10 @@ export default function Menu() {
 
                       <div>
                         <h1 className="sm-text k2d basket-price">160.00</h1>
-                        <h1 className="bracket bracket-edit">
+                        <h1
+                          className={"bracket bracket-edit" + lg}
+                          onClick={() => findMenu(mainMenu[i])}
+                        >
                           {t("basket.edit")}
                         </h1>
                       </div>
