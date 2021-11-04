@@ -19,6 +19,21 @@ exports.create = async (bill) => {
   }
 };
 
+exports.update = async (bill) => {
+  bill.updated_at = Date.now();
+
+  try {
+    const [result, fields] = await sql.query(
+      `UPDATE bills SET ? WHERE bill_id = '${bill.bill_id}'`,
+      bill
+    );
+
+    console.log(`Updated bill >>> id: ${bill.bill_id}`);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 exports.getLatestBillByTable = async (bill) => {
   try {
     const [result, fields] = await sql.query(
