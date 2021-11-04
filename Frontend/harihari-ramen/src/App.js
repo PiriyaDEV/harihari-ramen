@@ -3,13 +3,7 @@ import React, { lazy, Suspense } from "react";
 // import React from "react";
 import { Route, Switch } from "react-router-dom";
 import Loading from "./lazyloading/Loading";
-import "./css/App.css";
 import pMinDelay from 'p-min-delay';
-
-// import TableQR from "./components/TableQR";
-// import Landing from "./components/Landing";
-// import Home from "./components/Home";
-// import Invalid from "./components/Invalid";
 
 const TableQR = lazy(() => pMinDelay(import('./components/TableQR'), 700));
 const Landing = lazy(() => pMinDelay(import('./components/Landing'), 700));

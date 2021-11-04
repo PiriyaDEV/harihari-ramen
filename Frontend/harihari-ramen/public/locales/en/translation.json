@@ -43,5 +43,16 @@
         "ramen" : "Ramen",
         "dessert" : "Dessert",
         "beverage" : "Beverage"
+    },
+    "basket" : {
+        "yourBasket" : "YOUR BASKET",
+        "subtotal" : "Subtotal",
+        "serviceCharge": "Service Charge",
+        "edit" : "edit",
+        "total" : "Total",
+        "order" : "Order",
+        "item" : "items",
+        "request" : "Request",
+        "addBasket" : "Add to basket"
     }
 }
