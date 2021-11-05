@@ -12,6 +12,10 @@ button {
   color: #232322;
 }
 
+textarea {
+  resize: none;
+}
+
 .section {
   display: flex;
   justify-content: center;
@@ -23,6 +27,16 @@ button {
   width: 1440px;
   max-width: 1440px;
   padding: 0;
+}
+
+.popup {
+  background-color: rgb(162, 129, 76, 0.25);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  position: fixed;
+  z-index: 100000;
+  width: 100vw;
+  height: 100vh;
 }
 
 .navbar-container {

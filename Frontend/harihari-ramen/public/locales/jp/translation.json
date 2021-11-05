@@ -36,5 +36,23 @@
     "invalidePath" : {
         "1": "あなたは間違った場所に来ますか？",
         "2": "ウェイターに連絡する"
-    } 
+    },
+    "orderFoodIn" : "注文食べ物",
+    "categortyMenu" : {
+        "appetizer" : "前菜",
+        "ramen" : "ラーメン",
+        "dessert" : "デザート",
+        "beverage" : "飲む"
+    },
+    "basket" : {
+        "yourBasket" : "あなたのバスケット",
+        "subtotal" : "小計",
+        "serviceCharge": "サービス料",
+        "edit" : "編集",
+        "total" : "合計",
+        "order" : "注文",
+        "item" : "アイテム",
+        "request" : "リクエスト",
+        "addBasket" : "バスケットに追加"
+    }
 }

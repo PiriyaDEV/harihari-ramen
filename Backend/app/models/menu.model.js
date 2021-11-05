@@ -23,7 +23,18 @@ exports.createMainMenu = async (menu) => {
 exports.createInfoMainMenu = async (info) => {
   try {
     const [result, fields] = await sql.query(
-      `INSERT INTO info_main_menus VALUES ?`,
+      `INSERT INTO
+        info_main_menus (
+          product_id,
+          language,
+          name,
+          category,
+          description,
+          status,
+          created_at,
+          updated_at
+        )
+        VALUES ?`,
       [info]
     );
 
@@ -63,7 +74,18 @@ exports.createChoice = async (choice) => {
 exports.createInfoChoice = async (info) => {
   try {
     const [result, fields] = await sql.query(
-      `INSERT INTO info_ramen_choices VALUES ?`,
+      `INSERT INTO
+        info_ramen_choices (
+          choice_id,
+          language,
+          name,
+          category,
+          description,
+          status,
+          created_at,
+          updated_at
+        )
+        VALUES ?`,
       [info]
     );
 
@@ -80,15 +102,73 @@ exports.createInfoChoice = async (info) => {
   }
 };
 
-// exports.getMenus = async (result) => {
-//   try {
-//     const [result, fields] = await sql.query(
-//       `SELECT * FROM tables WHERE status = 1`
-//     );
+exports.getMainMenus = async (result) => {
+  try {
+    const [result, fields] = await sql.query(
+      `SELECT
+        M.product_id,
+        M.image_url,
+        M.price,
+        (
+          SELECT
+            JSON_OBJECT(
+              'name',
+              I.name,
+              'category',
+              I.category,
+              'description',
+              I.description
+            )
+          FROM
+            info_main_menus I
+          WHERE
+            I.product_id = M.product_id
+            AND I.language = 'en'
+            AND I.status = 1
+        ) AS en,
+        (
+          SELECT
+            JSON_OBJECT(
+              'name',
+              I.name,
+              'category',
+              I.category,
+              'description',
+              I.description
+            )
+          FROM
+            info_main_menus I
+          WHERE
+            I.product_id = M.product_id
+            AND I.language = 'jp'
+            AND I.status = 1
+        ) AS jp,
+        (
+          SELECT
+            JSON_OBJECT(
+              'name',
+              I.name,
+              'category',
+              I.category,
+              'description',
+              I.description
+            )
+          FROM
+            info_main_menus I
+          WHERE
+            I.product_id = M.product_id
+            AND I.language = 'th'
+            AND I.status = 1
+        ) AS th
+        FROM
+          main_menus M
+        WHERE
+          M.status = 1`
+    );
 
-//     console.log(`Selected ${result.length} menu(s)`);
-//     return result;
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
+    console.log(`Selected ${result.length} menu(s)`);
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+};

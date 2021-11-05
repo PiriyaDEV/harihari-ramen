@@ -1,3 +1,4 @@
+//Import
 import React, { Component } from "react";
 
 //Service
@@ -5,7 +6,7 @@ import tableService from "../services/table.service.js";
 
 //CSS
 import "../css/page.css";
-import "../css/page/TableQR.css";
+import "../css/components/TableQR.css";
 
 export default class TableQR extends Component {
   constructor(props) {
@@ -16,7 +17,9 @@ export default class TableQR extends Component {
   }
 
   componentDidMount() {
-    this.getLink();
+    if (this.state.link.length === 0) {
+      this.getLink();
+    }
   }
 
   makeQR(value) {
@@ -39,7 +42,7 @@ export default class TableQR extends Component {
   }
 
   async getLink() {
-    return await tableService
+    await tableService
       .getTables()
       .then((data) => this.setState({ link: data }));
   }

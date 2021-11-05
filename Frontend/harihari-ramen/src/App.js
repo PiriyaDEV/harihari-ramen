@@ -3,19 +3,13 @@ import React, { lazy, Suspense } from "react";
 // import React from "react";
 import { Route, Switch } from "react-router-dom";
 import Loading from "./lazyloading/Loading";
-import "./css/App.css";
 import pMinDelay from 'p-min-delay';
 
-// import TableQR from "./components/TableQR";
-// import Landing from "./components/Landing";
-// import Home from "./components/Home";
-// import Invalid from "./components/Invalid";
-
-const TableQR = lazy(() => pMinDelay(import('./components/TableQR'), 1000));
-const Landing = lazy(() => pMinDelay(import('./components/Landing'), 1000));
-const Home = lazy(() => pMinDelay(import('./components/Home'), 1000));
-const Invalid = lazy(() => pMinDelay(import('./components/Invalid'), 1000));
-
+const TableQR = lazy(() => pMinDelay(import('./components/TableQR'), 700));
+const Landing = lazy(() => pMinDelay(import('./components/Landing'), 700));
+const Home = lazy(() => pMinDelay(import('./components/Home'), 700));
+const Menu = lazy(() => pMinDelay(import('./components/Menu'), 700));
+const Invalid = lazy(() => pMinDelay(import('./components/Invalid'), 700));
 
 function App() {
   return (
@@ -50,6 +44,9 @@ function App() {
         </Route>
         <Route path="/:lgs/table/:id">
           <Landing />
+        </Route>
+        <Route path="/:lgs/menu/:id">
+          <Menu />
         </Route>
         <Route path="/invalid">
           <Invalid />

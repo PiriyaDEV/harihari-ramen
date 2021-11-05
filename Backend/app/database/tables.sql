@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS bills(
 CREATE TABLE IF NOT EXISTS orders(
   order_id                INT             NOT NULL  AUTO_INCREMENT,
   bill_id                 INT             NOT NULL,
-  status                  BOOLEAN         NOT NULL,
+  status                  VARCHAR(10)     NOT NULL,
   created_at              BIGINT          NOT NULL,
   updated_at              BIGINT          NOT NULL,
   PRIMARY KEY (order_id)
@@ -40,6 +40,7 @@ CREATE TABLE IF NOT EXISTS order_menus(
   product_id              INT             NULL,
   ramen_id                INT             NULL,
   quantity                INT             NOT NULL,
+  comment                 VARCHAR(255)    NULL,
   status                  BOOLEAN         NOT NULL,
   created_at              BIGINT          NOT NULL,
   updated_at              BIGINT          NOT NULL,
@@ -83,7 +84,6 @@ CREATE TABLE IF NOT EXISTS custom_ramens(
 CREATE TABLE IF NOT EXISTS custom_ramen_details(
   ramen_id                INT             NOT NULL,
   choice_id               INT             NOT NULL,
-  type                    VARCHAR(255)    NOT NULL,
   status                  BOOLEAN         NOT NULL,
   created_at              BIGINT          NOT NULL,
   updated_at              BIGINT          NOT NULL,
@@ -106,6 +106,7 @@ CREATE TABLE IF NOT EXISTS info_ramen_choices(
   choice_id               INT             NOT NULL,
   language                VARCHAR(2)      NOT NULL,
   name                    VARCHAR(255)    NOT NULL,
+  category                VARCHAR(255)    NOT NULL,
   description             VARCHAR(255)    NOT NULL,
   status                  BOOLEAN         NOT NULL,
   created_at              BIGINT          NOT NULL,

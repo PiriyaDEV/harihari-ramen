@@ -38,41 +38,31 @@ exports.getTables = async (req, res) => {
 };
 
 exports.checkin = async (req, res) => {
-  let guest_uid = req.query.id;
-
-  let table = {
-    guest_uid: guest_uid,
+  const table = req.body.table;
+  const bill = {
+    table_id: table.table_id,
   };
 
   try {
-    let findResult = await Table.find(table);
+    let billResult = {};
 
-    if (!findResult.isFound) {
-      return res.status(200).json({
-        success: false,
-        message: "Table not available",
-        guest_uid: guest_uid,
-      });
-    }
+    if (!table.reserve) {
+      const updateTable = {
+        table_id: table.table_id,
+        reserve: true,
+      }
 
-    let bill = {
-      table_id: findResult.table_id,
-    };
-
-    let insertResult = {}
-
-    if (!findResult.reserve) {
-      table.table_id = findResult.table_id;
-      table.reserve = true;
-      await Table.update(table);
-      insertResult = await Bill.create(bill);
+      await Table.update(updateTable);
+      billResult = await Bill.create(bill);
+    } else {
+      billResult = await Bill.getLatestBillByTable(bill);
     }
 
     return res.status(200).json({
       success: true,
       message: "Checked in successfully",
-      guest_uid: guest_uid,
-      checkin_at: insertResult.created_at,
+      guest_uid: table.guest_uid,
+      checkin_at: billResult.created_at,
     });
   } catch (error) {
     return res.status(500).json({

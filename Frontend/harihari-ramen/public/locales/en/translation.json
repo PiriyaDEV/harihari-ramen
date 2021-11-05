@@ -36,5 +36,23 @@
     "invalidePath" : {
         "1": "Do you come to wrong site?",
         "2": "contact the waiter"
-    } 
+    },
+    "orderFoodIn" : "Order Food",
+    "categortyMenu" : {
+        "appetizer" : "Appetizer",
+        "ramen" : "Ramen",
+        "dessert" : "Dessert",
+        "beverage" : "Beverage"
+    },
+    "basket" : {
+        "yourBasket" : "YOUR BASKET",
+        "subtotal" : "Subtotal",
+        "serviceCharge": "Service Charge",
+        "edit" : "edit",
+        "total" : "Total",
+        "order" : "Order",
+        "item" : "items",
+        "request" : "Request",
+        "addBasket" : "Add to basket"
+    }
 }
