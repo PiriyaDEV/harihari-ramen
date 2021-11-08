@@ -43,7 +43,7 @@ export default function DetailPopup(props) {
     }
   }
 
-  console.log(props.menu);
+  // console.log(props.menu);
   return (
     <div id="detail-popup-section" className="section popup">
       <div id="detail-popup" className="page-container">
@@ -103,7 +103,7 @@ export default function DetailPopup(props) {
             </div>
           </div>
 
-          <div id="add-box-section" onClick={props.back}>
+          <div id="add-box-section" onClick={props.addItem}>
             <div id="add-box" className="info-padding">
               <h1 className={"sm-text" + lg}>{t("basket.addBasket")}</h1>
               <h1 className={"bracket" + lg}>

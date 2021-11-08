@@ -3,7 +3,7 @@ import http from "./../http-common";
 export default new (class TableService {
   async getTables() {
     return await http
-      .get("/table/getTables")
+      .get("/table/allTables")
       .then((response) => {
         return response.data;
       })
