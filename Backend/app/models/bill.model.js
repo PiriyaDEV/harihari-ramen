@@ -56,3 +56,16 @@ exports.getLatestBillByTable = async (bill) => {
     console.log(error);
   }
 };
+
+exports.getBillSummary = async (bill) => {
+  try {
+    const [result, fields] = await sql.query(
+      ``
+    );
+
+    console.log(`Selected ${result.length} menu(s) >>> bill id: ${bill.bill_id}`);
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+};
