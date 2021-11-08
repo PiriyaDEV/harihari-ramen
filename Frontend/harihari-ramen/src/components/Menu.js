@@ -25,7 +25,7 @@ export default function Menu() {
   const [tempMenu, setTempMenu] = useState([]);
   const [lg, setLg] = useState(" " + lgs);
   const [menuClick, setMenuClick] = useState(false);
-  const [seachMenu, setSeachMenu] = useState();
+  const [searchMenu, setSearchMenu] = useState();
 
   useEffect(() => {
     getLink();
@@ -61,12 +61,12 @@ export default function Menu() {
   };
 
   const findMenu = (menu) => {
-    setSeachMenu(menu);
+    setSearchMenu(menu);
     setMenuClick(true);
   };
 
   const backMenu = () => {
-    setSeachMenu("");
+    setSearchMenu("");
     setMenuClick(false);
   };
 
@@ -82,9 +82,30 @@ export default function Menu() {
   numTable = CheckTable(link, id);
   CheckHaveTable(numTable, link);
 
+  //Basket
+
+  const AddBasket = async (quantity,comment) => {
+    setMenuClick(false);
+    var tempLocal = [];
+    tempLocal = JSON.parse(localStorage.getItem("items")) || [];
+    searchMenu.quantity = 10;
+    searchMenu.comment = "";
+    tempLocal.push(searchMenu);
+
+    localStorage.setItem("items", JSON.stringify(tempLocal));
+
+    await setSearchMenu("");
+
+    console.log(storedItems);
+  };
+
+  var storedItems = JSON.parse(localStorage.getItem("items"));
+
   return (
     <div>
-      {menuClick === true && <DetailPopup menu={seachMenu} back={backMenu} />}
+      {menuClick === true && (
+        <DetailPopup menu={searchMenu} back={backMenu} addItem={AddBasket} />
+      )}
       <div id="menu" className="section">
         <div id="menu-container" className="page-container">
           <div id="menu-header-container" className="section">
@@ -188,27 +209,49 @@ export default function Menu() {
               <div id="basket-container">
                 <h1 className={"md-text" + lg}>{t("basket.yourBasket")}</h1>
                 <div id="basket-item-box">
-                  {[...Array(10)].map((x, i) => (
-                    <div className="basket-item" key={i}>
-                      <div className="basket-name">
-                        <h1 className="md-text basket-no">X1</h1>
+                  {storedItems !== null &&
+                    storedItems.map((x, i) => (
+                      <div className="basket-item" key={i}>
+                        <div className="basket-name">
+                          <h1 className="md-text basket-no">X1</h1>
+                          <div>
+                            <h1 className={"sm-text menu-name" + lg}>
+                              {lgs === "th" && (
+                                <span>{storedItems[i].th.name}</span>
+                              )}
+                              {lgs === "en" && (
+                                <span>{storedItems[i].en.name}</span>
+                              )}
+                              {lgs === "jp" && (
+                                <span>{storedItems[i].jp.name}</span>
+                              )}
+                            </h1>
+                            <h1 className="bracket">Sweet 50% {storedItems[i].value}</h1>
+                          </div>
+                        </div>
+
                         <div>
-                          <h1 className="sm-text menu-name">Karaage</h1>
-                          <h1 className="bracket">Sweet 50%</h1>
+                          <h1 className="sm-text k2d basket-price">
+                            {storedItems[i].price} ฿
+                          </h1>
+                          <div className="section basket-edit">
+                            <h1
+                              className={"bracket bracket-edit" + lg}
+                              onClick={() => findMenu(mainMenu[i])}
+                            >
+                              {t("basket.edit")}
+                            </h1>
+                            <h1 className={"bracket bracket-edit" + lg}>|</h1>
+                            <h1
+                              className={"bracket bracket-edit" + lg}
+                              onClick={() => findMenu(mainMenu[i])}
+                            >
+                              remove
+                            </h1>
+                          </div>
                         </div>
                       </div>
-
-                      <div>
-                        <h1 className="sm-text k2d basket-price">160.00</h1>
-                        <h1
-                          className={"bracket bracket-edit" + lg}
-                          onClick={() => findMenu(mainMenu[i])}
-                        >
-                          {t("basket.edit")}
-                        </h1>
-                      </div>
-                    </div>
-                  ))}
+                    ))}
                 </div>
 
                 <hr className="hr-black"></hr>
