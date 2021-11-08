@@ -84,8 +84,6 @@ exports.getMainMenus = async (req, res) => {
   try {
     let result = await Menu.getMainMenus();
 
-
-
     result.map((menu) => (menu.image_url = `${base_url}${menu.image_url}`));
 
     return res.status(200).json(result);

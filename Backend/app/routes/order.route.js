@@ -5,4 +5,6 @@ const auth = require("../middleware/auth");
 
 router.post("/create", auth, controller.create);
 
+router.get("/orderHistory", auth, controller.getOrderHistory);
+
 module.exports = router;
