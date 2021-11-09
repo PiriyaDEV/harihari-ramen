@@ -18,6 +18,7 @@ export default function DetailPopup(props) {
   const { lgs } = useParams();
   const [lg, setLg] = useState(" " + lgs);
   const [amountNum, setAmount] = useState(1);
+  const [commentRequest, setCommentRequest] = useState("");
 
   const placeHolderRequest = () => {
     if (lgs === "th") {
@@ -31,7 +32,13 @@ export default function DetailPopup(props) {
 
   useEffect(() => {
     setLg(" " + lgs);
-  }, [lgs]);
+    if(props.menu.quantity) {
+      setAmount(props.menu.quantity)
+    } 
+    if (props.menu.comment) {
+      setCommentRequest(props.menu.comment)
+    }
+  }, [lgs , props.menu.quantity ,props.menu.comment]);
 
   function clickAmount(type) {
     if (type === "plus") {
@@ -41,6 +48,10 @@ export default function DetailPopup(props) {
         setAmount(amountNum - 1);
       }
     }
+  }
+
+  const Request = (e) => {
+    setCommentRequest(e.target.value)
   }
 
   // console.log(props.menu);
@@ -82,6 +93,8 @@ export default function DetailPopup(props) {
               rows="3"
               cols="50"
               placeholder={placeHolderRequest()}
+              value={commentRequest}
+              onChange={Request}
             ></textarea>
           </div>
 
@@ -94,6 +107,7 @@ export default function DetailPopup(props) {
             >
               <img src={minusIcon} alt=""></img>
             </div>
+            {/* {amountNum && <h1>Test</h1>} */}
             <h1 className="md-text od-amount">{amountNum}</h1>
             <div
               className="num-icon section"
@@ -103,7 +117,7 @@ export default function DetailPopup(props) {
             </div>
           </div>
 
-          <div id="add-box-section" onClick={props.addItem}>
+          <div id="add-box-section" onClick={() => props.addItem(amountNum,commentRequest)}>
             <div id="add-box" className="info-padding">
               <h1 className={"sm-text" + lg}>{t("basket.addBasket")}</h1>
               <h1 className={"bracket" + lg}>

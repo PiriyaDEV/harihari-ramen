@@ -47,7 +47,7 @@
     "basket" : {
         "yourBasket" : "ตะกร้าของคุณ",
         "subtotal" : "ยอดรวมอาหาร",
-        "serviceCharge": "ค่าบริการ",
+        "VAT": "VAT",
         "edit" : "แก้ไข",
         "total" : "ยอดทั้งหมด",
         "order" : "สั่ง",
