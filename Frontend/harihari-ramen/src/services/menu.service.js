@@ -3,7 +3,7 @@ import http from "./../http-common";
 export default new (class MenuService {
   async getMainMenus(value) {
     return await http
-      .get("/menu/getMainMenus")
+      .get("/menu/mainMenus")
       .then((response) => {
         return response.data;
       })

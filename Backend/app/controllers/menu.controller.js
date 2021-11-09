@@ -1,7 +1,7 @@
 const Menu = require("../models/menu.model");
 
 exports.addMain = async (req, res) => {
-  let menu = {
+  const menu = {
     image_url: req.body.image_url,
     price: req.body.price,
   };
@@ -40,12 +40,12 @@ exports.addMain = async (req, res) => {
 };
 
 exports.addChoice = async (req, res) => {
-  let choice = {
+  const choice = {
     image_url: req.body.image_url,
     price: req.body.price,
   };
 
-  let info = req.body.info;
+  const info = req.body.info;
 
   try {
     let choiceResult = await Menu.createChoice(choice);

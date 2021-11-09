@@ -166,6 +166,12 @@
 
 .basket-item {
   justify-content: space-between;
+  align-items: flex-start;
+}
+
+.basket-edit > h1:nth-child(2) {
+  margin: 0px 5px;
+  color: #232322;
 }
 
 #basket-container > .md-text {
@@ -178,16 +184,23 @@
 
 .basket-name {
   align-items: flex-start;
+  /* align-items: center; */
 }
 
 .basket-no {
   font-weight: 400;
   color: #e14842;
   margin-right: 10px;
+  /* line-height: 33px; */
+}
+
+.menu-no {
+  color: #e14842;
 }
 
 .basket-price {
   font-weight: 800;
+  text-align: right;
 }
 
 .bracket-edit {
@@ -223,4 +236,10 @@
   border-radius: 4px;
   background-color: rgba(0, 0, 0, 0.5);
   /* box-shadow: 0 0 1px rgba(255, 255, 255, 1); */
+}
+
+@media screen and (max-width: 1650px) {
+  .basket-no {
+    line-height: 33px;
+  }
 }

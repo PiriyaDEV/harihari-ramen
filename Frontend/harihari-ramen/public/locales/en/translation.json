@@ -47,8 +47,8 @@
     "basket" : {
         "yourBasket" : "YOUR BASKET",
         "subtotal" : "Subtotal",
-        "serviceCharge": "Service Charge",
-        "edit" : "edit",
+        "VAT": "VAT",
+        "edit" : "Edit",
         "total" : "Total",
         "order" : "Order",
         "item" : "items",

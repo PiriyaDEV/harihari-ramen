@@ -47,7 +47,7 @@
     "basket" : {
         "yourBasket" : "あなたのバスケット",
         "subtotal" : "小計",
-        "serviceCharge": "サービス料",
+        "VAT": "VAT",
         "edit" : "編集",
         "total" : "合計",
         "order" : "注文",

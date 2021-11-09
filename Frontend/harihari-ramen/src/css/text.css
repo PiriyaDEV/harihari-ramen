@@ -56,6 +56,15 @@
   line-height: 30px;
 }
 
+.xm-text {
+  font-family: heisei-maru-gothic-std, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 3em;
+  margin: 0;
+  line-height: 30px;
+}
+
 .bg-text {
   font-family: heisei-maru-gothic-std, sans-serif;
   font-weight: 800;
@@ -128,6 +137,11 @@
 
   .bracket {
     font-size: 1.625em;
+    line-height: 20px;
+  }
+
+  .xm-text {
+    font-size: 1.4em;
     line-height: 20px;
   }
 

@@ -56,3 +56,64 @@ exports.getLatestBillByTable = async (bill) => {
     console.log(error);
   }
 };
+
+exports.getBillSummary = async (bill) => {
+  try {
+    const [result, fields] = await sql.query(
+      `SELECT
+        MM.product_id,
+        MM.price,
+        SUM(OM.quantity) AS quantity,
+        GROUP_CONCAT(COALESCE(comment, '-') SEPARATOR ', ') AS comment,
+        (
+          SELECT
+            IMM.name
+          FROM
+            info_main_menus IMM
+          WHERE
+            IMM.product_id = MM.product_id
+            AND IMM.language = 'en'
+            AND IMM.status = 1
+        ) AS en,
+        (
+          SELECT
+            IMM.name
+          FROM
+            info_main_menus IMM
+          WHERE
+            IMM.product_id = MM.product_id
+            AND IMM.language = 'jp'
+            AND IMM.status = 1
+        ) AS jp,
+        (
+          SELECT
+            IMM.name
+          FROM
+            info_main_menus IMM
+          WHERE
+            IMM.product_id = MM.product_id
+            AND IMM.language = 'th'
+            AND IMM.status = 1
+        ) AS th
+        FROM
+          bills B,
+          orders O,
+          order_menus OM,
+          main_menus MM
+        WHERE
+          B.bill_id = ${bill.bill_id}
+          AND B.bill_id = O.bill_id
+          AND O.order_id = OM.order_id
+          AND MM.product_id = OM.product_id
+          AND O.status = 'ordered'
+        GROUP BY
+          OM.product_id,
+          OM.ramen_id`
+    );
+
+    console.log(`Selected ${result.length} menu(s) >>> bill id: ${bill.bill_id}`);
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+};

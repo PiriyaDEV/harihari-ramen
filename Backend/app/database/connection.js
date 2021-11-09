@@ -8,6 +8,7 @@ const config = {
   user: dbConfig.USER,
   password: dbConfig.PASSWORD,
   database: dbConfig.DB,
+  decimalNumbers: true
 };
 
 function handleConnection() {

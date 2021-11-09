@@ -9,4 +9,6 @@ router.get("/allTables", controller.getTables);
 
 router.put("/checkin", auth, controller.checkin);
 
+router.put("/checkout", auth, controller.checkout);
+
 module.exports = router;

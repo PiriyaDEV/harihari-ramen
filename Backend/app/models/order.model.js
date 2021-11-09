@@ -17,6 +17,21 @@ exports.createOrder = async (order) => {
   }
 };
 
+exports.updateOrder = async (order) => {
+  order.updated_at = Date.now();
+
+  try {
+    const [result, fields] = await sql.query(
+      `UPDATE orders SET ? WHERE order_id = '${order.order_id}'`,
+      order
+    );
+
+    console.log(`Updated order >>> id: ${order.order_id}`);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 exports.createOrderMenu = async (info) => {
   try {
     const [result, fields] = await sql.query(
@@ -109,7 +124,6 @@ exports.getOrderHistory = async (order) => {
           Orders O
         WHERE
           O.bill_id = ${order.bill_id}
-          AND O.status != "deleted"
         ORDER BY
           O.created_at DESC`
     );

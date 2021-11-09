@@ -11,6 +11,9 @@ import "../css/components/Home.css";
 import "../css/element/progressBar.css";
 import "../css/element/languageBtn.css";
 
+//JS
+import { getTimes } from "../utilities/Time";
+
 //Image
 import RamenPic from "../images/ramen_main@2x.png";
 
@@ -23,6 +26,7 @@ export default function Home() {
   const calculatedWidth = (width / (intermediaryBalls + 1)) * 100;
   const { t, i18n } = useTranslation();
   const [link, setLink] = useState();
+  const storedTimes = JSON.parse(localStorage.getItem("checkin_time"));
 
   useEffect(() => {
     if (!link) {
@@ -30,8 +34,7 @@ export default function Home() {
     }
     i18n.changeLanguage(lgs);
     setLg(" " + lgs);
-  }, [i18n, lgs , link]);
-
+  }, [i18n, lgs, link]);
 
   const getLink = async () => {
     await tableService.getTables().then((data) => setLink(data));
@@ -109,7 +112,9 @@ export default function Home() {
                 <h1 className={"title" + lg}>
                   {t("table")} {numTable}
                 </h1>
-                <h2 className={"sm-text" + lg}>{t("checkIn")}: 15:45:03</h2>
+                <h2 className={"sm-text" + lg}>
+                  {t("checkIn")}: {getTimes(storedTimes)}
+                </h2>
               </div>
             </div>
           </div>
