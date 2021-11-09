@@ -63,6 +63,7 @@ export default class TableQR extends Component {
                 className="qr-code"
                 src={this.makeQR(index.guest_uid)}
                 alt=""
+                onClick={() => this.openLink(index.guest_uid)}
               ></img>
             </div>
           ))}

@@ -24,7 +24,7 @@ export default function Landing() {
     }
     i18n.changeLanguage(lgs);
     setLg(" " + lgs);
-  }, [i18n, lgs , link]);
+  }, [i18n, lgs, link]);
 
   const getLink = async () => {
     return await tableService.getTables().then((data) => setLink(data));
@@ -113,10 +113,19 @@ export default function Landing() {
   );
 }
 
-let linkToHome = (value, lgs) => {
+let linkToHome = async (value, lgs) => {
   let web = "http://localhost:3000/";
   let path = "/home/";
-  window.location = web + lgs + path + value;
+
+  let result = await tableService.checkin(value);
+
+  localStorage.setItem("checkin_time", JSON.stringify(result.checkin_at));
+
+  if (result.success) {
+    window.location = web + lgs + path + value;
+  } else {
+    window.location = web + "invalid";
+  }
 };
 
 function CheckTable(link, id) {

@@ -26,6 +26,9 @@ export default function Menu() {
   const [lg, setLg] = useState(" " + lgs);
   const [menuClick, setMenuClick] = useState(false);
   const [searchMenu, setSearchMenu] = useState();
+  const [storedItems, setStoreItems] = useState(
+    JSON.parse(localStorage.getItem("items"))
+  );
 
   useEffect(() => {
     getLink();
@@ -61,7 +64,18 @@ export default function Menu() {
   };
 
   const findMenu = (menu) => {
+    setStoreItems(JSON.parse(localStorage.getItem("items")));
+    var tempLocal = [];
+    menu.quantity = 1;
+    menu.comment = "";
     setSearchMenu(menu);
+    tempLocal = JSON.parse(localStorage.getItem("items")) || [];
+    for (let i = 0; i < tempLocal.length; i++) {
+      if (menu.en.name === tempLocal[i].en.name) {
+        setSearchMenu(tempLocal[i]);
+        break;
+      }
+    }
     setMenuClick(true);
   };
 
@@ -84,22 +98,76 @@ export default function Menu() {
 
   //Basket
 
-  const AddBasket = async (quantity,comment) => {
+  const AddBasket = async (quantity, comment) => {
+    setStoreItems(JSON.parse(localStorage.getItem("items")));
     setMenuClick(false);
     var tempLocal = [];
+    let found = false;
     tempLocal = JSON.parse(localStorage.getItem("items")) || [];
-    searchMenu.quantity = 10;
-    searchMenu.comment = "";
-    tempLocal.push(searchMenu);
 
-    localStorage.setItem("items", JSON.stringify(tempLocal));
-
+    for (let i = 0; i < tempLocal.length; i++) {
+      if (searchMenu.en.name === tempLocal[i].en.name && quantity !== 0) {
+        tempLocal[i].quantity = quantity;
+        tempLocal[i].comment = comment;
+        localStorage.setItem("items", JSON.stringify(tempLocal));
+        setStoreItems(tempLocal);
+        found = true;
+        break;
+      } else if (
+        searchMenu.en.name === tempLocal[i].en.name &&
+        quantity === 0
+      ) {
+        tempLocal.splice(i, 1);
+        localStorage.setItem("items", JSON.stringify(tempLocal));
+        setStoreItems(tempLocal);
+        break;
+      }
+    }
+    if (found === false && quantity !== 0) {
+      searchMenu.quantity = quantity;
+      searchMenu.comment = comment;
+      tempLocal.push(searchMenu);
+      localStorage.setItem("items", JSON.stringify(tempLocal));
+      setStoreItems(tempLocal);
+    }
     await setSearchMenu("");
-
-    console.log(storedItems);
   };
 
-  var storedItems = JSON.parse(localStorage.getItem("items"));
+  const RemoveBasket = (menu) => {
+    var tempLocal = [];
+    setStoreItems(JSON.parse(localStorage.getItem("items")));
+    tempLocal = JSON.parse(localStorage.getItem("items")) || [];
+    for (let i = 0; i < tempLocal.length; i++) {
+      if (menu.en.name === tempLocal[i].en.name) {
+        tempLocal.splice(i, 1);
+        localStorage.setItem("items", JSON.stringify(tempLocal));
+        setStoreItems(tempLocal);
+        break;
+      }
+    }
+  };
+
+  const subTotal = () => {
+    var tempLocal = [];
+    tempLocal = JSON.parse(localStorage.getItem("items")) || [];
+    var tempSum = 0;
+    for (let i = 0; i < tempLocal.length; i++) {
+      tempSum = tempSum + tempLocal[i].quantity * tempLocal[i].price;
+    }
+    return tempSum;
+  };
+
+  const checkItems = (menu, index) => {
+    var tempLocal = [];
+    tempLocal = JSON.parse(localStorage.getItem("items")) || [];
+    for (let i = 0; i < tempLocal.length; i++) {
+      if (menu.en.name === tempLocal[i].en.name) {
+        mainMenu[index] = tempLocal[i];
+        return true;
+      }
+    }
+    return false;
+  };
 
   return (
     <div>
@@ -188,16 +256,28 @@ export default function Menu() {
                     onClick={() => findMenu(mainMenu[i])}
                   ></img>
                   <div className="menu-name-container">
-                    {/* <div className="vl"></div> */}
+                    {checkItems(mainMenu[i], i) === true && (
+                      <div className="vl"></div>
+                    )}
                     <div>
-                      <h1 className={"sm-text menu-name" + lg}>
-                        {/* <span>X1  </span> */}
+                      <h1
+                        className={
+                          "sm-text menu-name" +
+                          lg +
+                          (checkItems(mainMenu[i], i) === true
+                            ? " menu-no"
+                            : "")
+                        }
+                      >
+                        {checkItems(mainMenu[i], i) === true && (
+                          <span>X{mainMenu[i].quantity} </span>
+                        )}
                         {lgs === "th" && <span>{mainMenu[i].th.name}</span>}
                         {lgs === "en" && <span>{mainMenu[i].en.name}</span>}
                         {lgs === "jp" && <span>{mainMenu[i].jp.name}</span>}
                       </h1>
                       <h1 className="bracket menu-price k2d">
-                        ฿ {mainMenu[i].price}
+                        ฿ {mainMenu[i].price.toFixed(2)}
                       </h1>
                     </div>
                   </div>
@@ -213,7 +293,9 @@ export default function Menu() {
                     storedItems.map((x, i) => (
                       <div className="basket-item" key={i}>
                         <div className="basket-name">
-                          <h1 className="md-text basket-no">X1</h1>
+                          <h1 className="md-text basket-no">
+                            X{storedItems[i].quantity}
+                          </h1>
                           <div>
                             <h1 className={"sm-text menu-name" + lg}>
                               {lgs === "th" && (
@@ -226,27 +308,33 @@ export default function Menu() {
                                 <span>{storedItems[i].jp.name}</span>
                               )}
                             </h1>
-                            <h1 className="bracket">Sweet 50% {storedItems[i].value}</h1>
+                            {storedItems[i].comment !== null && (
+                              <h1 className="bracket">
+                                {storedItems[i].comment}
+                              </h1>
+                            )}
                           </div>
                         </div>
 
                         <div>
                           <h1 className="sm-text k2d basket-price">
-                            {storedItems[i].price} ฿
+                            {(
+                              storedItems[i].price * storedItems[i].quantity
+                            ).toFixed(2)}
                           </h1>
                           <div className="section basket-edit">
                             <h1
-                              className={"bracket bracket-edit" + lg}
-                              onClick={() => findMenu(mainMenu[i])}
+                              className={"xm-text bracket-edit" + lg}
+                              onClick={() => RemoveBasket(storedItems[i])}
+                            >
+                              Delete
+                            </h1>
+                            <h1 className={"xm-text bracket-edit" + lg}>|</h1>
+                            <h1
+                              className={"xm-text bracket-edit" + lg}
+                              onClick={() => findMenu(storedItems[i])}
                             >
                               {t("basket.edit")}
-                            </h1>
-                            <h1 className={"bracket bracket-edit" + lg}>|</h1>
-                            <h1
-                              className={"bracket bracket-edit" + lg}
-                              onClick={() => findMenu(mainMenu[i])}
-                            >
-                              remove
                             </h1>
                           </div>
                         </div>
@@ -257,13 +345,11 @@ export default function Menu() {
                 <hr className="hr-black"></hr>
                 <div className="price-box">
                   <h1 className={"bracket" + lg}>{t("basket.subtotal")}</h1>
-                  <h1 className="bracket">240.00</h1>
+                  <h1 className="bracket">{subTotal().toFixed(2)}</h1>
                 </div>
                 <div className="price-box">
-                  <h1 className={"bracket" + lg}>
-                    {t("basket.serviceCharge")} (10%)
-                  </h1>
-                  <h1 className="bracket">24.00</h1>
+                  <h1 className={"bracket" + lg}>{t("basket.VAT")} (7%)</h1>
+                  <h1 className="bracket">{(subTotal() * 0.07).toFixed(2)}</h1>
                 </div>
               </div>
 
@@ -272,12 +358,22 @@ export default function Menu() {
                   <h1 className={"sm-text menu-name" + lg}>
                     {t("basket.total")}
                   </h1>
-                  <h1 className="md-text k2d">฿ 264.00</h1>
+                  <h1 className={"md-text k2d" + lg}>
+                    ฿ {(subTotal() + subTotal() * 0.07).toFixed(2)}
+                  </h1>
                 </div>
 
                 <div id="order-box">
                   <h1 className={"md-text" + lg}>{t("basket.order")}</h1>
-                  <h1 className={"bracket" + lg}>2 {t("basket.item")}</h1>
+                  <h1 className={"bracket" + lg}>
+                    {storedItems !== null ? (
+                      <span>
+                        {storedItems.length} {t("basket.item")}
+                      </span>
+                    ) : (
+                      <span>0 {t("basket.item")}</span>
+                    )}
+                  </h1>
                 </div>
               </div>
             </div>
