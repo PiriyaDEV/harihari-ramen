@@ -4,7 +4,7 @@ const Table = require("../models/table.model");
 const Bill = require("../models/bill.model");
 
 exports.generate = async (req, res) => {
-  let table = {
+  const table = {
     guest_uid: uuid.v4(),
   };
 
@@ -47,10 +47,10 @@ exports.checkin = async (req, res) => {
     let billResult = {};
 
     if (!table.reserve) {
-      const updateTable = {
+      let updateTable = {
         table_id: table.table_id,
         reserve: true,
-      }
+      };
 
       await Table.update(updateTable);
       billResult = await Bill.create(bill);
@@ -63,6 +63,42 @@ exports.checkin = async (req, res) => {
       message: "Checked in successfully",
       guest_uid: table.guest_uid,
       checkin_at: billResult.created_at,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+exports.checkout = async (req, res) => {
+  const table = req.body.table;
+  const bill = {
+    table_id: table.table_id,
+  };
+
+  try {
+    let billResult = await Bill.getLatestBillByTable(bill);
+
+    let updateBill = {
+      bill_id: billResult.bill_id,
+      checkout_at: Date.now(),
+    };
+    await Bill.update(updateBill);
+
+    let updateTable = {
+      table_id: table.table_id,
+      guest_uid: uuid.v4(),
+      reserve: false,
+    };
+    await Table.update(updateTable);
+
+    return res.status(200).json({
+      success: true,
+      message: "Checked out successfully",
+      guest_uid: table.guest_uid,
+      checkout_at: updateBill.checkout_at,
     });
   } catch (error) {
     return res.status(500).json({

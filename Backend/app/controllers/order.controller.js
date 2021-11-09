@@ -58,8 +58,8 @@ exports.create = async (req, res) => {
 exports.getOrderHistory = async (req, res) => {
   const base_url = process.env.BASE_URL;
 
-  let table = req.body.table;
-  let bill = {
+  const table = req.body.table;
+  const bill = {
     table_id: table.table_id,
   };
 
@@ -75,6 +75,45 @@ exports.getOrderHistory = async (req, res) => {
     //result.map((menu) => (menu.image_url = `${base_url}${menu.image_url}`));
 
     return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+exports.cancel = async (req, res) => {
+  const table = req.body.table;
+  const bill = {
+    table_id: table.table_id,
+  };
+  const order = {
+    order_id: req.body.order_id,
+  };
+
+  try {
+    let billResult = await Bill.getLatestBillByTable(bill);
+
+    let updateOrder = {
+      order_id: order.order_id,
+      status: "cancel",
+    };
+    await Order.updateOrder(updateOrder);
+
+    let subtotal = await Order.getSubtotalByOrder(order);
+
+    let updateBill = {
+      bill_id: billResult.bill_id,
+      subtotal: Number(billResult.subtotal) - Number(subtotal),
+    };
+    await Bill.update(updateBill);
+
+    return res.status(200).json({
+      success: true,
+      message: "Canceled successfully",
+      order_id: updateOrder.order_id,
+    });
   } catch (error) {
     return res.status(500).json({
       success: false,
