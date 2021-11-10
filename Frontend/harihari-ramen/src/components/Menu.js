@@ -157,6 +157,16 @@ export default function Menu() {
     return tempSum;
   };
 
+  const totalOrder = () => {
+    var tempLocal = [];
+    tempLocal = JSON.parse(localStorage.getItem("items")) || [];
+    var tempOrder = 0;
+    for (let i = 0; i < tempLocal.length; i++) {
+      tempOrder = tempOrder + tempLocal[i].quantity;
+    }
+    return tempOrder;
+  };
+
   const checkItems = (menu, index) => {
     var tempLocal = [];
     tempLocal = JSON.parse(localStorage.getItem("items")) || [];
@@ -368,7 +378,7 @@ export default function Menu() {
                   <h1 className={"bracket" + lg}>
                     {storedItems !== null ? (
                       <span>
-                        {storedItems.length} {t("basket.item")}
+                        {totalOrder()} {t("basket.item")}
                       </span>
                     ) : (
                       <span>0 {t("basket.item")}</span>
