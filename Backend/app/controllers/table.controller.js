@@ -94,11 +94,17 @@ exports.checkout = async (req, res) => {
     };
     await Table.update(updateTable);
 
+    let billSummary = await Bill.getBillSummary(billResult);
+
     return res.status(200).json({
       success: true,
       message: "Checked out successfully",
       guest_uid: table.guest_uid,
-      checkout_at: updateBill.checkout_at,
+      bill: {
+        bill_id: updateBill.bill_id,
+        checkout_at: updateBill.checkout_at,
+        items: billSummary
+      }
     });
   } catch (error) {
     return res.status(500).json({
