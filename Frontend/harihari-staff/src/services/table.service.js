@@ -11,9 +11,9 @@ export default new (class TableService {
         return error.response;
       });
   }
-  async checkin(uid) {
+  async checkout(uid) {
     return await http
-      .put("/table/checkin", {}, { headers: { "x-access-token": uid }})
+      .put("/table/checkout", {}, { headers: { "x-access-token": uid }})
       .then((response) => {
         return response.data;
       })
@@ -21,5 +21,4 @@ export default new (class TableService {
         return error.response;
       });
   }
-  
 })();
