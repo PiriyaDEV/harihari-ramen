@@ -1,5 +1,6 @@
 const mysql = require("mysql2/promise");
 
+const logger = require("../../lib/logger/index");
 const dbConfig = require("../config/db.config");
 
 const config = {
@@ -8,19 +9,19 @@ const config = {
   user: dbConfig.USER,
   password: dbConfig.PASSWORD,
   database: dbConfig.DB,
-  decimalNumbers: true
+  decimalNumbers: true,
 };
 
 function handleConnection() {
   try {
     let pool = mysql.createPool(config);
 
-    console.log(
+    logger.info(
       `Successfully connected to ${dbConfig.DB} database on port ${dbConfig.PORT}.`
     );
     return pool;
   } catch (error) {
-    console.log(error);
+    logger.error(error);
   }
 }
 

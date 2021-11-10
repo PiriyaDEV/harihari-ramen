@@ -1,4 +1,5 @@
 const sql = require("../database/connection");
+const logger = require("../../lib/logger/index");
 
 exports.create = async (table) => {
   table.reserve = false;
@@ -9,12 +10,12 @@ exports.create = async (table) => {
   try {
     const [result, fields] = await sql.query(`INSERT INTO tables SET ?`, table);
 
-    console.log(
+    logger.info(
       `Inserted ${result.affectedRows} table >>> id: ${result.insertId}`
     );
     return { table_id: result.insertId, ...table };
   } catch (error) {
-    console.log(error);
+    logger.error(error);
   }
 };
 
@@ -27,9 +28,9 @@ exports.update = async (table) => {
       table
     );
 
-    console.log(`Updated table >>> id: ${table.table_id}`);
+    logger.info(`Updated table >>> id: ${table.table_id}`);
   } catch (error) {
-    console.log(error);
+    logger.error(error);
   }
 };
 
@@ -41,14 +42,14 @@ exports.find = async (table) => {
     );
 
     if (result.length) {
-      console.log(`Found table >>> id: ${result[0].table_id}`);
+      logger.info(`Found table >>> id: ${result[0].table_id}`);
       return { isFound: true, ...result[0] };
     } else {
-      console.log(`Not found table >>> id: ${table.guest_uid}`);
+      logger.info(`Not found table >>> id: ${table.guest_uid}`);
       return { isFound: false };
     }
   } catch (error) {
-    console.log(error);
+    logger.error(error);
   }
 };
 
@@ -58,9 +59,9 @@ exports.getTables = async (result) => {
       `SELECT table_id, guest_uid, reserve FROM tables WHERE status = 1`
     );
 
-    console.log(`Selected ${result.length} table(s)`);
+    logger.info(`Selected ${result.length} table(s)`);
     return result;
   } catch (error) {
-    console.log(error);
+    logger.error(error);
   }
 };

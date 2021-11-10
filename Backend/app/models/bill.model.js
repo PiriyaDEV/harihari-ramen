@@ -1,4 +1,5 @@
 const sql = require("../database/connection");
+const logger = require("../../lib/logger/index");
 
 exports.create = async (bill) => {
   bill.subtotal = 0;
@@ -10,12 +11,12 @@ exports.create = async (bill) => {
   try {
     const [result, fields] = await sql.query(`INSERT INTO bills SET ?`, bill);
 
-    console.log(
+    logger.info(
       `Inserted ${result.affectedRows} bill >>> id: ${result.insertId}`
     );
     return { bill_id: result.insertId, ...bill };
   } catch (error) {
-    console.log(error);
+    logger.error(error);
   }
 };
 
@@ -28,9 +29,9 @@ exports.update = async (bill) => {
       bill
     );
 
-    console.log(`Updated bill >>> id: ${bill.bill_id}`);
+    logger.info(`Updated bill >>> id: ${bill.bill_id}`);
   } catch (error) {
-    console.log(error);
+    logger.error(error);
   }
 };
 
@@ -46,14 +47,14 @@ exports.getLatestBillByTable = async (bill) => {
     );
 
     if (result.length) {
-      console.log(`Found bill >>> id: ${result[0].bill_id}`);
+      logger.info(`Found bill >>> id: ${result[0].bill_id}`);
       return { isFound: true, ...result[0] };
     } else {
-      console.log(`Not found bill >>> id: ${bill.table_id}`);
+      logger.info(`Not found bill >>> id: ${bill.table_id}`);
       return { isFound: false };
     }
   } catch (error) {
-    console.log(error);
+    logger.error(error);
   }
 };
 
@@ -111,9 +112,9 @@ exports.getBillSummary = async (bill) => {
           OM.ramen_id`
     );
 
-    console.log(`Selected ${result.length} menu(s) >>> bill id: ${bill.bill_id}`);
+    logger.info(`Selected ${result.length} menu(s) >>> bill id: ${bill.bill_id}`);
     return result;
   } catch (error) {
-    console.log(error);
+    logger.error(error);
   }
 };
