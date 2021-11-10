@@ -4,7 +4,8 @@ import tableService from "../services/table.service.js";
 import menuService from "../services/menu.service.js";
 import { useParams } from "react-router";
 import { useTranslation } from "react-i18next";
-import DetailPopup from "./DetailPopup.js";
+import DetailPopup from "./popup/DetailPopup.js";
+import ConfirmOrder from "./popup/ConfirmOrder.js";
 
 //CSS
 import "../css/page.css";
@@ -25,6 +26,7 @@ export default function Menu() {
   const [tempMenu, setTempMenu] = useState([]);
   const [lg, setLg] = useState(" " + lgs);
   const [menuClick, setMenuClick] = useState(false);
+  const [orderClick, setOrderClick] = useState(false);
   const [searchMenu, setSearchMenu] = useState();
   const [storedItems, setStoreItems] = useState(
     JSON.parse(localStorage.getItem("items"))
@@ -82,6 +84,7 @@ export default function Menu() {
   const backMenu = () => {
     setSearchMenu("");
     setMenuClick(false);
+    setOrderClick(false);
   };
 
   const checkCategory = (value) => {
@@ -181,6 +184,7 @@ export default function Menu() {
 
   return (
     <div>
+      {orderClick === true && <ConfirmOrder back={backMenu} menuOrder={storedItems}/>}
       {menuClick === true && (
         <DetailPopup menu={searchMenu} back={backMenu} addItem={AddBasket} />
       )}
@@ -373,7 +377,7 @@ export default function Menu() {
                   </h1>
                 </div>
 
-                <div id="order-box">
+                <div onClick={() => setOrderClick(true)} id="order-box">
                   <h1 className={"md-text" + lg}>{t("basket.order")}</h1>
                   <h1 className={"bracket" + lg}>
                     {storedItems !== null ? (
