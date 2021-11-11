@@ -33,7 +33,7 @@
 
 .timeline__ball {
   z-index: 2;
-  background-color: #e14842;
+  background-color: #bdbdbf;
   height: 30px;
   width: 30px;
   border: 1px solid #232322;
@@ -42,10 +42,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
 }
 
-#tl-ball{
+#tl-ball {
   z-index: 2;
   position: relative;
   text-align: center;
@@ -54,6 +53,33 @@
 .pg-text {
   position: absolute;
   left: -35px;
+}
+
+.ongoing {
+  -webkit-animation: pulse 1100ms infinite alternate;
+  animation: pulse 1100ms infinite alternate;
+}
+
+.active {
+  background-color: #e14842;
+}
+
+@-webkit-keyframes pulse {
+  0% {
+    background-color: #bdbdbf;
+    /* background-color: rgb(165, 81, 78);; */
+  }
+  100% {
+    background-color: #e14842;
+  }
+}
+@keyframes pulse {
+  0% {
+    background-color: #bdbdbf;
+  }
+  100% {
+    background-color: #e14842;
+  }
 }
 
 @media screen and (max-width: 1650px) {
