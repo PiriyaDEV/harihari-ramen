@@ -5,6 +5,8 @@ const socketIO = require("socket.io");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 
+const logger = require("./lib/logger/index");
+
 // use config environment from .env
 dotenv.config();
 
@@ -13,7 +15,7 @@ const app = express();
 
 // define cors options
 const corsOptions = {
-  origin: ["http://localhost:3000"],
+  origin: ["http://localhost:3000", "http://localhost:3001"],
 };
 
 // enable cross-origin resource sharing
@@ -39,29 +41,22 @@ app.use((req, res) => {
 
 // set port and start a server
 const PORT = process.env.PORT || 8080;
-const server = http.createServer(app);
-
-server.listen(PORT, () => {
-  console.log(`Hari Hari Ramen's API server is running on port ${PORT}.`);
+const server = app.listen(PORT, () => {
+  logger.info(`Hari Hari Ramen's API server is running on port ${PORT}.`);
 });
 
-const io = socketIO(server, {
-  transports: ["polling"],
-  cors: {
-    cors: {
-      origin: "http://localhost:3000",
-    },
-  },
-});
+const io = socketIO(server);
 
-io.on("connection", (socket) => {
-  console.log("A user is connected");
+io.use()
 
-  socket.on("message", (message) => {
-    console.log(`message from ${socket.id} : ${message}`);
+io.on("connection", (client) => {
+  logger.info("A user is connected");
+
+  client.on("message", (message) => {
+    logger.info(`message from ${client.id} : ${message}`);
   });
 
-  socket.on("disconnect", () => {
-    console.log(`socket ${socket.id} disconnected`);
+  client.on("disconnect", () => {
+    logger.info(`socket ${client.id} disconnected`);
   });
 });

@@ -1,4 +1,5 @@
 const sql = require("../database/connection");
+const logger = require("../../lib/logger/index");
 
 exports.createOrder = async (order) => {
   order.status = "ordered";
@@ -8,12 +9,12 @@ exports.createOrder = async (order) => {
   try {
     const [result, fields] = await sql.query(`INSERT INTO orders SET ?`, order);
 
-    console.log(
+    logger.info(
       `Inserted ${result.affectedRows} order >>> id: ${result.insertId}`
     );
     return { order_id: result.insertId, ...order };
   } catch (error) {
-    console.log(error);
+    logger.error(error);
   }
 };
 
@@ -26,9 +27,9 @@ exports.updateOrder = async (order) => {
       order
     );
 
-    console.log(`Updated order >>> id: ${order.order_id}`);
+    logger.info(`Updated order >>> id: ${order.order_id}`);
   } catch (error) {
-    console.log(error);
+    logger.error(error);
   }
 };
 
@@ -51,7 +52,7 @@ exports.createOrderMenu = async (info) => {
       [info]
     );
 
-    console.log(
+    logger.info(
       `Inserted ${result.affectedRows} menu(s) >>> order id: ${info[0][1]}`
     );
     return {
@@ -59,7 +60,7 @@ exports.createOrderMenu = async (info) => {
       inserted: result.affectedRows,
     };
   } catch (error) {
-    console.log(error);
+    logger.error(error);
   }
 };
 
@@ -76,13 +77,13 @@ exports.getSubtotalByOrder = async (order) => {
           AND O.status = 1`
     );
 
-    console.log(
+    logger.info(
       `Subtotal ${result[0].subtotal} baht >>> order id: ${order.order_id}`
     );
 
     return result[0].subtotal;
   } catch (error) {
-    console.log(error);
+    logger.error(error);
   }
 };
 
@@ -128,9 +129,9 @@ exports.getOrderHistory = async (order) => {
           O.created_at DESC`
     );
 
-    console.log(`Selected ${result.length} order(s)`);
+    logger.info(`Selected ${result.length} order(s)`);
     return result;
   } catch (error) {
-    console.log(error);
+    logger.error(error);
   }
 };

@@ -4,14 +4,14 @@ import { useParams } from "react-router";
 import { useTranslation } from "react-i18next";
 
 //CSS
-import "../css/page.css";
-import "../css/text.css";
-import "../css/element/detailPopup.css";
+import "../../css/page.css";
+import "../../css/text.css";
+import "../../css/element/detailPopup.css";
 
 //Icon
-import closeIcon from "../images/icon/Union 12.svg";
-import plusIcon from "../images/icon/Union 13.svg";
-import minusIcon from "../images/icon/Union 14.svg";
+import closeIcon from "../../images/icon/Union 12.svg";
+import plusIcon from "../../images/icon/Union 13.svg";
+import minusIcon from "../../images/icon/Union 14.svg";
 
 export default function DetailPopup(props) {
   const { t } = useTranslation();

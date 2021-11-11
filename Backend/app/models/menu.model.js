@@ -1,4 +1,5 @@
 const sql = require("../database/connection");
+const logger = require("../../lib/logger/index");
 
 exports.createMainMenu = async (menu) => {
   menu.status = true;
@@ -11,12 +12,12 @@ exports.createMainMenu = async (menu) => {
       menu
     );
 
-    console.log(
+    logger.info(
       `Inserted ${result.affectedRows} menu >>> id: ${result.insertId}`
     );
     return { product_id: result.insertId, ...menu };
   } catch (error) {
-    console.log(error);
+    logger.error(error);
   }
 };
 
@@ -38,7 +39,7 @@ exports.createInfoMainMenu = async (info) => {
       [info]
     );
 
-    console.log(
+    logger.info(
       `Inserted ${result.affectedRows} menu's info(s) >>> menu id: ${info[0][0]}`
     );
     return {
@@ -47,7 +48,7 @@ exports.createInfoMainMenu = async (info) => {
       inserted: result.affectedRows,
     };
   } catch (error) {
-    console.log(error);
+    logger.error(error);
   }
 };
 
@@ -62,12 +63,12 @@ exports.createChoice = async (choice) => {
       choice
     );
 
-    console.log(
+    logger.info(
       `Inserted ${result.affectedRows} choice >>> id: ${result.insertId}`
     );
     return { choice_id: result.insertId, ...choice };
   } catch (error) {
-    console.log(error);
+    logger.error(error);
   }
 };
 
@@ -89,7 +90,7 @@ exports.createInfoChoice = async (info) => {
       [info]
     );
 
-    console.log(
+    logger.info(
       `Inserted ${result.affectedRows} choice's info(s) >>> choice id: ${info[0][0]}`
     );
     return {
@@ -98,7 +99,7 @@ exports.createInfoChoice = async (info) => {
       inserted: result.affectedRows,
     };
   } catch (error) {
-    console.log(error);
+    logger.error(error);
   }
 };
 
@@ -166,9 +167,9 @@ exports.getMainMenus = async (result) => {
           M.status = 1`
     );
 
-    console.log(`Selected ${result.length} menu(s)`);
+    logger.info(`Selected ${result.length} menu(s)`);
     return result;
   } catch (error) {
-    console.log(error);
+    logger.error(error);
   }
 };
