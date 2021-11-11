@@ -15,4 +15,14 @@ export default new (class OrderService {
         return error.response;
       });
   }
+  async getOrderHistory(uid) {
+    return await http
+      .get("/order/orderHistory",{ headers: { "x-access-token": uid } })
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        return error.response;
+      });
+  }
 })();

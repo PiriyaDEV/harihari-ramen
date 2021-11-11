@@ -341,7 +341,7 @@ export default function Menu() {
                               className={"xm-text bracket-edit" + lg}
                               onClick={() => RemoveBasket(storedItems[i])}
                             >
-                              Delete
+                              {t("basket.delete")}
                             </h1>
                             <h1 className={"xm-text bracket-edit" + lg}>|</h1>
                             <h1
