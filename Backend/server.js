@@ -1,9 +1,9 @@
 const dotenv = require("dotenv");
-const http = require("http");
 const express = require("express");
-const socketIO = require("socket.io");
+const http = require("http");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const socketIO = require("socket.io");
 
 const logger = require("./lib/logger/index");
 
@@ -12,6 +12,9 @@ dotenv.config();
 
 // create an application object
 const app = express();
+
+// create a server instance
+const server = http.createServer(app);
 
 // define cors options
 const corsOptions = {
@@ -34,29 +37,22 @@ app.use(bodyParser.urlencoded({ extended: true, limit: "20mb" }));
 const router = require("./app/routes");
 app.use("/api/v1", router);
 
-// handle 404 requests
-app.use((req, res) => {
-  res.status(404).send(`<h1>404 Page Not Found!</h1>`);
-});
-
 // set port and start a server
 const PORT = process.env.PORT || 8080;
-const server = app.listen(PORT, () => {
+server.listen(PORT, () => {
   logger.info(`Hari Hari Ramen's API server is running on port ${PORT}.`);
 });
 
-const io = socketIO(server);
+const io = socketIO(server, {
+  transports: ["polling"],
+  cors: {
+    cors: corsOptions,
+  },
+});
 
-io.use()
+require("./app/sockets/index")(io);
 
-io.on("connection", (client) => {
-  logger.info("A user is connected");
-
-  client.on("message", (message) => {
-    logger.info(`message from ${client.id} : ${message}`);
-  });
-
-  client.on("disconnect", () => {
-    logger.info(`socket ${client.id} disconnected`);
-  });
+// handle 404 requests
+app.use((req, res) => {
+  res.status(404).send(`<h1>404 Page Not Found!</h1>`);
 });

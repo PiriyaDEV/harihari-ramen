@@ -1,9 +1,11 @@
 //Import
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import tableService from "../services/table.service.js";
+import orderService from "../services/order.service.js";
 import { useParams } from "react-router";
 import { useTranslation } from "react-i18next";
 import Bill from "./popup/Bill.js";
+import socketIOClient from "socket.io-client";
 
 //CSS
 import "../css/page.css";
@@ -18,7 +20,9 @@ import { getTimes } from "../utilities/Time";
 //Image
 import RamenPic from "../images/ramen_main@2x.png";
 
-// import Invalid from "../components/Invalid";
+const socketCall = async () => {
+  await socketIOClient("ws://localhost:3030");
+};
 
 export default function Home() {
   const { id, lgs } = useParams();
@@ -26,21 +30,54 @@ export default function Home() {
   const intermediaryBalls = 2;
   const calculatedWidth = (width / (intermediaryBalls + 1)) * 100;
   const { t, i18n } = useTranslation();
-  const [link, setLink] = useState();
   const storedTimes = JSON.parse(localStorage.getItem("checkin_time"));
   const [checkBill, setCheckBill] = useState(false);
 
+  const [link, setLink] = useState();
+  const [orderHistory, setOrderHistory] = useState("");
+
   useEffect(() => {
-    if (!link) {
-      getLink();
-    }
-    i18n.changeLanguage(lgs);
-    setLg(" " + lgs);
-  }, [i18n, lgs, link]);
+    socketCall();
+  }, []);
 
   const getLink = async () => {
     await tableService.getTables().then((data) => setLink(data));
   };
+
+  const getAPIOrderHistory = async (id) => {
+    await orderService
+      .getOrderHistory(id)
+      .then((data) =>
+        setOrderHistory(
+          data.filter(
+            (order) => order.status !== "served" && order.status !== "cancel"
+          )
+        )
+      );
+  };
+
+  useEffect(() => {
+    if (!link && !orderHistory) {
+      getLink();
+      getAPIOrderHistory(id);
+    }
+    i18n.changeLanguage(lgs);
+    setLg(" " + lgs);
+  }, [i18n, lgs, link, orderHistory, id]);
+
+  useLayoutEffect(() => {
+    if (orderHistory.length > 0) {
+      let lastestOrder = orderHistory[0];
+      //Status Order: 0 is Order, 1 is Received Order, 2 is Prepare, 3 is Served
+      if (lastestOrder.status === "ordered") setWidth(0);
+      else if (lastestOrder.status === "received") setWidth(1);
+      else if (lastestOrder.status === "preparing") setWidth(2);
+      else if (lastestOrder.status === "serving") setWidth(3);
+    }
+    else{
+      setWidth(-1);
+    }
+  }, [orderHistory]);
 
   const clickChangeLanguage = (lng) => {
     let web = "http://localhost:3000/";
@@ -61,17 +98,26 @@ export default function Home() {
   //   window.location = "http://localhost:3000/invalid";
   // }
 
-  const timeLineBalls = (n, onClick, current, text) =>
+  const [orderStatusText] = useState([
+    "Ordered",
+    "Received Order",
+    "Preparing Order",
+    "Serving",
+  ]);
+
+  const timeLineBalls = (n, current, text) =>
     Array(n)
       .fill(0)
       //ใช้ index ในการเปลี่ยน bar
       .map((i, index) => (
         <div id="tl-ball" key={index}>
           <div
-            className={`timeline__ball ${current >= index ? "active" : null}`}
-            onClick={() => onClick(1)}
+            className={`timeline__ball ${current > index ? "active" : null} ${
+              current === index ? "ongoing" : null
+            }`}
+            // onloadd={() => onClick(3)}
           ></div>
-          <h1 className={"pg-text bracket" + lg}>{text}</h1>
+          <h1 className={"pg-text bracket" + lg}>{text[index]}</h1>
         </div>
       ));
 
@@ -126,7 +172,13 @@ export default function Home() {
             <div id="order-status">
               <h1 className={"md-text" + lg}>{t("orderStatus")}</h1>
               <p className={"bracket" + lg}>
-                {t("orderLeft.1")} 1 {t("orderLeft.2")}
+                {t("orderLeft.1")}{" "}
+                {orderHistory !== null ? (
+                  <span>{orderHistory.length}</span>
+                ) : (
+                  <span>0</span>
+                )}
+                {t("orderLeft.2")}
               </p>
 
               <p className={"sm-text order-p" + lg}>
@@ -139,12 +191,7 @@ export default function Home() {
                   className="timeline__progress"
                   style={{ width: `${calculatedWidth}%` }}
                 />
-                {timeLineBalls(
-                  intermediaryBalls + 2,
-                  setWidth,
-                  width,
-                  "Received Order"
-                )}
+                {timeLineBalls(intermediaryBalls + 2, width, orderStatusText)}
               </div>
             </div>
           </div>

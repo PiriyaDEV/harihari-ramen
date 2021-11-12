@@ -48,6 +48,7 @@
         "yourBasket" : "あなたのバスケット",
         "subtotal" : "小計",
         "VAT": "VAT",
+        "delete": "消去",
         "edit" : "編集",
         "total" : "合計",
         "order" : "注文",

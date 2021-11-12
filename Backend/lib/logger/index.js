@@ -30,6 +30,13 @@ exports.info = (message) => {
   console.info(`${timestamp} ${level}  `, message);
 };
 
+exports.socket = (message) => {
+  const level = `${Color.Reset}${Color.Bright}${Color.FgOrange}SOCKET${Color.Reset}`;
+  const timestamp = getTimestamp();
+
+  console.info(`${timestamp} ${level}`, message);
+};
+
 exports.warn = (message) => {
   const level = `${Color.Reset}${Color.Bright}${Color.FgYellow}WARN${Color.Reset}`;
   const timestamp = getTimestamp();

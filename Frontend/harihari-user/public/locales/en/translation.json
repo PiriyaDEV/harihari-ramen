@@ -48,6 +48,7 @@
         "yourBasket" : "YOUR BASKET",
         "subtotal" : "Subtotal",
         "VAT": "VAT",
+        "delete": "Delete",
         "edit" : "Edit",
         "total" : "Total",
         "order" : "Order",
