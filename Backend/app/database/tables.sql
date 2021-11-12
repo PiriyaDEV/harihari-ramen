@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS tables(
 -- Create Bills Table
 CREATE TABLE IF NOT EXISTS bills(
   bill_id                 INT             NOT NULL  AUTO_INCREMENT,
+  uid                     VARCHAR(36)     NOT NULL  UNIQUE,
   table_id                INT             NOT NULL,
   subtotal                DECIMAL(12,2)   NOT NULL,
   status                  BOOLEAN         NOT NULL,

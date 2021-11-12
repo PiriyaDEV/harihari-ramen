@@ -17,6 +17,7 @@ module.exports = {
   FgMagenta: "\x1b[35m",
   FgCyan: "\x1b[36m",
   FgWhite: "\x1b[37m",
+  FgOrange: "\x1b[38;5;3m",
 
   // background color codes
   BgBlack: "\x1b[40m",
