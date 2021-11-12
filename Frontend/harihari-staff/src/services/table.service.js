@@ -11,9 +11,10 @@ export default new (class TableService {
         return error.response;
       });
   }
-  async checkout(uid) {
+  async checkout(guest_uid, bill_uid) {
+    console.log(bill_uid)
     return await http
-      .put("/table/checkout", {}, { headers: { "x-access-token": uid }})
+      .put("/table/checkout", {uid: bill_uid}, { headers: { "x-access-token": guest_uid }})
       .then((response) => {
         return response.data;
       })
