@@ -20,10 +20,6 @@ import { getTimes } from "../utilities/Time";
 //Image
 import RamenPic from "../images/ramen_main@2x.png";
 
-const socketCall = async () => {
-  await socketIOClient("ws://localhost:3030");
-};
-
 export default function Home() {
   const { id, lgs } = useParams();
   const [width, setWidth] = useState(0);
@@ -37,8 +33,9 @@ export default function Home() {
   const [orderHistory, setOrderHistory] = useState("");
 
   useEffect(() => {
-    socketCall();
-  }, []);
+    socketIOClient("ws://localhost:3030", { auth: {id: id}});
+
+  }, [id]);
 
   const getLink = async () => {
     await tableService.getTables().then((data) => setLink(data));
@@ -92,10 +89,9 @@ export default function Home() {
 
   numTable = CheckTable(link, id);
   CheckHaveTable(numTable, link);
+  
+  // const toggleBill = () => {
 
-  // if (numTable === 0) {
-  //   numTable = 0;
-  //   window.location = "http://localhost:3000/invalid";
   // }
 
   const [orderStatusText] = useState([
@@ -123,7 +119,7 @@ export default function Home() {
 
   return (
     <div>
-      {checkBill === true && <Bill />}
+      {checkBill === true && <Bill toggle={() => setCheckBill()}/>}
       <div id="home" className="section">
         <div id="home-container" className="page-container">
           <div>
