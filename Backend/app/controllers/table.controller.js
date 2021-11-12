@@ -41,6 +41,7 @@ exports.checkin = async (req, res) => {
   const table = req.body.table;
   const bill = {
     table_id: table.table_id,
+    uid: uuid.v4(),
   };
 
   try {
@@ -74,12 +75,15 @@ exports.checkin = async (req, res) => {
 
 exports.checkout = async (req, res) => {
   const table = req.body.table;
+  const uid = req.body.uid;
   const bill = {
     table_id: table.table_id,
   };
 
   try {
     let billResult = await Bill.getLatestBillByTable(bill);
+
+    if (billResult.uid !== uid) throw new Error("Invalid bill");
 
     let updateBill = {
       bill_id: billResult.bill_id,
@@ -101,10 +105,10 @@ exports.checkout = async (req, res) => {
       message: "Checked out successfully",
       guest_uid: table.guest_uid,
       bill: {
-        bill_id: updateBill.bill_id,
+        uid: billResult.uid,
         checkout_at: updateBill.checkout_at,
-        items: billSummary
-      }
+        items: billSummary,
+      },
     });
   } catch (error) {
     return res.status(500).json({

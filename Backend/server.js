@@ -43,14 +43,16 @@ server.listen(PORT, () => {
   logger.info(`Hari Hari Ramen's API server is running on port ${PORT}.`);
 });
 
-const io = socketIO(server, {
+// initial socket 
+const socket = socketIO(server, {
   transports: ["polling"],
   cors: {
     cors: corsOptions,
   },
 });
 
-require("./app/sockets/index")(io);
+// parse to socket module
+require("./app/sockets/index")(socket);
 
 // handle 404 requests
 app.use((req, res) => {

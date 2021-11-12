@@ -56,7 +56,7 @@ exports.find = async (table) => {
 exports.getTables = async (result) => {
   try {
     const [result, fields] = await sql.query(
-      `SELECT table_id, guest_uid, reserve FROM tables WHERE status = 1`
+      `SELECT table_id, guest_uid, reserve FROM tables WHERE status = 1 ORDER BY table_id`
     );
 
     logger.info(`Selected ${result.length} table(s)`);
