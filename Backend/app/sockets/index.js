@@ -1,16 +1,17 @@
-const socketIO = require("socket.io");
 const logger = require("../../lib/logger/index");
 
 module.exports = function (io) {
-  var count = 0;
+  let count = 0;
 
   io.on("connection", (socket) => {
     count++;
-    logger.socket(`[connected ${count}] A user is connected from ${socket.id}`);
+    logger.socket(`[${count} Connected] User connected >>> id ${socket.id}`);
 
     socket.on("disconnect", () => {
       count--;
-      logger.socket(`[connected ${count}] socket ${socket.id} disconnected`);
+      logger.socket(
+        `[${count} Connected] User disconnected >>> id ${socket.id}`
+      );
     });
   });
 };
