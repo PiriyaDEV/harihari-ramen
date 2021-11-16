@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="29" height="29" viewBox="0 0 29 29">
+  <g id="Cancel_Icon" data-name="Cancel Icon" transform="translate(-91 -230.841)">
+    <g id="Group_321" data-name="Group 321" transform="translate(6.587 -158.572)">
+      <path id="Union_12" data-name="Union 12" d="M11.123,12.945,6.635,8.457,2.185,12.906A1.28,1.28,0,0,1,.375,11.1L4.825,6.647.377,2.2A1.259,1.259,0,0,1,2.158.419L6.606,4.866,11.1.375a1.28,1.28,0,1,1,1.81,1.81l-4.49,4.49L12.9,11.164a1.259,1.259,0,1,1-1.781,1.781Z" transform="translate(92.412 397.412)" fill="#232322"/>
+    </g>
+    <g id="Ellipse_128" data-name="Ellipse 128" transform="translate(91 230.841)" fill="none" stroke="#232322" stroke-width="2">
+      <circle cx="14.5" cy="14.5" r="14.5" stroke="none"/>
+      <circle cx="14.5" cy="14.5" r="13.5" fill="none"/>
+    </g>
+  </g>
+</svg>

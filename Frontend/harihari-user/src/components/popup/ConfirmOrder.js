@@ -7,7 +7,6 @@ import OrderService from "../../services/order.service.js";
 //CSS
 import "../../css/page.css";
 import "../../css/text.css";
-import "../../css/element/confirmOrder.css";
 
 export default function ConfirmOrder(props) {
   const { id, lgs } = useParams();

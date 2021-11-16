@@ -14,6 +14,10 @@ import "../css/components/Home.css";
 import "../css/element/progressBar.css";
 import "../css/element/languageBtn.css";
 
+//Icon
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBell } from "@fortawesome/free-solid-svg-icons";
+
 //JS
 import { getTimes } from "../utilities/Time";
 
@@ -32,9 +36,18 @@ export default function Home() {
   const [link, setLink] = useState();
   const [orderHistory, setOrderHistory] = useState("");
 
-  useEffect(() => {
-    socketIOClient("ws://localhost:3030", { auth: {id: id}});
+  const [callWaiter, setWaiter] = useState(false);
 
+  useEffect(() => {
+    const socket = socketIOClient("ws://localhost:3030", { auth: { id: id } });
+
+    socket.on("order-history", (orders) => {
+      setOrderHistory(
+        orders.filter(
+          (order) => order.status !== "served" && order.status !== "cancel"
+        )
+      );
+    });
   }, [id]);
 
   const getLink = async () => {
@@ -70,8 +83,7 @@ export default function Home() {
       else if (lastestOrder.status === "received") setWidth(1);
       else if (lastestOrder.status === "preparing") setWidth(2);
       else if (lastestOrder.status === "serving") setWidth(3);
-    }
-    else{
+    } else {
       setWidth(-1);
     }
   }, [orderHistory]);
@@ -89,7 +101,7 @@ export default function Home() {
 
   numTable = CheckTable(link, id);
   CheckHaveTable(numTable, link);
-  
+
   // const toggleBill = () => {
 
   // }
@@ -119,7 +131,7 @@ export default function Home() {
 
   return (
     <div>
-      {checkBill === true && <Bill toggle={() => setCheckBill()}/>}
+      {checkBill === true && <Bill toggle={() => setCheckBill()} />}
       <div id="home" className="section">
         <div id="home-container" className="page-container">
           <div>
@@ -203,7 +215,10 @@ export default function Home() {
                   {t("orderFood.2")}
                 </h1>
               </div>
-              <div className="menu-box">
+              <div
+                className="menu-box"
+                onClick={() => MenuSelect("history", id, lgs)}
+              >
                 <h1 className={"md-text" + lg}>
                   {t("orderHistory.1")} <br />
                   {t("orderHistory.2")}
@@ -212,7 +227,15 @@ export default function Home() {
             </div>
 
             <div className="menu-container">
-              <div className="menu-box">
+              <div
+                onClick={() => setWaiter(!callWaiter)}
+                className={`menu-box ${
+                  callWaiter === true ? "waiter-box" : null
+                }`}
+              >
+                {callWaiter === true && (
+                  <FontAwesomeIcon icon={faBell} className="nm-text bell-fa" />
+                )}
                 <h1 className={"md-text" + lg}>
                   {t("callWaiter.1")} <br />
                   {t("callWaiter.2")}

@@ -25,4 +25,18 @@ export default new (class OrderService {
         return error.response;
       });
   }
+  async cancelOrder(order,uid) {
+    return await http
+      .put(
+        "/order/cancel",
+        { order_id: order },
+        { headers: { "x-access-token": uid } }
+      )
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        return error.response;
+      });
+  }
 })();

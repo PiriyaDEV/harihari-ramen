@@ -55,5 +55,9 @@
         "item" : "アイテム",
         "request" : "リクエスト",
         "addBasket" : "バスケットに追加"
+    },
+    "history" : {
+        "order": "注文",
+        "cancel": "食べ物をキャンセルする"
     }
 }

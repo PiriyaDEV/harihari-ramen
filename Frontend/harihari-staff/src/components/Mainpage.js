@@ -101,10 +101,10 @@ export default function Mainpage() {
             {orderMenu &&
               orderMenu.map((menu, id) => (
                 <div id="order-info-table">
-                  <h1>{menu.name}</h1>
+                  <h1>{menu.en}</h1>
                   {menu.comment ? <h1>{menu.comment}</h1> : <h1>-</h1>}
                   <h1>{menu.quantity}</h1>
-                  <h1>{menu.price}</h1>
+                  <h1>{menu.price.toFixed(2)}</h1>
                 </div>
               ))}
             <button

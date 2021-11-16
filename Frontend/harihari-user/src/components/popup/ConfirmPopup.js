@@ -1,0 +1,101 @@
+//Import
+import React from "react";
+// import { useTranslation } from "react-i18next";
+import { useParams } from "react-router";
+import OrderService from "../../services/order.service.js";
+
+//CSS
+import "../../css/page.css";
+import "../../css/text.css";
+import "../../css/element/confirmPopup.css";
+
+//Image
+import closeImg from "../../images/icon/Cancel Icon.svg";
+import checkImg from "../../images/icon/Check Icon.png";
+
+export default function ConfirmOrder(props) {
+  const { id, lgs } = useParams();
+
+  const orderItem = async () => {
+    let web = "http://localhost:3000/";
+    let path = "/home/";
+
+    let items = [];
+    items = props.menuOrder.map((item) => {
+      return {
+        product_id: item.product_id,
+        quantity: item.quantity,
+        comment: item.comment ? item.comment : null,
+      };
+    });
+
+    let result = await OrderService.createOrder(items, id);
+
+    if (result.success) {
+      localStorage.removeItem("items");
+      window.location = web + lgs + path + id;
+    } else {
+      window.location = web + "invalid";
+    }
+  };
+
+  const cancelOrder = async(orderId) => {
+    let web = "http://localhost:3000/";
+    let path = "/history/";
+
+    let result = await OrderService.cancelOrder(orderId ,id);
+
+    if (result.success) {
+      window.location = web + lgs + path + id;
+    } else {
+      window.location = web + "invalid";
+    }
+  }
+
+  console.log(props.order)
+
+  return (
+    <div id="confirm-popup" className="section popup">
+      <div className="page-container section">
+        <div id="confirm-box">
+          <div>
+            {props.page === "history" ? (
+              <div className="confirm-header">
+                <img className="close-img" src={closeImg} alt="" />
+                <h1 className="menu-header">Cancel Order</h1>
+              </div>
+            ) : (
+              <div className="confirm-header">
+                <img className="close-img" src={checkImg} alt="" />
+                <h1 className="menu-header">Confirm Order</h1>
+              </div>
+            )}
+          </div>
+          <p className="sm-text popup-p">
+          {props.page === "history" ? (
+            <span>
+              Do you confirm to cancel{" "}
+              <span className="order-red">order {props.orderIndex + 1}</span>? You cannot undo this
+              action.
+            </span> ) : (
+            <span>
+              Do you want to confirm basket or not? You cannot undo this action.
+            </span> 
+            )}
+          </p>
+          <div className="popup-btn-section section">
+            <button
+              className="md-text popup-btn-white"
+              onClick={() => props.cancel(false)}
+            >
+              Back
+            </button> 
+            {props.page === "history" ? (
+            <button className="md-text popup-btn-red" onClick={()=> cancelOrder(props.order)}>Confirm</button> ) : (
+            <button className="md-text popup-btn-red" onClick={() => orderItem()}>Confirm</button> )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -1,3 +1,5 @@
+const shortMonth = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
 export function getTimes(epoch) {
   const datetime = new Date(epoch);
 
@@ -8,4 +10,14 @@ export function getTimes(epoch) {
   return `${hours}:${minutes}:${seconds}`;
 }
 
+export function getDateTimes(epoch) {
+  const datetime = new Date(epoch);
 
+  const month = shortMonth[datetime.getMonth()];
+  const date = datetime.getDate().toString().padStart(2, 0);
+
+  const hours = datetime.getHours().toString().padStart(2, 0);
+  const minutes = datetime.getMinutes().toString().padStart(2, 0);
+
+  return `${date} ${month}, ${hours}:${minutes}`;
+}

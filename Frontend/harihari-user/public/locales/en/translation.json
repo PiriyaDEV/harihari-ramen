@@ -55,5 +55,9 @@
         "item" : "items",
         "request" : "Request",
         "addBasket" : "Add to basket"
+    },
+    "history" : {
+        "order": "Order",
+        "cancel": "cancel order"
     }
 }
