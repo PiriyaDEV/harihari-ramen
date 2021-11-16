@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS tables(
   table_id                INT             NOT NULL  AUTO_INCREMENT,
   guest_uid               VARCHAR(36)     NOT NULL  UNIQUE,
   reserve                 BOOLEAN         NOT NULL,
+  call_waiter             BOOLEAN         NOT NULL,
   status                  BOOLEAN         NOT NULL,
   created_at              BIGINT          NOT NULL,
   updated_at              BIGINT          NOT NULL,

@@ -3,6 +3,7 @@ const logger = require("../../lib/logger/index");
 
 exports.create = async (table) => {
   table.reserve = false;
+  table.call_waiter = false;
   table.status = true;
   table.created_at = Date.now();
   table.updated_at = Date.now();

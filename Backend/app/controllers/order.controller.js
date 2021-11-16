@@ -1,6 +1,6 @@
 const Order = require("../models/order.model");
 const Bill = require("../models/bill.model");
-const io = require("../sockets/index");
+const { io } = require("../sockets/index");
 
 exports.create = async (req, res) => {
   let table = req.body.table;
@@ -57,8 +57,6 @@ exports.create = async (req, res) => {
 };
 
 exports.getOrderHistory = async (req, res) => {
-  const base_url = process.env.BASE_URL;
-
   const table = req.body.table;
   const bill = {
     table_id: table.table_id,
@@ -73,9 +71,43 @@ exports.getOrderHistory = async (req, res) => {
 
     let result = await Order.getOrderHistory(order);
 
-    //result.map((menu) => (menu.image_url = `${base_url}${menu.image_url}`));
-
     return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+exports.updateStatus = async (req, res) => {
+  const table = req.body.table;
+  const bill = {
+    table_id: table.table_id,
+  };
+  const order = {
+    order_id: req.body.order_id,
+    status: req.body.status,
+  };
+
+  try {
+    let updateOrder = {
+      order_id: order.order_id,
+      status: order.status,
+    };
+    await Order.updateOrder(updateOrder);
+
+    let billResult = await Bill.getLatestBillByTable(bill);
+
+    let result = await Order.getOrderHistory(billResult);
+
+    io.emit("order-history", result);
+
+    return res.status(200).json({
+      success: true,
+      message: "Updated order status successfully",
+      order_id: updateOrder.order_id,
+    });
   } catch (error) {
     return res.status(500).json({
       success: false,

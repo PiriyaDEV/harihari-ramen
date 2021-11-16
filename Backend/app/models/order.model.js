@@ -100,23 +100,50 @@ exports.getOrderHistory = async (order) => {
               JSON_OBJECT(
                 'product_id',
                 OM.product_id,
-                'name',
-                IMM.name,
-                'image_url',
-                MM.image_url,
                 'price',
                 MM.price,
                 'quantity',
                 OM.quantity,
                 'comment',
-                OM.comment
+                OM.comment,
+                'en',
+                (
+                  SELECT
+                    IMM.name
+                  FROM
+                    info_main_menus IMM
+                  WHERE
+                    IMM.product_id = OM.product_id
+                    AND IMM.language = 'en'
+                    AND IMM.status = 1
+                ),
+                'jp',
+                (
+                  SELECT
+                    IMM.name
+                  FROM
+                    info_main_menus IMM
+                  WHERE
+                    IMM.product_id = OM.product_id
+                    AND IMM.language = 'jp'
+                    AND IMM.status = 1
+                ),
+                'th',
+                (
+                  SELECT
+                    IMM.name
+                  FROM
+                    info_main_menus IMM
+                  WHERE
+                    IMM.product_id = OM.product_id
+                    AND IMM.language = 'th'
+                    AND IMM.status = 1
+                )       
               )
             )
           FROM
             order_menus OM
             LEFT JOIN main_menus MM ON OM.product_id = MM.product_id
-            LEFT JOIN info_main_menus IMM ON MM.product_id = IMM.product_id
-            AND IMM.language = 'en'
           WHERE
             OM.order_id = O.order_id
             AND OM.status = 1

@@ -7,6 +7,8 @@ router.post("/create", auth, controller.create);
 
 router.get("/orderHistory", auth, controller.getOrderHistory);
 
+router.put("/updateStatus", auth, controller.updateStatus);
+
 router.put("/cancel", auth, controller.cancel);
 
 module.exports = router;
