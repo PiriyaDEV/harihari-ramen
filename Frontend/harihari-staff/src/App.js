@@ -6,14 +6,15 @@ import { Route, Switch } from "react-router-dom";
 import TableQR from "./components/TableQR";
 import Payment from "./components/Payment";
 import Receipt from "./components/Receipt";
+import Mainpage from "./components/Mainpage";
 
 function App() {
   return (
     <div>
       <Switch>
-        {/* <Route exact path="/">
-            <Home />
-          </Route> */}
+        <Route exact path="/">
+            <Mainpage />
+          </Route>
         <Route path="/qr">
           <TableQR />
         </Route>

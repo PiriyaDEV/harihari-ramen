@@ -41,6 +41,7 @@ export default class TableQR extends Component {
     window.location = path;
   }
 
+
   async getLink() {
     await tableService
       .getTables()
