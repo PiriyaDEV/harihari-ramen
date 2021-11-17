@@ -30,7 +30,6 @@ export default function Home() {
   const intermediaryBalls = 2;
   const calculatedWidth = (width / (intermediaryBalls + 1)) * 100;
   const { t, i18n } = useTranslation();
-  const storedTimes = JSON.parse(localStorage.getItem("checkin_time"));
   const [checkBill, setCheckBill] = useState(false);
 
   const [link, setLink] = useState();
@@ -50,8 +49,8 @@ export default function Home() {
     });
   }, [id]);
 
-  const getLink = async () => {
-    await tableService.getTables().then((data) => setLink(data));
+  const getLink = async (id) => {
+    await tableService.getTableById(id).then((data) => setLink(data));
   };
 
   const getAPIOrderHistory = async (id) => {
@@ -68,11 +67,16 @@ export default function Home() {
 
   useEffect(() => {
     if (!link && !orderHistory) {
-      getLink();
+      getLink(id);
       getAPIOrderHistory(id);
     }
     i18n.changeLanguage(lgs);
     setLg(" " + lgs);
+    if(link) {
+      if (link.call_waiter) {
+        setWaiter(true);
+      }
+    }
   }, [i18n, lgs, link, orderHistory, id]);
 
   useLayoutEffect(() => {
@@ -94,13 +98,7 @@ export default function Home() {
     window.location = web + lng + path + id;
   };
 
-  // alert(lgs);
-
   const [lg, setLg] = useState(" " + lgs);
-  let numTable = useState(0);
-
-  numTable = CheckTable(link, id);
-  CheckHaveTable(numTable, link);
 
   const [orderStatusText] = useState([
     "Ordered",
@@ -109,10 +107,10 @@ export default function Home() {
     "Serving",
   ]);
 
-  const callWaiterClick = async() => {
-    setWaiter(true)
+  const callWaiterClick = async () => {
+    setWaiter(true);
     await tableService.callWaiter(id);
-  }
+  };
 
   const timeLineBalls = (n, current, text) =>
     Array(n)
@@ -168,12 +166,16 @@ export default function Home() {
                   <img id="ramen-icon" src={RamenPic} alt="" />
                 </div>
                 <div>
-                  <h1 className={"title" + lg}>
-                    {t("table")} {numTable}
-                  </h1>
-                  <h2 className={"sm-text" + lg}>
-                    {t("checkIn")}: {getTimes(storedTimes)}
-                  </h2>
+                  {link && (
+                    <h1 className={"title" + lg}>
+                      {t("table")} {link.table_id}
+                    </h1>
+                  )}
+                  {link && (
+                    <h2 className={"sm-text" + lg}>
+                      {t("checkIn")}: {getTimes(link.checkin_at)}
+                    </h2>
+                  )}
                 </div>
               </div>
             </div>
@@ -229,7 +231,7 @@ export default function Home() {
 
             <div className="menu-container">
               <div
-                onClick={()=> callWaiterClick()}
+                onClick={() => callWaiterClick()}
                 className={`menu-box ${
                   callWaiter === true ? "waiter-box" : null
                 }`}
@@ -256,22 +258,14 @@ export default function Home() {
   );
 }
 
-function CheckTable(link, id) {
-  for (const index in link) {
-    if (link[index].guest_uid === id) {
-      return link[index].table_id;
-    }
-  }
-}
-
 function MenuSelect(page, value, lgs) {
   let web = "http://localhost:3000/";
   let path = "/" + page + "/";
   window.location = web + lgs + path + value;
 }
 
-function CheckHaveTable(numTable, link) {
-  if (!numTable && link) {
-    window.location = "http://localhost:3000/invalid";
-  }
-}
+// function CheckHaveTable(numTable, link) {
+//   if (!numTable && link) {
+//     window.location = "http://localhost:3000/invalid";
+//   }
+// }

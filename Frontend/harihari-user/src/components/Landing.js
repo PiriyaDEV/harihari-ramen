@@ -119,8 +119,6 @@ let linkToHome = async (value, lgs) => {
 
   let result = await tableService.checkin(value);
 
-  localStorage.setItem("checkin_time", JSON.stringify(result.checkin_at));
-
   if (result.success) {
     window.location = web + lgs + path + value;
   } else {

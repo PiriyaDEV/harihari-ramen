@@ -10,7 +10,7 @@ import "../css/components/Mainpage.css";
 
 //Icon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { faInfoCircle, faBell } from "@fortawesome/free-solid-svg-icons";
 
 export default function Mainpage() {
   const [link, setLink] = useState();
@@ -68,15 +68,18 @@ export default function Mainpage() {
   };
 
   const getIndexStatus = (index) => {
-    setSelectOrder(index.order_id)
-  }
+    setSelectOrder(index.order_id);
+  };
 
-  const changeStatus = async(e) => {
+  const changeStatus = async (e) => {
     let order = [];
     order.order_id = selectOrder;
     order.status = e.target.value;
 
-    let result = await orderService.updateStatus(order,link[selectedTable - 1].guest_uid);
+    let result = await orderService.updateStatus(
+      order,
+      link[selectedTable - 1].guest_uid
+    );
 
     if (result.success) {
       console.log("success");
@@ -84,17 +87,19 @@ export default function Mainpage() {
     } else {
       console.log("unsuccess");
     }
-  }
+  };
 
-  const callWaiterClick = async() => {
-    let result = await tableService.callWaiter(link[selectedTable - 1].guest_uid);
-    if(result.success) {
+  const callWaiterClick = async () => {
+    let result = await tableService.callWaiter(
+      link[selectedTable - 1].guest_uid
+    );
+    if (result.success) {
       console.log("success");
       window.location.reload(false);
     } else {
       console.log("unsuccess");
     }
-  }
+  };
 
   return (
     <div>
@@ -165,10 +170,18 @@ export default function Mainpage() {
                     <div
                       className={`table-clr section ${
                         selectedTable === i + 1 ? "table-clr-active" : null
-                      }`}
+                      } ${link[i].call_waiter ? "waiter-active" : null}`}
                       key={i}
                       onClick={() => setCurrentTable(i + 1)}
                     >
+                      {link[i].call_waiter ? (
+                        <FontAwesomeIcon
+                          icon={faBell}
+                          className="sm-text bell-fa"
+                        />
+                      ) : (
+                        <span></span>
+                      )}
                       <h1 className="sm-text">{link[i].table_id}</h1>
                     </div>
                   ))}
@@ -191,13 +204,16 @@ export default function Mainpage() {
                     </div>
                     <div>
                       {link && link[selectedTable - 1].call_waiter ? (
-                      <button onClick={()=> callWaiterClick()} className="sm-text red-table-btn">
-                        Send Waiter
-                      </button>
+                        <button
+                          onClick={() => callWaiterClick()}
+                          className="sm-text yellow-table-btn"
+                        >
+                          Send Waiter
+                        </button>
                       ) : (
-                      <button className="sm-text gray-table-btn">
-                        Send Waiter
-                      </button>
+                        <button className="sm-text gray-table-btn">
+                          Send Waiter
+                        </button>
                       )}
                     </div>
                   </div>
@@ -220,15 +236,18 @@ export default function Mainpage() {
                             />
                             {i + 1}
                           </h1>
-                          <select onChange={changeStatus} onClick={() => getIndexStatus(x)} value={x.status} className="sm-text">
-                            <option value="ordered">
-                              Ordered
-                            </option>
+                          <select
+                            onChange={changeStatus}
+                            onClick={() => getIndexStatus(x)}
+                            value={x.status}
+                            className="sm-text"
+                          >
+                            <option value="ordered">Ordered</option>
                             <option value="received">Received</option>
                             <option value="preparing">Preparing</option>
                             <option value="serving">Serving</option>
                             <option value="served">Served</option>
-                            <option value="cancel">cancel</option>
+                            <option value="cancel">Cancel</option>
                           </select>
                         </div>
                       ))}

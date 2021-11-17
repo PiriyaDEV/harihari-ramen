@@ -33,7 +33,7 @@ export default new (class TableService {
   }
   async getTableById(uid) {
     return await http
-      .get("/table/getTableById", {}, { headers: { "x-access-token": uid }})
+      .get("/table/getTableById", { headers: { "x-access-token": uid }})
       .then((response) => {
         return response.data;
       })
