@@ -1,7 +1,9 @@
 const socketIO = require("socket.io");
 const logger = require("../../lib/logger/index");
 
-module.exports = (server, corsOptions) => {
+var socketInstance = null;
+
+exports.initialize = (server, corsOptions) => {
   const io = socketIO(server, {
     transports: ["polling"],
     cors: {
@@ -12,6 +14,7 @@ module.exports = (server, corsOptions) => {
   let count = 0;
 
   io.on("connection", (socket) => {
+    socketInstance = socket;
     count++;
     logger.socket(`[${count} Connected] User connected >>> id ${socket.id}`);
 
@@ -21,9 +24,9 @@ module.exports = (server, corsOptions) => {
         `[${count} Connected] User disconnected >>> id ${socket.id}`
       );
     });
-
-    //socket.on('order-history', )
   });
+};
 
-  return io;
+exports.getSocket = () => {
+  return socketInstance;
 };
