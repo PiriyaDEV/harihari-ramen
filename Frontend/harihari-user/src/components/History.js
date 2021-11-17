@@ -99,7 +99,7 @@ export default function History() {
                 onClick={() => linkToHome(id, lgs)}
               />
               <h1 className={"menu-header" + lg}>
-                {t("orderHistory.1")} {t("orderHistory.2")}
+                {t("history.title")}
               </h1>
             </div>
 
@@ -163,79 +163,87 @@ export default function History() {
                   </div>
 
                   <div className="history-info">
-                    <div className="history-box">
-                      {history &&
-                        history.menus.map((element, i) => (
-                          <div className="history-menu" key={i}>
-                            <div className="basket-name">
-                              <h1 className="md-text basket-no">
-                                X{element.quantity}
-                              </h1>
-                              <div>
-                                <h1 className={"sm-text menu-name" + lg}>
-                                  {lgs === "th" && <span>{element.th}</span>}
-                                  {lgs === "en" && <span>{element.en}</span>}
-                                  {lgs === "jp" && <span>{element.jp}</span>}
+                    <div>
+                      <div className="history-box">
+                        {history &&
+                          history.menus.map((element, i) => (
+                            <div className="history-menu" key={i}>
+                              <div className="basket-name">
+                                <h1 className="md-text basket-no">
+                                  X{element.quantity}
                                 </h1>
-                                <h1 className="bracket">{element.comment}</h1>
+                                <div>
+                                  <h1 className={"sm-text menu-name" + lg}>
+                                    {lgs === "th" && <span>{element.th}</span>}
+                                    {lgs === "en" && <span>{element.en}</span>}
+                                    {lgs === "jp" && <span>{element.jp}</span>}
+                                  </h1>
+                                  <h1 className="bracket">{element.comment}</h1>
+                                </div>
+                              </div>
+                              <div>
+                                <h1 className="sm-text k2d">
+                                  {element.price.toFixed(2)}
+                                </h1>
                               </div>
                             </div>
-                            <div>
-                              <h1 className="sm-text k2d">
-                                {element.price.toFixed(2)}
-                              </h1>
-                            </div>
-                          </div>
-                        ))}
-                    </div>
-                    <hr className="hr-black"></hr>
-                    <div className="history-price-menu">
-                      <h1 className={"sm-text menu-name" + lg}>
-                        {t("basket.subtotal")}
-                      </h1>
-                      <h1 className="sm-text k2d">
-                        {subTotal(history.menus).toFixed(2)}
-                      </h1>
-                    </div>
-                    <div className="history-price-menu">
-                      <h1 className={"sm-text menu-name" + lg}>
-                        {t("basket.VAT")} 7%
-                      </h1>
-                      <h1 className="sm-text k2d">
-                        {(subTotal(history.menus) * 0.07).toFixed(2)}
-                      </h1>
-                    </div>
-                    <div className="history-price-menu total">
-                      <h1 className={"sm-text menu-name" + lg}>
-                        {t("basket.total")}
-                      </h1>
-                      <h1 className="sm-text k2d">
-                        ฿{" "}
-                        {(
-                          subTotal(history.menus) +
-                          subTotal(history.menus) * 0.07
-                        ).toFixed(2)}
-                      </h1>
-                    </div>
+                          ))}
+                      </div>
+                      <hr className="hr-black"></hr>
+                      <div className="history-price-menu">
+                        <h1 className={"sm-text menu-name" + lg}>
+                          {t("basket.subtotal")}
+                        </h1>
+                        <h1 className="sm-text k2d">
+                          {subTotal(history.menus).toFixed(2)}
+                        </h1>
+                      </div>
+                      <div className="history-price-menu">
+                        <h1 className={"sm-text menu-name" + lg}>
+                          {t("basket.VAT")} 7%
+                        </h1>
+                        <h1 className="sm-text k2d">
+                          {(subTotal(history.menus) * 0.07).toFixed(2)}
+                        </h1>
+                      </div>
+                      <div className="history-price-menu total">
+                        <h1 className={"sm-text menu-name" + lg}>
+                          {t("basket.total")}
+                        </h1>
+                        <h1 className="sm-text k2d">
+                          ฿{" "}
+                          {(
+                            subTotal(history.menus) +
+                            subTotal(history.menus) * 0.07
+                          ).toFixed(2)}
+                        </h1>
+                      </div>
 
-                    {history.status !== "ordered" ? (
-                      <button
-                        className={"cancel-btn disable section md-text" + lg}
-                      >
-                        <FontAwesomeIcon icon={faTimes} className="close-fa" />
-                        <span>{t("history.cancel")}</span>
-                      </button>
-                    ) : (
-                      <button
-                        className={"cancel-btn section md-text" + lg}
-                        onClick={() => {
-                          cancelClick(true, history.order_id, order);
-                        }}
-                      >
-                        <FontAwesomeIcon icon={faTimes} className="close-fa" />
-                        <span>{t("history.cancel")}</span>
-                      </button>
-                    )}
+                      {history.status !== "ordered" ? (
+                        <button
+                          className={"cancel-btn disable section md-text" + lg}
+                        >
+                          <FontAwesomeIcon
+                            icon={faTimes}
+                            className="close-fa"
+                          />
+                          <span>{t("history.cancel")}</span>
+                        </button>
+                      ) : (
+                        <button
+                          className={"cancel-btn section md-text" + lg}
+                          onClick={() => {
+                            cancelClick(true, history.order_id, order);
+                          }}
+                        >
+                          <FontAwesomeIcon
+                            icon={faTimes}
+                            className="close-fa"
+                          />
+                          <span>{t("history.cancel")}</span>
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               ))}

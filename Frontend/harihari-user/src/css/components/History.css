@@ -94,20 +94,20 @@
   margin-top: 15px;
 }
 
-.disable{
-  background: #8E8E8E 0% 0% no-repeat padding-box !important;
-  color: #BDBDBF !important;
+.disable {
+  background: #8e8e8e 0% 0% no-repeat padding-box !important;
+  color: #bdbdbf !important;
   cursor: default !important;
 }
 
-.status{
-    text-transform: capitalize;
+.status {
+  text-transform: capitalize;
 }
 
 .close-fa {
   margin: 0px 20px 3px 0px;
 }
 
-.menu-name{
-    width: inherit;
+.menu-name {
+  width: inherit;
 }

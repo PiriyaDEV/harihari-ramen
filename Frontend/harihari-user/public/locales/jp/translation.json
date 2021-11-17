@@ -57,6 +57,7 @@
         "addBasket" : "バスケットに追加"
     },
     "history" : {
+        "title":"食品注文履歴",
         "order": "注文",
         "cancel": "食べ物をキャンセルする"
     }

@@ -25,4 +25,14 @@ export default new (class OrderService {
         return error.response;
       });
   }
+  async updateStatus(order,uid) {
+    return await http
+      .put("/order/updateStatus",{ order_id: order.order_id , status : order.status },{ headers: { "x-access-token": uid } })
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        return error.response;
+      });
+  }
 })();

@@ -21,6 +21,7 @@ export default function Mainpage() {
   const [showCam, setShowCam] = useState(false);
   const [orderMenu, setOrderMenu] = useState();
   const [orderSelect, setOrderSelect] = useState(false);
+  const [selectOrder, setSelectOrder] = useState("");
 
   const checkOut = async (value) => {
     let web = "http://localhost:3001/";
@@ -55,8 +56,6 @@ export default function Mainpage() {
     });
   };
 
-  //   const currentUid = link[selectedTable - 1].guest_uid;
-
   const getOrder = async (value) => {
     return await orderService
       .getOrderHistory(value)
@@ -67,6 +66,35 @@ export default function Mainpage() {
     setOrderMenu(menu);
     setOrderSelect(true);
   };
+
+  const getIndexStatus = (index) => {
+    setSelectOrder(index.order_id)
+  }
+
+  const changeStatus = async(e) => {
+    let order = [];
+    order.order_id = selectOrder;
+    order.status = e.target.value;
+
+    let result = await orderService.updateStatus(order,link[selectedTable - 1].guest_uid);
+
+    if (result.success) {
+      console.log("success");
+      window.location.reload(false);
+    } else {
+      console.log("unsuccess");
+    }
+  }
+
+  const callWaiterClick = async() => {
+    let result = await tableService.callWaiter(link[selectedTable - 1].guest_uid);
+    if(result.success) {
+      console.log("success");
+      window.location.reload(false);
+    } else {
+      console.log("unsuccess");
+    }
+  }
 
   return (
     <div>
@@ -162,9 +190,15 @@ export default function Mainpage() {
                       </button>
                     </div>
                     <div>
+                      {link && link[selectedTable - 1].call_waiter ? (
+                      <button onClick={()=> callWaiterClick()} className="sm-text red-table-btn">
+                        Send Waiter
+                      </button>
+                      ) : (
                       <button className="sm-text gray-table-btn">
                         Send Waiter
                       </button>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -186,14 +220,15 @@ export default function Mainpage() {
                             />
                             {i + 1}
                           </h1>
-                          <select className="sm-text">
-                            <option value="ordered" defaultValue>
+                          <select onChange={changeStatus} onClick={() => getIndexStatus(x)} value={x.status} className="sm-text">
+                            <option value="ordered">
                               Ordered
                             </option>
                             <option value="received">Received</option>
-                            <option value="prepared">Prepared</option>
+                            <option value="preparing">Preparing</option>
                             <option value="serving">Serving</option>
                             <option value="served">Served</option>
+                            <option value="cancel">cancel</option>
                           </select>
                         </div>
                       ))}

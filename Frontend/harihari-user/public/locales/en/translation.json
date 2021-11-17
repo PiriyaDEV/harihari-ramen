@@ -57,6 +57,7 @@
         "addBasket" : "Add to basket"
     },
     "history" : {
+        "title":"Order History",
         "order": "Order",
         "cancel": "cancel order"
     }

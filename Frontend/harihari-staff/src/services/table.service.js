@@ -22,4 +22,14 @@ export default new (class TableService {
         return error.response;
       });
   }
+  async callWaiter(uid) {
+    return await http
+      .put("/table/callWaiter", {call_waiter: false}, { headers: { "x-access-token": uid }})
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        return error.response;
+      });
+  }
 })();

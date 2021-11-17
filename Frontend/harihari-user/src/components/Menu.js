@@ -84,10 +84,10 @@ export default function Menu() {
   const backMenu = () => {
     setSearchMenu("");
     setMenuClick(false);
-  }
+  };
 
   const orderClick = (value) => {
-    setOrderToggle(value)
+    setOrderToggle(value);
   };
 
   const checkCategory = (value) => {
@@ -187,7 +187,9 @@ export default function Menu() {
 
   return (
     <div>
-      {orderToggle === true && <ConfirmPopup cancel={orderClick} menuOrder={storedItems} page="menu"/>}
+      {orderToggle === true && (
+        <ConfirmPopup cancel={orderClick} menuOrder={storedItems} page="menu" />
+      )}
       {menuClick === true && (
         <DetailPopup menu={searchMenu} back={backMenu} addItem={AddBasket} />
       )}
@@ -264,42 +266,43 @@ export default function Menu() {
 
           <div id="menu-main-container">
             <div id="menu-list-container">
-              {mainMenu.map((element, i) => (
-                <div className="menu-box" key={i}>
-                  <img
-                    className="menu-pics"
-                    src={mainMenu[i].image_url}
-                    alt=""
-                    onClick={() => findMenu(mainMenu[i])}
-                  ></img>
-                  <div className="menu-name-container">
-                    {checkItems(mainMenu[i], i) === true && (
-                      <div className="vl"></div>
-                    )}
-                    <div>
-                      <h1
-                        className={
-                          "sm-text menu-name" +
-                          lg +
-                          (checkItems(mainMenu[i], i) === true
-                            ? " menu-no"
-                            : "")
-                        }
-                      >
-                        {checkItems(mainMenu[i], i) === true && (
-                          <span>X{mainMenu[i].quantity} </span>
-                        )}
-                        {lgs === "th" && <span>{mainMenu[i].th.name}</span>}
-                        {lgs === "en" && <span>{mainMenu[i].en.name}</span>}
-                        {lgs === "jp" && <span>{mainMenu[i].jp.name}</span>}
-                      </h1>
-                      <h1 className="bracket menu-price k2d">
-                        ฿ {mainMenu[i].price.toFixed(2)}
-                      </h1>
+              {mainMenu !== null &&
+                mainMenu.map((element, i) => (
+                  <div className="menu-box" key={i}>
+                    <img
+                      className="menu-pics"
+                      src={mainMenu[i].image_url}
+                      alt=""
+                      onClick={() => findMenu(mainMenu[i])}
+                    ></img>
+                    <div className="menu-name-container">
+                      {checkItems(mainMenu[i], i) === true && (
+                        <div className="vl"></div>
+                      )}
+                      <div>
+                        <h1
+                          className={
+                            "sm-text menu-name" +
+                            lg +
+                            (checkItems(mainMenu[i], i) === true
+                              ? " menu-no"
+                              : "")
+                          }
+                        >
+                          {checkItems(mainMenu[i], i) === true && (
+                            <span>X{mainMenu[i].quantity} </span>
+                          )}
+                          {lgs === "th" && <span>{mainMenu[i].th.name}</span>}
+                          {lgs === "en" && <span>{mainMenu[i].en.name}</span>}
+                          {lgs === "jp" && <span>{mainMenu[i].jp.name}</span>}
+                        </h1>
+                        <h1 className="bracket menu-price k2d">
+                          ฿ {mainMenu[i].price.toFixed(2)}
+                        </h1>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </div>
 
             <div>

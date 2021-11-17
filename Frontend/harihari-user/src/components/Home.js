@@ -102,16 +102,17 @@ export default function Home() {
   numTable = CheckTable(link, id);
   CheckHaveTable(numTable, link);
 
-  // const toggleBill = () => {
-
-  // }
-
   const [orderStatusText] = useState([
     "Ordered",
     "Received Order",
     "Preparing Order",
     "Serving",
   ]);
+
+  const callWaiterClick = async() => {
+    setWaiter(true)
+    await tableService.callWaiter(id);
+  }
 
   const timeLineBalls = (n, current, text) =>
     Array(n)
@@ -228,7 +229,7 @@ export default function Home() {
 
             <div className="menu-container">
               <div
-                onClick={() => setWaiter(!callWaiter)}
+                onClick={()=> callWaiterClick()}
                 className={`menu-box ${
                   callWaiter === true ? "waiter-box" : null
                 }`}
