@@ -1,5 +1,7 @@
 #history-list {
   margin-top: 30px;
+  flex-direction: column-reverse;
+  display: flex;
 }
 
 #history-list > div {
@@ -87,7 +89,7 @@
   background: #ffffff 0% 0% no-repeat padding-box;
   border: 3px solid #232322;
   border-radius: 10px;
-  padding: 3px 10px;
+  padding: 1px 10px;
   width: 100%;
   color: #232322;
   cursor: pointer;

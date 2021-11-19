@@ -29,7 +29,7 @@
   flex-wrap: wrap;
   gap: 10px;
   margin-top: 10px;
-  height: 110px;
+  max-height: 110px;
   overflow-y: auto;
 }
 
@@ -83,6 +83,7 @@
 }
 
 .bell-fa {
+  font-size: 20px;
   position: absolute;
   right: -4px;
   top: -2px;
@@ -405,4 +406,68 @@
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   gap: 10px;
+}
+
+#mainpage {
+  min-height: 100vh;
+}
+
+#qr-popup{
+  background-color: #ffffff;
+}
+
+@media screen and (max-width: 1650px) {
+  .bell-fa {
+    font-size: initial;
+  }
+}
+
+@media screen and (max-width: 1100px) {
+  #table-clr-section {
+    max-height: 70px;
+  }
+
+  .mainpage-container {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  #table-info-container {
+    max-height: 320px;
+    height: 100%;
+  }
+
+  #show-cam {
+    height: 300px;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .red-table-btn,
+  .yellow-table-btn,
+  .gray-table-btn {
+    padding: 2px 8px;
+    justify-content: center;
+  }
+
+  #payment-header,
+  #table-info-header {
+    flex-direction: column;
+    align-items: initial;
+  }
+
+  .red-table-btn > span {
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .table-clr {
+    width: 18px;
+    height: 18px;
+  }
+
+  #table-clr-section{
+    max-height: 100px;
+  }
 }

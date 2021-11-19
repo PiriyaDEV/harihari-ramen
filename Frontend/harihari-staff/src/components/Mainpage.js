@@ -7,10 +7,12 @@ import orderService from "../services/order.service.js";
 import "../css/page.css";
 import "../css/text.css";
 import "../css/components/Mainpage.css";
+import "../css/components/Popup.css";
 
 //Icon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle, faBell } from "@fortawesome/free-solid-svg-icons";
+import closeIcon from "../images/Union 12.svg";
 
 export default function Mainpage() {
   const [link, setLink] = useState();
@@ -106,6 +108,7 @@ export default function Mainpage() {
       {qrPopup !== false && (
         <div id="qr-popup-section" className="section popup">
           <div id="qr-popup" className="page-container">
+            <h1 className="nm-text qr-table-name">Table {selectedTable}</h1>
             {link && (
               <img
                 className="qr-code"
@@ -121,9 +124,9 @@ export default function Mainpage() {
                 onClick={() => openQR(link[selectedTable - 1].guest_uid)}
               ></img>
             )}
-            <button class="sm-text" onClick={() => setQR(!qrPopup)}>
-              Close
-            </button>
+            <div className="closeIcon" onClick={() => setQR(!qrPopup)}>
+              <img src={closeIcon} alt=""></img>
+            </div>
           </div>
         </div>
       )}

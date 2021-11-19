@@ -58,9 +58,7 @@ export default function History() {
       .getOrderHistory(id)
       .then((data) =>
         setOrderHistory(
-          data.filter(
-            (order) => order.status !== "served" && order.status !== "cancel"
-          )
+          data
         )
       );
   };
@@ -98,9 +96,7 @@ export default function History() {
                 className="menu-header fa"
                 onClick={() => linkToHome(id, lgs)}
               />
-              <h1 className={"menu-header" + lg}>
-                {t("history.title")}
-              </h1>
+              <h1 className={"menu-header" + lg}>{t("history.title")}</h1>
             </div>
 
             <div id="table-box">

@@ -4,7 +4,6 @@ import tableService from "../services/table.service.js";
 import orderService from "../services/order.service.js";
 import { useParams } from "react-router";
 import { useTranslation } from "react-i18next";
-import Bill from "./popup/Bill.js";
 import socketIOClient from "socket.io-client";
 
 //CSS
@@ -30,7 +29,6 @@ export default function Home() {
   const intermediaryBalls = 2;
   const calculatedWidth = (width / (intermediaryBalls + 1)) * 100;
   const { t, i18n } = useTranslation();
-  const [checkBill, setCheckBill] = useState(false);
 
   const [link, setLink] = useState();
   const [orderHistory, setOrderHistory] = useState("");
@@ -130,7 +128,6 @@ export default function Home() {
 
   return (
     <div>
-      {checkBill === true && <Bill toggle={() => setCheckBill()} />}
       <div id="home" className="section">
         <div id="home-container" className="page-container">
           <div>
@@ -244,7 +241,7 @@ export default function Home() {
                   {t("callWaiter.2")}
                 </h1>
               </div>
-              <div onClick={() => setCheckBill(true)} className="menu-box">
+              <div onClick={() => MenuSelect("checkout", id, lgs)} className="menu-box">
                 <h1 className={"md-text" + lg}>
                   {t("checkOut.1")} <br />
                   {t("checkOut.2")}

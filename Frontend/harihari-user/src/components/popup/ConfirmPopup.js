@@ -52,8 +52,6 @@ export default function ConfirmOrder(props) {
     }
   }
 
-  console.log(props.order)
-
   return (
     <div id="confirm-popup" className="section popup">
       <div className="page-container section">
@@ -64,10 +62,15 @@ export default function ConfirmOrder(props) {
                 <img className="close-img" src={closeImg} alt="" />
                 <h1 className="menu-header">Cancel Order</h1>
               </div>
-            ) : (
+            ) :  props.page === "menu" ? (
               <div className="confirm-header">
                 <img className="close-img" src={checkImg} alt="" />
                 <h1 className="menu-header">Confirm Order</h1>
+              </div>
+            ) : (
+              <div className="confirm-header">
+                <img className="close-img" src={checkImg} alt="" />
+                <h1 className="menu-header">Check Out</h1>
               </div>
             )}
           </div>
@@ -77,11 +80,15 @@ export default function ConfirmOrder(props) {
               Do you confirm to cancel{" "}
               <span className="order-red">order {props.orderIndex + 1}</span>? You cannot undo this
               action.
-            </span> ) : (
+            </span> ) : props.page === "menu" ? (
             <span>
               Do you want to confirm basket or not? You cannot undo this action.
             </span> 
-            )}
+            ) : (
+            <span>
+              Do you want to check out or not?
+            </span> )
+          }
           </p>
           <div className="popup-btn-section section">
             <button
@@ -91,11 +98,20 @@ export default function ConfirmOrder(props) {
               Back
             </button> 
             {props.page === "history" ? (
-            <button className="md-text popup-btn-red" onClick={()=> cancelOrder(props.order)}>Confirm</button> ) : (
-            <button className="md-text popup-btn-red" onClick={() => orderItem()}>Confirm</button> )}
+            <button className="md-text popup-btn-red" onClick={()=> cancelOrder(props.order)}>Confirm</button> 
+            ) : props.page === "menu" ? (
+            <button className="md-text popup-btn-red" onClick={() => orderItem()}>Confirm</button> 
+            ) : (
+            <button className="md-text popup-btn-red" onClick={() => linkToHome(id, lgs, "/bill/")}>Confirm</button> 
+            )}
           </div>
         </div>
       </div>
     </div>
   );
 }
+
+let linkToHome = (value, lgs, path) => {
+  let web = "http://localhost:3000/";
+  window.location = web + lgs + path + value;
+};
