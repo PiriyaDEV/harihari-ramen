@@ -31,17 +31,12 @@ export default function History() {
 
   useEffect(() => {
     if (!link && !orderHistory) {
-      getLink();
+      getLink(id);
       getAPIOrderHistory(id);
     }
     i18n.changeLanguage(lgs);
     setLg(" " + lgs);
   }, [i18n, lgs, link, orderHistory, id]);
-
-  let numTable = useState(0);
-
-  numTable = CheckTable(link, id);
-  CheckHaveTable(numTable, link);
 
   const clickChangeLanguage = (lng) => {
     let web = "http://localhost:3000/";
@@ -49,8 +44,8 @@ export default function History() {
     window.location = web + lng + path + id;
   };
 
-  const getLink = async () => {
-    await tableService.getTables().then((data) => setLink(data));
+  const getLink = async (id) => {
+    await tableService.getTableById(id).then((data) => setLink(data));
   };
 
   const getAPIOrderHistory = async (id) => {
@@ -101,7 +96,9 @@ export default function History() {
 
             <div id="table-box">
               <h1 className="bracket">{t("table")}</h1>
-              <h1 className="md-text">{numTable}</h1>
+              {link &&
+              <h1 className="md-text">{link.table_id}</h1>
+              }
               <div className="lg-box">
                 <div className="lg-text section">
                   {lg === " en" ? (
@@ -256,16 +253,3 @@ let linkToHome = (value, lgs) => {
   window.location = web + lgs + path + value;
 };
 
-function CheckTable(link, id) {
-  for (const index in link) {
-    if (link[index].guest_uid === id) {
-      return link[index].table_id;
-    }
-  }
-}
-
-function CheckHaveTable(numTable, link) {
-  if (!numTable && link) {
-    window.location = "http://localhost:3000/invalid";
-  }
-}

@@ -33,11 +33,13 @@ export default function Menu() {
   );
 
   useEffect(() => {
-    getLink();
+    if(!link) {
+      getLink(id);
+    }
     i18n.changeLanguage(lgs);
     setLg(" " + lgs);
     getMainMenu();
-  }, [i18n, lgs]);
+  }, [i18n, lgs , link ,id]);
 
   useLayoutEffect(() => {
     setMainMenu(tempMenu.filter((menu) => menu.en.category === "Appetizer"));
@@ -48,8 +50,8 @@ export default function Menu() {
     setCategory(value);
   }
 
-  const getLink = async () => {
-    return await tableService.getTables().then((data) => setLink(data));
+  const getLink = async (id) => {
+    await tableService.getTableById(id).then((data) => setLink(data));
   };
 
   const getMainMenu = async () => {
@@ -96,11 +98,6 @@ export default function Menu() {
     }
     return "md-text inactive";
   };
-
-  let numTable = useState(0);
-
-  numTable = CheckTable(link, id);
-  CheckHaveTable(numTable, link);
 
   //Basket
 
@@ -207,7 +204,9 @@ export default function Menu() {
 
             <div id="table-box">
               <h1 className="bracket">{t("table")}</h1>
-              <h1 className="md-text">{numTable}</h1>
+              {link && 
+              <h1 className="md-text">{link.table_id}</h1>
+              }
               <div className="lg-box">
                 <div className="lg-text section">
                   {lg === " en" ? (
@@ -409,17 +408,3 @@ let linkToHome = (value, lgs) => {
   let path = "/home/";
   window.location = web + lgs + path + value;
 };
-
-function CheckTable(link, id) {
-  for (const index in link) {
-    if (link[index].guest_uid === id) {
-      return link[index].table_id;
-    }
-  }
-}
-
-function CheckHaveTable(numTable, link) {
-  if (!numTable && link) {
-    window.location = "http://localhost:3000/invalid";
-  }
-}

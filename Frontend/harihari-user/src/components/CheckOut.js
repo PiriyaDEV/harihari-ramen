@@ -48,8 +48,15 @@ export default function CheckOut() {
   };
 
   const getAPIBill = async (id) => {
-    await BillService.summary(id).then((data) => setCheckOut(data));
+    await BillService.summary(id).then((data) => setCheckOut(data)
+    );
   };
+
+  if(checkOut) {
+    if(checkOut.bill.items.length === 0) {
+      window.location = "http://localhost:3000/invalid";
+    }
+  }
 
   const subTotal = (order) => {
     var tempSum = 0;
@@ -65,7 +72,7 @@ export default function CheckOut() {
 
   return (
     <div>
-      {cancel && <ConfirmPopup cancel={cancelClick} uid={checkOut.bill.uid} page="checkOut" />}
+      {cancel && <ConfirmPopup cancel={cancelClick} uid={checkOut.bill.uid} page="checkout" />}
       <div id="history" className="section">
         <div id="history-container" className="page-container">
           <div id="menu-header-container" className="section">
@@ -75,7 +82,7 @@ export default function CheckOut() {
                 className="menu-header fa"
                 onClick={() => linkToHome(id, lgs, "/home/")}
               />
-              <h1 className={"menu-header" + lg}>Check Out</h1>
+              <h1 className={"menu-header" + lg}>{t("checkOut.checkOutFull")}</h1>
             </div>
 
             <div id="table-box">
@@ -180,7 +187,7 @@ export default function CheckOut() {
                   className="md-text check-out-btn"
                   onClick={() => setCancel(true)}
                 >
-                  Check Out
+                  {t("checkOut.checkOutFull")}
                 </button>
               </div>
             </div>

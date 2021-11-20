@@ -38,6 +38,7 @@ export default new (class TableService {
         return response.data;
       })
       .catch((error) => {
+        window.location = "http://localhost:3000/invalid";
         return error.response;
       });
   }

@@ -67,10 +67,15 @@ export default function ConfirmOrder(props) {
                 <img className="close-img" src={checkImg} alt="" />
                 <h1 className="menu-header">Confirm Order</h1>
               </div>
-            ) : (
+            ) : props.page === "checkout" ? (
               <div className="confirm-header">
                 <img className="close-img" src={checkImg} alt="" />
                 <h1 className="menu-header">Check Out</h1>
+              </div>
+            ) : (
+              <div className="confirm-header">
+                <img className="close-img" src={closeImg} alt="" />
+                <h1 className="menu-header">Alert</h1>
               </div>
             )}
           </div>
@@ -84,10 +89,14 @@ export default function ConfirmOrder(props) {
             <span>
               Do you want to confirm basket or not? You cannot undo this action.
             </span> 
-            ) : (
+            ) : props.page === "checkout" ? (
             <span>
               Do you want to check out or not?
-            </span> )
+            </span> ) : (
+            <span>
+              You can't check out, because the food has not yet been served
+            </span>
+            )
           }
           </p>
           <div className="popup-btn-section section">
@@ -101,8 +110,8 @@ export default function ConfirmOrder(props) {
             <button className="md-text popup-btn-red" onClick={()=> cancelOrder(props.order)}>Confirm</button> 
             ) : props.page === "menu" ? (
             <button className="md-text popup-btn-red" onClick={() => orderItem()}>Confirm</button> 
-            ) : (
-            <button className="md-text popup-btn-red" onClick={() => linkToHome(id, lgs, "/bill/")}>Confirm</button> 
+            ) : props.page === "checkout" && (
+            <button className="md-text popup-btn-red" onClick={() => linkToHome(id,props.uid, lgs, "/bill/")}>Confirm</button> 
             )}
           </div>
         </div>
@@ -111,7 +120,7 @@ export default function ConfirmOrder(props) {
   );
 }
 
-let linkToHome = (value, lgs, path) => {
+let linkToHome = (id,uid, lgs, path) => {
   let web = "http://localhost:3000/";
-  window.location = web + lgs + path + value;
+  window.location = web + lgs + path + id + "$" + uid;
 };

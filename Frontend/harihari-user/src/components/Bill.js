@@ -39,20 +39,20 @@ export default function Bill() {
     window.location = web + lng + path + id;
   };
 
-  const getLink = async (id) => {
-    await tableService.getTableById(id).then((data) => setLink(data));
+  const getLink = async (uid) => {
+    let id = uid.split("$");
+    await tableService.getTableById(id[0]).then((data) => setLink(data));
   };
 
-  const getAPIBill = async (id) => {
-    await BillService.summary(id).then((data) => setCheckOut(data));
+  const getAPIBill = async (uid) => {
+    let id = uid.split("$");
+    await BillService.summary(id[0]).then((data) => setCheckOut(data));
   };
 
-  function makeQR(guest, bill) {
+  function makeQR(uid) {
     let qrlink =
       "https://chart.googleapis.com/chart?cht=qr&chl=" +
-      guest +
-      "$" +
-      bill +
+      uid +
       "&chs=160x160&chld=L|0";
 
     return qrlink;
@@ -72,12 +72,7 @@ export default function Bill() {
 
   return (
     <div>
-      {cancel && (
-        <ConfirmPopup
-          cancel={cancelClick}
-          page="bill"
-        />
-      )}
+      {cancel && <ConfirmPopup cancel={cancelClick} page="bill" />}
       <div id="history" className="section">
         <div id="history-container" className="page-container">
           <div id="menu-header-container" className="section">
@@ -87,9 +82,7 @@ export default function Bill() {
 
             <div id="table-box">
               <h1 className="bracket">{t("table")}</h1>
-              {link &&
-              <h1 className="md-text">{link.table_id}</h1>
-              }
+              {link && <h1 className="md-text">{link.table_id}</h1>}
               <div className="lg-box">
                 <div className="lg-text section">
                   {lg === " en" ? (
@@ -122,30 +115,36 @@ export default function Bill() {
           <div>
             <div id="bill-box">
               <div className="history-box">
-                {checkOut && checkOut.bill.items.map((element, i) => (
-                  <div className="history-menu" key={i}>
-                    <div className="basket-name">
-                      <h1 className="md-text basket-no">X{element.quantity}</h1>
-                      <div>
-                        <h1 className={"sm-text menu-name" + lg}>
+                {checkOut &&
+                  checkOut.bill.items.map((element, i) => (
+                    <div className="history-menu" key={i}>
+                      <div className="basket-name">
+                        <h1 className="md-text basket-no">
+                          X{element.quantity}
+                        </h1>
+                        <div>
+                          <h1 className={"sm-text menu-name" + lg}>
                             {lgs === "th" && <span>{element.th}</span>}
                             {lgs === "en" && <span>{element.en}</span>}
                             {lgs === "jp" && <span>{element.jp}</span>}
+                          </h1>
+                          <h1 className="bracket">{element.comment}</h1>
+                        </div>
+                      </div>
+                      <div>
+                        <h1 className="sm-text k2d">
+                          {element.price.toFixed(2)}
                         </h1>
-                        <h1 className="bracket">{element.comment}</h1>
                       </div>
                     </div>
-                    <div>
-                      <h1 className="sm-text k2d">{element.price.toFixed(2)}</h1>
-                    </div>
-                  </div>
-                ))}
+                  ))}
               </div>
+
               <div id="bill-qr-section">
                 <div className="section">
                   <img
                     className="qr-code"
-                    src={makeQR("id", "bill_id")}
+                    src={makeQR(id)}
                     alt=""
                   ></img>
                 </div>
@@ -156,32 +155,38 @@ export default function Bill() {
                     <h1 className={"sm-text menu-name" + lg}>
                       {t("basket.subtotal")}
                     </h1>
-                    {checkOut && 
-                    <h1 className="sm-text k2d">{subTotal(checkOut.bill.items).toFixed(2)}</h1>
-                    }
+                    {checkOut && (
+                      <h1 className="sm-text k2d">
+                        {subTotal(checkOut.bill.items).toFixed(2)}
+                      </h1>
+                    )}
                   </div>
                   <div className="history-price-menu">
                     <h1 className={"sm-text menu-name" + lg}>
                       {t("basket.VAT")} 7%
                     </h1>
-                    {checkOut && 
-                    <h1 className="sm-text k2d">{(subTotal(checkOut.bill.items) * 0.07).toFixed(2)}</h1>
-                    }
+                    {checkOut && (
+                      <h1 className="sm-text k2d">
+                        {(subTotal(checkOut.bill.items) * 0.07).toFixed(2)}
+                      </h1>
+                    )}
                   </div>
                   <div className="history-price-menu">
                     <h1 className={"sm-text menu-name" + lg}>
                       {t("basket.total")}
                     </h1>
-                    {checkOut && 
-                    <h1 className="md-text k2d"> {" "}
-                    ฿{" "}
-                    {numberWithCommas(
-                      (
-                        subTotal(checkOut.bill.items) +
-                        subTotal(checkOut.bill.items) * 0.07
-                      ).toFixed(2)
-                    )}</h1>
-                    }
+                    {checkOut && (
+                      <h1 className="md-text k2d">
+                        {" "}
+                        ฿{" "}
+                        {numberWithCommas(
+                          (
+                            subTotal(checkOut.bill.items) +
+                            subTotal(checkOut.bill.items) * 0.07
+                          ).toFixed(2)
+                        )}
+                      </h1>
+                    )}
                   </div>
                 </div>
               </div>
@@ -192,23 +197,3 @@ export default function Bill() {
     </div>
   );
 }
-
-// let linkToHome = (value, lgs) => {
-//   let web = "http://localhost:3000/";
-//   let path = "/home/";
-//   window.location = web + lgs + path + value;
-// };
-
-// function CheckTable(link, id) {
-//   for (const index in link) {
-//     if (link[index].guest_uid === id) {
-//       return link[index].table_id;
-//     }
-//   }
-// }
-
-// function CheckHaveTable(numTable, link) {
-//   if (!numTable && link) {
-//     window.location = "http://localhost:3000/invalid";
-//   }
-// }

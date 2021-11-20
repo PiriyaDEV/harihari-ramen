@@ -2,9 +2,11 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
 import tableService from "../services/table.service.js";
 import orderService from "../services/order.service.js";
+import ConfirmPopup from "./popup/ConfirmPopup.js";
 import { useParams } from "react-router";
 import { useTranslation } from "react-i18next";
 import socketIOClient from "socket.io-client";
+import BillService from "../services/bill.service.js";
 
 //CSS
 import "../css/page.css";
@@ -21,7 +23,7 @@ import { faBell } from "@fortawesome/free-solid-svg-icons";
 import { getTimes } from "../utilities/Time";
 
 //Image
-import RamenPic from "../images/ramen_main@2x.png";
+import RamenPic from "../images/Mini Logo.png";
 
 export default function Home() {
   const { id, lgs } = useParams();
@@ -29,11 +31,12 @@ export default function Home() {
   const intermediaryBalls = 2;
   const calculatedWidth = (width / (intermediaryBalls + 1)) * 100;
   const { t, i18n } = useTranslation();
-
   const [link, setLink] = useState();
   const [orderHistory, setOrderHistory] = useState("");
-
   const [callWaiter, setWaiter] = useState(false);
+  const [lg, setLg] = useState(" " + lgs);
+  const [alertPopup , setAlert] = useState(false);
+  const [checkOut, setCheckOut] = useState("");
 
   useEffect(() => {
     const socket = socketIOClient("ws://localhost:3030", { auth: { id: id } });
@@ -51,6 +54,11 @@ export default function Home() {
     await tableService.getTableById(id).then((data) => setLink(data));
   };
 
+  const getAPIBill = async (id) => {
+    await BillService.summary(id).then((data) => setCheckOut(data)
+    );
+  };
+
   const getAPIOrderHistory = async (id) => {
     await orderService
       .getOrderHistory(id)
@@ -64,18 +72,19 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if (!link && !orderHistory) {
+    if (!link && !orderHistory && !checkOut) {
       getLink(id);
       getAPIOrderHistory(id);
+      getAPIBill(id);
     }
     i18n.changeLanguage(lgs);
     setLg(" " + lgs);
-    if(link) {
+    if (link) {
       if (link.call_waiter) {
         setWaiter(true);
       }
     }
-  }, [i18n, lgs, link, orderHistory, id]);
+  }, [i18n, lgs, link, orderHistory, id, checkOut]);
 
   useLayoutEffect(() => {
     if (orderHistory.length > 0) {
@@ -96,18 +105,23 @@ export default function Home() {
     window.location = web + lng + path + id;
   };
 
-  const [lg, setLg] = useState(" " + lgs);
-
-  const [orderStatusText] = useState([
-    "Ordered",
-    "Received Order",
-    "Preparing Order",
-    "Serving",
-  ]);
+  const [orderStatusText] = useState({
+    en: ["Ordered", "Received Order", "Preparing Order", "Serving"],
+    th: ["สั่งอาหารแล้ว", "รับออร์เดอร์แล้ว", "กำลังทำอาหาร", "กำลังเสิร์ฟ"],
+    jp: ["順序付けられました", "受注", "注文の準備", "サービング"],
+  });
 
   const callWaiterClick = async () => {
     setWaiter(true);
     await tableService.callWaiter(id);
+  };
+
+  const getTextToAlert = () => {
+    setAlert(true);
+  }
+
+  const cancelClick = (toggle) => {
+    setAlert(toggle);
   };
 
   const timeLineBalls = (n, current, text) =>
@@ -122,12 +136,22 @@ export default function Home() {
             }`}
             // onloadd={() => onClick(3)}
           ></div>
-          <h1 className={"pg-text bracket" + lg}>{text[index]}</h1>
+          <h1 className={"pg-text bracket" + lg}>
+            {lgs === "th" && <span>{text.th[index]}</span>}
+            {lgs === "en" && <span>{text.en[index]}</span>}
+            {lgs === "jp" && <span>{text.jp[index]}</span>}
+          </h1>
         </div>
       ));
 
   return (
     <div>
+      {alertPopup && (
+        <ConfirmPopup
+          cancel={cancelClick}
+          page="home"
+        />
+      )}
       <div id="home" className="section">
         <div id="home-container" className="page-container">
           <div>
@@ -190,8 +214,17 @@ export default function Home() {
               </p>
 
               <p className={"sm-text order-p" + lg}>
-                {t("phaseOrder.1")} <br />
-                {t("phaseOrder.2")}
+                {orderHistory != null && orderHistory.length !== 0 ? (
+                  <span>
+                    {t("phaseOrder.1")} <br />
+                    {t("phaseOrder.2")}
+                  </span>
+                ) : (
+                  <span>
+                    No order is currently being process. <br />
+                    You can order by click 'Order food'
+                  </span>
+                )}
               </p>
 
               <div className="timeline">
@@ -241,7 +274,10 @@ export default function Home() {
                   {t("callWaiter.2")}
                 </h1>
               </div>
-              <div onClick={() => MenuSelect("checkout", id, lgs)} className="menu-box">
+              <div
+                onClick={() => CheckValid("checkout",id,lgs,orderHistory,getTextToAlert,checkOut.bill.items)}
+                className="menu-box"
+              >
                 <h1 className={"md-text" + lg}>
                   {t("checkOut.1")} <br />
                   {t("checkOut.2")}
@@ -255,10 +291,20 @@ export default function Home() {
   );
 }
 
-function MenuSelect(page, value, lgs) {
+function MenuSelect(page, value, lgs ) {
   let web = "http://localhost:3000/";
   let path = "/" + page + "/";
-  window.location = web + lgs + path + value;
+    window.location = web + lgs + path + value;
+}
+
+function CheckValid(page, value, lgs ,orderHistory,getTextToAlert , billItem) {
+  let web = "http://localhost:3000/";
+  let path = "/" + page + "/";
+    if(orderHistory.length === 0 && billItem.length !== 0) {
+      window.location = web + lgs + path + value;
+    } else {
+        getTextToAlert()
+    }
 }
 
 // function CheckHaveTable(numTable, link) {

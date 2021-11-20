@@ -5,6 +5,10 @@
   gap: 40px;
 }
 
+.status-text{
+  margin: 10px 0px;
+}
+
 #staff-header {
   display: flex;
   justify-content: space-between;
@@ -412,7 +416,7 @@
   min-height: 100vh;
 }
 
-#qr-popup{
+#qr-popup {
   background-color: #ffffff;
 }
 
@@ -467,7 +471,7 @@
     height: 18px;
   }
 
-  #table-clr-section{
+  #table-clr-section {
     max-height: 100px;
   }
 }

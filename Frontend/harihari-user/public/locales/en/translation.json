@@ -25,7 +25,8 @@
     },
     "checkOut" : {
         "1": "Check",
-        "2": "Out"
+        "2": "Out",
+        "checkOutFull": "Check Out"
     },
     "AskContinue" : {
         "1": "Do you which to continue",

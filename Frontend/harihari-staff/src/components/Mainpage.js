@@ -19,22 +19,20 @@ export default function Mainpage() {
   const [order, setOrder] = useState();
   const [selectedTable, setCurrentTable] = useState(1);
   const [qrPopup, setQR] = useState(false);
-  const [data, setData] = useState("Not Found");
   const [showCam, setShowCam] = useState(false);
   const [orderMenu, setOrderMenu] = useState();
   const [orderSelect, setOrderSelect] = useState(false);
   const [selectOrder, setSelectOrder] = useState("");
+  const [showCheckOut, setCheckOut] = useState(false);
 
   const checkOut = async (value) => {
-    let web = "http://localhost:3001/";
-    let path = web + "receipt/" + value;
-
     let id = value.split("$");
 
     let result = await tableService.checkout(id[0], id[1]);
 
     if (result.success) {
-      window.location = path;
+      setCheckOut(true);
+      setQR(true);
     }
   };
 
@@ -109,7 +107,12 @@ export default function Mainpage() {
         <div id="qr-popup-section" className="section popup">
           <div id="qr-popup" className="page-container">
             <h1 className="nm-text qr-table-name">Table {selectedTable}</h1>
-            {link && (
+            {showCheckOut === true && (
+              <h1 className="sm-text qr-table-name status-text">
+                Check Out Success
+              </h1>
+            )}
+            {link && showCheckOut === false && (
               <img
                 className="qr-code"
                 src={
@@ -124,7 +127,13 @@ export default function Mainpage() {
                 onClick={() => openQR(link[selectedTable - 1].guest_uid)}
               ></img>
             )}
-            <div className="closeIcon" onClick={() => setQR(!qrPopup)}>
+            <div
+              className="closeIcon"
+              onClick={() => {
+                setQR(!qrPopup);
+                setCheckOut(false);
+              }}
+            >
               <img src={closeIcon} alt=""></img>
             </div>
           </div>
@@ -237,7 +246,7 @@ export default function Mainpage() {
                               className="fa fa-info"
                               onClick={() => orderClick(order[i].menus)}
                             />
-                            {i + 1}
+                            {order.length - i}
                           </h1>
                           <select
                             onChange={changeStatus}
@@ -281,13 +290,11 @@ export default function Mainpage() {
                     //   height={500}
                     onUpdate={(err, result) => {
                       if (result) checkOut(result.text);
-                      else setData("Not Found");
                     }}
                   />
                 )}
               </div>
               {/* <p className="sm-text">{data}</p> */}
-              <h1 className="sm-text">Table 1 Check Out : Success {data}</h1>
             </div>
           </div>
         </div>
