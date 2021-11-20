@@ -15,8 +15,8 @@ CREATE TABLE IF NOT EXISTS tables(
 -- Create Bills Table
 CREATE TABLE IF NOT EXISTS bills(
   bill_id                 INT             NOT NULL  AUTO_INCREMENT,
-  uid                     VARCHAR(36)     NOT NULL  UNIQUE,
   table_id                INT             NOT NULL,
+  uid                     VARCHAR(36)     NOT NULL  UNIQUE,
   subtotal                DECIMAL(12,2)   NOT NULL,
   status                  BOOLEAN         NOT NULL,
   checkout_at             BIGINT          NOT NULL,
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS info_main_menus(
   language                VARCHAR(2)      NOT NULL,
   name                    VARCHAR(255)    NOT NULL,
   category                VARCHAR(255)    NOT NULL,
-  description             VARCHAR(255)    NOT NULL,
+  description             VARCHAR(255)    NULL,
   status                  BOOLEAN         NOT NULL,
   created_at              BIGINT          NOT NULL,
   updated_at              BIGINT          NOT NULL,
@@ -76,27 +76,26 @@ CREATE TABLE IF NOT EXISTS info_main_menus(
 -- Create Custom_ramens Table
 CREATE TABLE IF NOT EXISTS custom_ramens(
   ramen_id                INT             NOT NULL AUTO_INCREMENT,
+  price                   DECIMAL(12,2)   NOT NULL,
+  soup_type               INT             NOT NULL,
+  noodle                  INT             NOT NULL,
+  spring_onion            INT             NOT NULL,
+  garlic                  INT             NOT NULL,
+  spice                   INT             NOT NULL,
+  chashu                  INT             NOT NULL,
+  richness                INT             NOT NULL,
+  grease                  INT             NOT NULL,
   status                  BOOLEAN         NOT NULL,
   created_at              BIGINT          NOT NULL,
   updated_at              BIGINT          NOT NULL,
-  PRIMARY KEY (ramen_id)
-);
-
--- Create Custom_ramen_details Table
-CREATE TABLE IF NOT EXISTS custom_ramen_details(
-  ramen_id                INT             NOT NULL,
-  choice_id               INT             NOT NULL,
-  status                  BOOLEAN         NOT NULL,
-  created_at              BIGINT          NOT NULL,
-  updated_at              BIGINT          NOT NULL,
-  PRIMARY KEY (ramen_id, choice_id)
+  PRIMARY KEY (ramen_id),
+  UNIQUE (soup_type, noodle, spring_onion, garlic, spice, chashu, richness, grease)
 );
 
 -- Create Ramen_choices Table
 CREATE TABLE IF NOT EXISTS ramen_choices(
   choice_id               INT             NOT NULL  AUTO_INCREMENT,
   image_url               VARCHAR(255)    NOT NULL,
-  price                   DECIMAL(12,2)   NOT NULL,
   status                  BOOLEAN         NOT NULL,
   created_at              BIGINT          NOT NULL,
   updated_at              BIGINT          NOT NULL,
@@ -109,7 +108,7 @@ CREATE TABLE IF NOT EXISTS info_ramen_choices(
   language                VARCHAR(2)      NOT NULL,
   name                    VARCHAR(255)    NOT NULL,
   category                VARCHAR(255)    NOT NULL,
-  description             VARCHAR(255)    NOT NULL,
+  description             VARCHAR(255)    NULL,
   status                  BOOLEAN         NOT NULL,
   created_at              BIGINT          NOT NULL,
   updated_at              BIGINT          NOT NULL,

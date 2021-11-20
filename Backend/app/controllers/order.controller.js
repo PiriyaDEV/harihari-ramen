@@ -1,6 +1,6 @@
 const Order = require("../models/order.model");
 const Bill = require("../models/bill.model");
-const socketIO = require("../sockets/index");
+//const socketIO = require("../sockets/index");
 
 exports.create = async (req, res) => {
   let table = req.body.table;
@@ -101,8 +101,8 @@ exports.updateStatus = async (req, res) => {
 
     let result = await Order.getOrderHistory(billResult);
     
-    const socket = socketIO.getSocket();
-    socket.emit("order-history", result);
+    // const socket = socketIO.getSocket();
+    // socket.emit("order-history", result);
 
     return res.status(200).json({
       success: true,

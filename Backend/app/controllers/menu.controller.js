@@ -42,7 +42,6 @@ exports.addMain = async (req, res) => {
 exports.addChoice = async (req, res) => {
   const choice = {
     image_url: req.body.image_url,
-    price: req.body.price,
   };
 
   const info = req.body.info;

@@ -65,7 +65,7 @@ exports.getBillSummary = async (bill) => {
         MM.product_id,
         MM.price,
         SUM(OM.quantity) AS quantity,
-        GROUP_CONCAT(COALESCE(comment, '-') SEPARATOR ', ') AS comment,
+        GROUP_CONCAT(COMMENT SEPARATOR ', ') AS comment,
         (
           SELECT
             IMM.name
@@ -106,7 +106,7 @@ exports.getBillSummary = async (bill) => {
           AND B.bill_id = O.bill_id
           AND O.order_id = OM.order_id
           AND MM.product_id = OM.product_id
-          AND O.status = 'ordered'
+          AND O.status = 'served'
         GROUP BY
           OM.product_id,
           OM.ramen_id`
