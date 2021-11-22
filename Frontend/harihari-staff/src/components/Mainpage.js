@@ -2,6 +2,7 @@ import React, { useState, useEffect, useLayoutEffect } from "react";
 import BarcodeScannerComponent from "react-qr-barcode-scanner";
 import tableService from "../services/table.service.js";
 import orderService from "../services/order.service.js";
+import socketIOClient from "socket.io-client";
 
 //CSS
 import "../css/page.css";
@@ -25,6 +26,14 @@ export default function Mainpage() {
   const [selectOrder, setSelectOrder] = useState("");
   const [showCheckOut, setCheckOut] = useState(false);
 
+  useEffect(() => {
+    const socket = socketIOClient("http://localhost:3030/harihari-staff");
+
+    socket.on("call-waiter", (table) => {
+      setLink(table);
+    });
+  }, []);
+
   const checkOut = async (value) => {
     let id = value.split("$");
 
@@ -37,8 +46,10 @@ export default function Mainpage() {
   };
 
   useEffect(() => {
-    getLink();
-  }, []);
+    if(!link) {
+      getLink();
+    }
+  }, [link]);
 
   useLayoutEffect(() => {
     if (link) getOrder(link[selectedTable - 1].guest_uid);

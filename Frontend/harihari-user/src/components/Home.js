@@ -39,7 +39,7 @@ export default function Home() {
   const [checkOut, setCheckOut] = useState("");
 
   useEffect(() => {
-    const socket = socketIOClient("ws://localhost:3030", { auth: { id: id } });
+    const socket = socketIOClient("http://localhost:3030/harihari-customer", { auth: { id: id } });
 
     socket.on("order-history", (orders) => {
       setOrderHistory(
@@ -47,6 +47,10 @@ export default function Home() {
           (order) => order.status !== "served" && order.status !== "cancel"
         )
       );
+    });
+
+    socket.on("call-waiter", (call_waiter) => {
+      setLink({...link, call_waiter});
     });
   }, [id]);
 

@@ -11,4 +11,14 @@ export default new (class MenuService {
         return error.response;
       });
   }
+  async customRamen(value) {
+    return await http
+      .get("/menu/customRamen")
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        return error.response;
+      });
+  }
 })();

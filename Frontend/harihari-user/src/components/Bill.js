@@ -7,6 +7,7 @@ import ConfirmPopup from "./popup/ConfirmPopup.js";
 
 //JS
 import { numberWithCommas } from "../utilities/Number";
+import { getDateTimes } from "../utilities/Time";
 
 //CSS
 import "../css/page.css";
@@ -15,6 +16,9 @@ import "../css/components/Menu.css";
 import "../css/components/History.css";
 import "../css/components/CheckOut.css";
 import "../css/element/languageBtn.css";
+
+//Image
+import HariLogo from "../images/Full Logo.png";
 
 export default function Bill() {
   const { t, i18n } = useTranslation();
@@ -114,39 +118,60 @@ export default function Bill() {
 
           <div>
             <div id="bill-box">
-              <div className="history-box">
-                {checkOut &&
-                  checkOut.bill.items.map((element, i) => (
-                    <div className="history-menu" key={i}>
-                      <div className="basket-name">
-                        <h1 className="md-text basket-no">
-                          X{element.quantity}
-                        </h1>
-                        <div>
-                          <h1 className={"sm-text menu-name" + lg}>
-                            {lgs === "th" && <span>{element.th}</span>}
-                            {lgs === "en" && <span>{element.en}</span>}
-                            {lgs === "jp" && <span>{element.jp}</span>}
+              <div>
+                <div className="section">
+                  <img id="bill-logo" src={HariLogo} alt="" />
+                </div>
+                <div className="bill-table">
+                  <h1 className={"ssm-text menu-name" + lg}>TABLE 12</h1>
+                  {link && (
+                    <h1 className={"ssm-text" + lg}>
+                      {getDateTimes(link.checkin_at)}
+                    </h1>
+                  )}
+                </div>
+                <div>
+                  <hr className="hr-black"></hr>
+                </div>
+                <div id="bill-menu-list">
+                  {checkOut &&
+                    checkOut.bill.items.map((element, i) => (
+                      <div className="history-menu" key={i}>
+                        <div className="basket-name">
+                          <h1 className="md-text basket-no">
+                            X{element.quantity}
                           </h1>
-                          <h1 className="bracket">{element.comment}</h1>
+                          <div>
+                            <h1 className={"sm-text menu-name" + lg}>
+                              {lgs === "th" && <span>{element.th}</span>}
+                              {lgs === "en" && <span>{element.en}</span>}
+                              {lgs === "jp" && <span>{element.jp}</span>}
+                            </h1>
+                            <h1 className="bracket">{element.comment}</h1>
+                          </div>
+                        </div>
+                        <div>
+                          <h1 className="sm-text k2d">
+                            {element.price.toFixed(2)}
+                          </h1>
                         </div>
                       </div>
-                      <div>
-                        <h1 className="sm-text k2d">
-                          {element.price.toFixed(2)}
-                        </h1>
-                      </div>
-                    </div>
-                  ))}
+                    ))}
+                </div>
               </div>
 
               <div id="bill-qr-section">
-                <div className="section">
-                  <img
-                    className="qr-code"
-                    src={makeQR(id)}
-                    alt=""
-                  ></img>
+                <div id="bill-qr">
+                  <div>
+                    <h1 className="nm-text menu-name">Check Out QR code</h1>
+                    <p className="bracket">
+                      Please show this QR code to our <br />
+                      waiter to complete the checkout
+                    </p>
+                  </div>
+                  <div className="section">
+                    <img className="qr-code" src={makeQR(id)} alt=""></img>
+                  </div>
                 </div>
 
                 <div>
@@ -172,11 +197,11 @@ export default function Bill() {
                     )}
                   </div>
                   <div className="history-price-menu">
-                    <h1 className={"sm-text menu-name" + lg}>
+                    <h1 className={"md-text menu-name red-bill" + lg}>
                       {t("basket.total")}
                     </h1>
                     {checkOut && (
-                      <h1 className="md-text k2d">
+                      <h1 className="md-text k2d red-bill">
                         {" "}
                         ฿{" "}
                         {numberWithCommas(

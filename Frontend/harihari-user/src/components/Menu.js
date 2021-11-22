@@ -5,6 +5,7 @@ import menuService from "../services/menu.service.js";
 import { useParams } from "react-router";
 import { useTranslation } from "react-i18next";
 import DetailPopup from "./popup/DetailPopup.js";
+import CustomRamen from "./popup/CustomRamen.js";
 import ConfirmPopup from "./popup/ConfirmPopup.js";
 
 //CSS
@@ -28,18 +29,19 @@ export default function Menu() {
   const [menuClick, setMenuClick] = useState(false);
   const [searchMenu, setSearchMenu] = useState();
   const [orderToggle, setOrderToggle] = useState(false);
+  const [custom, setCustom] = useState(false);
   const [storedItems, setStoreItems] = useState(
     JSON.parse(localStorage.getItem("items"))
   );
 
   useEffect(() => {
-    if(!link) {
+    if (!link) {
       getLink(id);
     }
     i18n.changeLanguage(lgs);
     setLg(" " + lgs);
     getMainMenu();
-  }, [i18n, lgs , link ,id]);
+  }, [i18n, lgs, link, id]);
 
   useLayoutEffect(() => {
     setMainMenu(tempMenu.filter((menu) => menu.en.category === "Appetizer"));
@@ -75,7 +77,7 @@ export default function Menu() {
     setSearchMenu(menu);
     tempLocal = JSON.parse(localStorage.getItem("items")) || [];
     for (let i = 0; i < tempLocal.length; i++) {
-      if (menu.en.name === tempLocal[i].en.name) {
+      if (menu.product_id === tempLocal[i].product_id) {
         setSearchMenu(tempLocal[i]);
         break;
       }
@@ -86,6 +88,7 @@ export default function Menu() {
   const backMenu = () => {
     setSearchMenu("");
     setMenuClick(false);
+    setCustom(false);
   };
 
   const orderClick = (value) => {
@@ -109,7 +112,7 @@ export default function Menu() {
     tempLocal = JSON.parse(localStorage.getItem("items")) || [];
 
     for (let i = 0; i < tempLocal.length; i++) {
-      if (searchMenu.en.name === tempLocal[i].en.name && quantity !== 0) {
+      if (searchMenu.product_id === tempLocal[i].product_id && quantity !== 0) {
         tempLocal[i].quantity = quantity;
         tempLocal[i].comment = comment;
         localStorage.setItem("items", JSON.stringify(tempLocal));
@@ -117,7 +120,7 @@ export default function Menu() {
         found = true;
         break;
       } else if (
-        searchMenu.en.name === tempLocal[i].en.name &&
+        searchMenu.product_id === tempLocal[i].product_id &&
         quantity === 0
       ) {
         tempLocal.splice(i, 1);
@@ -141,7 +144,7 @@ export default function Menu() {
     setStoreItems(JSON.parse(localStorage.getItem("items")));
     tempLocal = JSON.parse(localStorage.getItem("items")) || [];
     for (let i = 0; i < tempLocal.length; i++) {
-      if (menu.en.name === tempLocal[i].en.name) {
+      if (menu.product_id === tempLocal[i].product_id) {
         tempLocal.splice(i, 1);
         localStorage.setItem("items", JSON.stringify(tempLocal));
         setStoreItems(tempLocal);
@@ -174,7 +177,7 @@ export default function Menu() {
     var tempLocal = [];
     tempLocal = JSON.parse(localStorage.getItem("items")) || [];
     for (let i = 0; i < tempLocal.length; i++) {
-      if (menu.en.name === tempLocal[i].en.name) {
+      if (menu.product_id === tempLocal[i].product_id) {
         mainMenu[index] = tempLocal[i];
         return true;
       }
@@ -190,6 +193,7 @@ export default function Menu() {
       {menuClick === true && (
         <DetailPopup menu={searchMenu} back={backMenu} addItem={AddBasket} />
       )}
+      {custom === true && <CustomRamen back={backMenu} addItem={AddBasket} />}
       <div id="menu" className="section">
         <div id="menu-container" className="page-container">
           <div id="menu-header-container" className="section">
@@ -204,9 +208,7 @@ export default function Menu() {
 
             <div id="table-box">
               <h1 className="bracket">{t("table")}</h1>
-              {link && 
-              <h1 className="md-text">{link.table_id}</h1>
-              }
+              {link && <h1 className="md-text">{link.table_id}</h1>}
               <div className="lg-box">
                 <div className="lg-text section">
                   {lg === " en" ? (
@@ -236,75 +238,115 @@ export default function Menu() {
             </div>
           </div>
 
-          <div id="menu-choice-container">
-            <h1
-              className={checkCategory("Appetizer") + lg}
-              onClick={() => changeCategory("Appetizer")}
-            >
-              {t("categortyMenu.appetizer")}
-            </h1>
-            <h1
-              className={checkCategory("Ramen") + lg}
-              onClick={() => changeCategory("Ramen")}
-            >
-              {t("categortyMenu.ramen")}
-            </h1>
-            <h1
-              className={checkCategory("Dessert") + lg}
-              onClick={() => changeCategory("Dessert")}
-            >
-              {t("categortyMenu.dessert")}
-            </h1>
-            <h1
-              className={checkCategory("Beverage") + lg}
-              onClick={() => changeCategory("Beverage")}
-            >
-              {t("categortyMenu.beverage")}
-            </h1>
-          </div>
-
           <div id="menu-main-container">
-            <div id="menu-list-container">
-              {mainMenu !== null &&
-                mainMenu.map((element, i) => (
-                  <div className="menu-box" key={i}>
+            <div>
+              <div id="menu-choice-container">
+                <h1
+                  className={checkCategory("Appetizer") + lg}
+                  onClick={() => changeCategory("Appetizer")}
+                >
+                  {t("categortyMenu.appetizer")}
+                </h1>
+                <h1
+                  className={checkCategory("Ramen") + lg}
+                  onClick={() => changeCategory("Ramen")}
+                >
+                  {t("categortyMenu.ramen")}
+                </h1>
+                <h1
+                  className={checkCategory("Dessert") + lg}
+                  onClick={() => changeCategory("Dessert")}
+                >
+                  {t("categortyMenu.dessert")}
+                </h1>
+                <h1
+                  className={checkCategory("Beverage") + lg}
+                  onClick={() => changeCategory("Beverage")}
+                >
+                  EatPlay
+                </h1>
+                <h1
+                  className={checkCategory("Beverage") + lg}
+                  onClick={() => changeCategory("Beverage")}
+                >
+                  {t("categortyMenu.beverage")}
+                </h1>
+              </div>
+              <div id="menu-list-container">
+                {/* Custom Ramen */}
+
+                {category === "Ramen" && (
+                  <div
+                    onClick={() => setCustom(true)}
+                    id="custom-ramen"
+                    className="menu-box"
+                  >
                     <img
                       className="menu-pics"
-                      src={mainMenu[i].image_url}
+                      src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Shoyu_ramen%2C_at_Kasukabe_Station_%282014.05.05%29_1.jpg/1200px-Shoyu_ramen%2C_at_Kasukabe_Station_%282014.05.05%29_1.jpg"
                       alt=""
-                      onClick={() => findMenu(mainMenu[i])}
+                      // onClick={() => findMenu(mainMenu[i])}
                     ></img>
                     <div className="menu-name-container">
-                      {checkItems(mainMenu[i], i) === true && (
-                        <div className="vl"></div>
-                      )}
+                      {/* {checkItems(mainMenu[i], i) === true && (
+                    <div className="vl"></div>
+                  )} */}
                       <div>
                         <h1
                           className={
-                            "sm-text menu-name" +
-                            lg +
-                            (checkItems(mainMenu[i], i) === true
-                              ? " menu-no"
-                              : "")
+                            "sm-text menu-name" + lg
+                            // (checkItems(mainMenu[i], i) === true ? " menu-no" : "")
                           }
                         >
-                          {checkItems(mainMenu[i], i) === true && (
-                            <span>X{mainMenu[i].quantity} </span>
-                          )}
-                          {lgs === "th" && <span>{mainMenu[i].th.name}</span>}
-                          {lgs === "en" && <span>{mainMenu[i].en.name}</span>}
-                          {lgs === "jp" && <span>{mainMenu[i].jp.name}</span>}
+                          Custom Ramen
                         </h1>
-                        <h1 className="bracket menu-price k2d">
-                          ฿ {mainMenu[i].price.toFixed(2)}
-                        </h1>
+                        <h1 className="bracket menu-price k2d">฿ 290.00</h1>
                       </div>
                     </div>
                   </div>
-                ))}
+                )}
+
+                {mainMenu !== null &&
+                  mainMenu.map((element, i) => (
+                    <div className="menu-box" key={i}>
+                      <img
+                        className="menu-pics"
+                        src={mainMenu[i].image_url}
+                        alt=""
+                        onClick={() => findMenu(mainMenu[i])}
+                      ></img>
+                      <div className="menu-name-container">
+                        {checkItems(mainMenu[i], i) === true && (
+                          <div className="vl"></div>
+                        )}
+                        <div>
+                          <h1
+                            className={
+                              "sm-text menu-name" +
+                              lg +
+                              (checkItems(mainMenu[i], i) === true
+                                ? " menu-no"
+                                : "")
+                            }
+                          >
+                            {checkItems(mainMenu[i], i) === true && (
+                              <span>X{mainMenu[i].quantity} </span>
+                            )}
+                            {lgs === "th" && <span>{mainMenu[i].th.name}</span>}
+                            {lgs === "en" && <span>{mainMenu[i].en.name}</span>}
+                            {lgs === "jp" && <span>{mainMenu[i].jp.name}</span>}
+                          </h1>
+                          <h1 className="bracket menu-price k2d">
+                            ฿ {mainMenu[i].price.toFixed(2)}
+                          </h1>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+              </div>
             </div>
 
-            <div>
+            <div id="basket-section">
               <div id="basket-container">
                 <h1 className={"md-text" + lg}>{t("basket.yourBasket")}</h1>
                 <div id="basket-item-box">

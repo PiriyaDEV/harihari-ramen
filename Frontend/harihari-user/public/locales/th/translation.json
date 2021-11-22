@@ -61,5 +61,30 @@
         "title":"ประวัติการสั่งอาหาร",
         "order": "รายการอาหาร",
         "cancel": "ยกเลิกรายการอาหาร"
+    },
+    "popup" : {
+        "history": {
+            "header": "Cancel Order",
+            "text":{
+             "1":"Do you confirm to cancel",
+             "2":"? You cannot undo this action."
+            }
+        },
+        "menu": {
+            "header": "Cancel Order",
+            "text":"Do you want to confirm basket or not? You cannot undo this action."
+        },
+        "checkout": {
+            "header": "Cancel Order",
+            "text":"Do you want to check out or not?"
+        },
+        "alert": {
+            "header": "Cancel Order",
+            "text":"You can't check out, because the food has not yet been served"
+        },
+        "button": {
+            "confirm": "Confirm",
+            "back": "Back"
+        }
     }
 }
