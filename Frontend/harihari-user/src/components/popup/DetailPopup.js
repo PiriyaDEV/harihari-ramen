@@ -32,13 +32,13 @@ export default function DetailPopup(props) {
 
   useEffect(() => {
     setLg(" " + lgs);
-    if(props.menu.quantity) {
-      setAmount(props.menu.quantity)
-    } 
-    if (props.menu.comment) {
-      setCommentRequest(props.menu.comment)
+    if (props.menu.quantity) {
+      setAmount(props.menu.quantity);
     }
-  }, [lgs , props.menu.quantity ,props.menu.comment]);
+    if (props.menu.comment) {
+      setCommentRequest(props.menu.comment);
+    }
+  }, [lgs, props.menu.quantity, props.menu.comment]);
 
   function clickAmount(type) {
     if (type === "plus") {
@@ -51,8 +51,8 @@ export default function DetailPopup(props) {
   }
 
   const Request = (e) => {
-    setCommentRequest(e.target.value)
-  }
+    setCommentRequest(e.target.value);
+  };
 
   // console.log(props.menu);
   return (
@@ -68,6 +68,7 @@ export default function DetailPopup(props) {
         <img className="detail-img" src={props.menu.image_url} alt=""></img>
 
         <div id="detail-popup-info">
+          <div>
           <div className="info-padding">
             <h1 className={"md-text" + lg}>
               {lgs === "th" && <span>{props.menu.th.name}</span>}
@@ -90,7 +91,7 @@ export default function DetailPopup(props) {
             <h1 className={"sm-text comment" + lg}>{t("basket.request")}</h1>
             <textarea
               className={"bracket comment-box" + lg}
-              rows="3"
+              rows="4"
               cols="50"
               placeholder={placeHolderRequest()}
               value={commentRequest}
@@ -116,8 +117,12 @@ export default function DetailPopup(props) {
               <img src={plusIcon} alt=""></img>
             </div>
           </div>
+          </div>
 
-          <div id="add-box-section" onClick={() => props.addItem(amountNum,commentRequest)}>
+          <div
+            id="add-box-section"
+            onClick={() => props.addItem(amountNum, commentRequest)}
+          >
             <div id="add-box" className="info-padding">
               <h1 className={"sm-text" + lg}>{t("basket.addBasket")}</h1>
               <h1 className={"bracket" + lg}>

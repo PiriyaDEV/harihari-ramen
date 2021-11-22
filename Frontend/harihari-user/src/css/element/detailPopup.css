@@ -35,6 +35,13 @@
   margin: 13px 15px 13px 15px;
 }
 
+#detail-popup-info {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  height: 460px;
+}
+
 #detail-popup-info > div > .k2d {
   font-weight: 600;
   color: #314975;
@@ -47,6 +54,7 @@
 .gray-line {
   border: 2px solid #bdbdbf;
   background-color: #bdbdbf;
+  width: calc(100% - 4px) !important;
 }
 
 .comment {

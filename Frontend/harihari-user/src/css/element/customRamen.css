@@ -105,10 +105,6 @@
   justify-content: center !important;
 }
 
-.gray-line {
-  width: calc(100% - 3px);
-}
-
 .custom-padding {
   margin: 13px 0px 13px 0px;
 }

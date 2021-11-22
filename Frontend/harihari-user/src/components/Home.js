@@ -49,10 +49,11 @@ export default function Home() {
       );
     });
 
-    socket.on("call-waiter", (call_waiter) => {
-      setLink({...link, call_waiter});
+    socket.on("call-waiter", (newValue) => {
+      setLink(link => ({...link, call_waiter: newValue }));
+      setWaiter(newValue)
     });
-  }, [id]);
+  }, [id,callWaiter,link]);
 
   const getLink = async (id) => {
     await tableService.getTableById(id).then((data) => setLink(data));
@@ -83,8 +84,8 @@ export default function Home() {
     }
     i18n.changeLanguage(lgs);
     setLg(" " + lgs);
-    if (link) {
-      if (link.call_waiter) {
+    if(link) {
+      if(link.call_waiter) {
         setWaiter(true);
       }
     }
@@ -116,8 +117,7 @@ export default function Home() {
   });
 
   const callWaiterClick = async () => {
-    setWaiter(true);
-    await tableService.callWaiter(id);
+    await tableService.callWaiter(id,!link.call_waiter);
   };
 
   const getTextToAlert = () => {

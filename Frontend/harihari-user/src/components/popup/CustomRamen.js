@@ -68,12 +68,12 @@ export default function DetailPopup(props) {
   }
 
   const BackFunction = () => {
-    if(lastChoice === true) {
-      setLastChoice(false)
+    if (lastChoice === true) {
+      setLastChoice(false);
     } else {
-      setContinue(false)
+      setContinue(false);
     }
-  }
+  };
 
   const Request = (e) => {
     setCommentRequest(e.target.value);
@@ -166,7 +166,7 @@ export default function DetailPopup(props) {
                   <h1 className="bracket">Note to our cook</h1>
                   <textarea
                     className={"bracket comment-box" + lg}
-                    rows="8"
+                    rows="6"
                     cols="50"
                     placeholder={placeHolderRequest()}
                     value={commentRequest}
@@ -176,16 +176,40 @@ export default function DetailPopup(props) {
               )}
             </div>
 
+            {lastChoice === true && (
+              <div>
+                <hr className="gray-line"></hr>
+
+                <div id="amount-box" className="section">
+                  <div
+                    className="num-icon section"
+                    onClick={() => clickAmount("minus")}
+                  >
+                    <img src={minusIcon} alt=""></img>
+                  </div>
+                  {/* {amountNum && <h1>Test</h1>} */}
+                  <h1 className="md-text od-amount">{amountNum}</h1>
+                  <div
+                    className="num-icon section"
+                    onClick={() => clickAmount("plus")}
+                  >
+                    <img src={plusIcon} alt=""></img>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <div id="continue-box-section" className="section">
               <div
                 id="add-box"
                 className="custom-padding continue-box black-box"
+                onClick={() => BackFunction()}
               >
                 <FontAwesomeIcon
                   icon={faArrowLeft}
                   className="sm-text fa-arrow-left"
                 />
-                <h1 className={"sm-text" + lg} onClick={()=> BackFunction() }>Back</h1>
+                <h1 className={"sm-text" + lg}>Back</h1>
               </div>
               {lastChoice === false ? (
                 <div
