@@ -93,3 +93,22 @@ exports.getMainMenus = async (req, res) => {
     });
   }
 };
+
+exports.getCustomRamen = async (req, res) => {
+  const base_url = process.env.BASE_URL;
+
+  try {
+    let result = await Menu.getCustomRamen();
+
+    result.map(
+      (choice) => (choice.image_url = `${base_url}${choice.image_url}`)
+    );
+
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};

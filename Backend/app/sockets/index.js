@@ -1,43 +1,53 @@
 const socketIO = require("socket.io");
 const logger = require("../../lib/logger/index");
 
-var socketInstance = null;
+var exportSocket = null;
 
-module.exports = (server, corsOptions) => {
+exports.initialize = (server, corsOptions) => {
   const io = socketIO(server, {
-    transports: ["polling"],
+    //transports: ["polling"],
     cors: {
       cors: corsOptions,
     },
   });
 
-  logger.socket("SocketIO initialized");
+  exportSocket = io;
+
+  let customerCount = 0;
+  let staffCount = 0;
+
+  io.of("/harihari-customer").on("connection", (socket) => {
+    customerCount++;
+    logger.socket(
+      `[${customerCount} customer(s)] Connected >>> id ${socket.id}`
+    );
+
+    const room_id = socket.handshake.auth.id;
+    socket.join(room_id);
+
+    socket.on("disconnect", () => {
+      customerCount--;
+      logger.socket(
+        `[${customerCount} customer(s)] Disconnected >>> id ${socket.id}`
+      );
+    });
+  });
+
+  io.of("/harihari-staff").on("connection", (socket) => {
+    staffCount++;
+    logger.socket(`[${staffCount} staff(s)] Connected >>> id ${socket.id}`);
+
+    socket.join("staff");
+
+    socket.on("disconnect", () => {
+      staffCount--;
+      logger.socket(
+        `[${staffCount} staff(s)] Disconnected >>> id ${socket.id}`
+      );
+    });
+  });
 };
 
-// exports.initialize = (server, corsOptions) => {
-//   const io = socketIO(server, {
-//     transports: ["polling"],
-//     cors: {
-//       cors: corsOptions,
-//     },
-//   });
-
-//   let count = 0;
-
-//   io.on("connection", (socket) => {
-//     socketInstance = socket;
-//     count++;
-//     logger.socket(`[${count} Connected] User connected >>> id ${socket.id}`);
-
-//     socket.on("disconnect", () => {
-//       count--;
-//       logger.socket(
-//         `[${count} Connected] User disconnected >>> id ${socket.id}`
-//       );
-//     });
-//   });
-// };
-
-// exports.getSocket = () => {
-//   return socketInstance;
-// };
+exports.getSocket = () => {
+  return exportSocket;
+};

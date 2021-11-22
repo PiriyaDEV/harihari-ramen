@@ -1,6 +1,6 @@
 const Order = require("../models/order.model");
 const Bill = require("../models/bill.model");
-//const socketIO = require("../sockets/index");
+const socketIO = require("../sockets/index");
 
 exports.create = async (req, res) => {
   let table = req.body.table;
@@ -100,9 +100,14 @@ exports.updateStatus = async (req, res) => {
     let billResult = await Bill.getLatestBillByTable(bill);
 
     let result = await Order.getOrderHistory(billResult);
-    
-    // const socket = socketIO.getSocket();
-    // socket.emit("order-history", result);
+
+    const socket = socketIO.getSocket();
+    const room_id = table.guest_uid;
+    socket
+      .of("/harihari-staff")
+      .to("staff")
+      .emit("order-status", { table_id: table.table_id, orders: result });
+    socket.of("/harihari-customer").to(room_id).emit("order-history", result);
 
     return res.status(200).json({
       success: true,

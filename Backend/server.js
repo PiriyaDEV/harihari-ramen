@@ -43,7 +43,7 @@ server.listen(PORT, () => {
 });
 
 // initial socket module
-//require("./app/sockets/index").initialize(server, corsOptions);
+require("./app/sockets/index").initialize(server, corsOptions);
 
 // handle 404 requests
 app.use((req, res) => {

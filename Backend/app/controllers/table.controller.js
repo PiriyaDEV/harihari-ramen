@@ -2,6 +2,7 @@ const uuid = require("uuid");
 
 const Table = require("../models/table.model");
 const Bill = require("../models/bill.model");
+const socketIO = require("../sockets/index");
 
 exports.generate = async (req, res) => {
   const table = {
@@ -49,9 +50,9 @@ exports.getTableById = async (req, res) => {
     let result = {
       table_id: table.table_id,
       reserve: table.reserve,
-      call_waiter:table.call_waiter,
+      call_waiter: table.call_waiter,
       checkin_at: billResult.created_at,
-    }
+    };
 
     return res.status(200).json(result);
   } catch (error) {
@@ -73,6 +74,15 @@ exports.callWaiter = async (req, res) => {
     };
 
     await Table.update(updateTable);
+    let result = await Table.getTables();
+
+    const socket = socketIO.getSocket();
+    const room_id = table.guest_uid;
+    socket.of("/harihari-staff").to("staff").emit("call-waiter", result);
+    socket
+      .of("/harihari-customer")
+      .to(room_id)
+      .emit("call-waiter", updateTable.call_waiter);
 
     return res.status(200).json({
       success: true,

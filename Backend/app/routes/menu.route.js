@@ -9,4 +9,6 @@ router.post("/addChoice", uploader, controller.addChoice);
 
 router.get("/mainMenus", controller.getMainMenus);
 
+router.get("/customRamen", controller.getCustomRamen);
+
 module.exports = router;
