@@ -35,33 +35,43 @@ export default function Home() {
   const [orderHistory, setOrderHistory] = useState("");
   const [callWaiter, setWaiter] = useState(false);
   const [lg, setLg] = useState(" " + lgs);
-  const [alertPopup , setAlert] = useState(false);
+  const [alertPopup, setAlert] = useState(false);
   const [checkOut, setCheckOut] = useState("");
+  const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    const socket = socketIOClient("http://localhost:3030/harihari-customer", { auth: { id: id } });
+    const socketInput = socketIOClient(
+      "http://localhost:3030/harihari-customer",
+      {
+        auth: { id: id },
+      }
+    );
+    setSocket(socketInput);
+  }, [id]);
 
-    socket.on("order-history", (orders) => {
-      setOrderHistory(
-        orders.filter(
-          (order) => order.status !== "served" && order.status !== "cancel"
-        )
-      );
-    });
+  useEffect(() => {
+    if (socket) {
+      socket.on("order-history", (orders) => {
+        setOrderHistory(
+          orders.filter(
+            (order) => order.status !== "served" && order.status !== "cancel"
+          )
+        );
+      });
 
-    socket.on("call-waiter", (newValue) => {
-      setLink(link => ({...link, call_waiter: newValue }));
-      setWaiter(newValue)
-    });
-  }, [id,callWaiter,link]);
+      socket.on("call-waiter", (newValue) => {
+        setLink((link) => ({ ...link, call_waiter: newValue }));
+        setWaiter(newValue);
+      });
+    }
+  }, [id, callWaiter, link, socket]);
 
   const getLink = async (id) => {
     await tableService.getTableById(id).then((data) => setLink(data));
   };
 
   const getAPIBill = async (id) => {
-    await BillService.summary(id).then((data) => setCheckOut(data)
-    );
+    await BillService.summary(id).then((data) => setCheckOut(data));
   };
 
   const getAPIOrderHistory = async (id) => {
@@ -84,8 +94,8 @@ export default function Home() {
     }
     i18n.changeLanguage(lgs);
     setLg(" " + lgs);
-    if(link) {
-      if(link.call_waiter) {
+    if (link) {
+      if (link.call_waiter) {
         setWaiter(true);
       }
     }
@@ -117,12 +127,14 @@ export default function Home() {
   });
 
   const callWaiterClick = async () => {
-    await tableService.callWaiter(id,!link.call_waiter);
+    if(!link.call_waiter) {
+      await tableService.callWaiter(id);
+    }
   };
 
   const getTextToAlert = () => {
     setAlert(true);
-  }
+  };
 
   const cancelClick = (toggle) => {
     setAlert(toggle);
@@ -150,12 +162,7 @@ export default function Home() {
 
   return (
     <div>
-      {alertPopup && (
-        <ConfirmPopup
-          cancel={cancelClick}
-          page="home"
-        />
-      )}
+      {alertPopup && <ConfirmPopup cancel={cancelClick} page="home" />}
       <div id="home" className="section">
         <div id="home-container" className="page-container">
           <div>
@@ -279,7 +286,16 @@ export default function Home() {
                 </h1>
               </div>
               <div
-                onClick={() => CheckValid("checkout",id,lgs,orderHistory,getTextToAlert,checkOut.bill.items)}
+                onClick={() =>
+                  CheckValid(
+                    "checkout",
+                    id,
+                    lgs,
+                    orderHistory,
+                    getTextToAlert,
+                    checkOut.bill.items
+                  )
+                }
                 className="menu-box"
               >
                 <h1 className={"md-text" + lg}>
@@ -295,20 +311,20 @@ export default function Home() {
   );
 }
 
-function MenuSelect(page, value, lgs ) {
+function MenuSelect(page, value, lgs) {
   let web = "http://localhost:3000/";
   let path = "/" + page + "/";
-    window.location = web + lgs + path + value;
+  window.location = web + lgs + path + value;
 }
 
-function CheckValid(page, value, lgs ,orderHistory,getTextToAlert , billItem) {
+function CheckValid(page, value, lgs, orderHistory, getTextToAlert, billItem) {
   let web = "http://localhost:3000/";
   let path = "/" + page + "/";
-    if(orderHistory.length === 0 && billItem.length !== 0) {
-      window.location = web + lgs + path + value;
-    } else {
-        getTextToAlert()
-    }
+  if (orderHistory.length === 0 && billItem.length !== 0) {
+    window.location = web + lgs + path + value;
+  } else {
+    getTextToAlert();
+  }
 }
 
 // function CheckHaveTable(numTable, link) {

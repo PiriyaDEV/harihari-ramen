@@ -25,14 +25,32 @@ export default function Mainpage() {
   const [orderSelect, setOrderSelect] = useState(false);
   const [selectOrder, setSelectOrder] = useState("");
   const [showCheckOut, setCheckOut] = useState(false);
+  const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    const socket = socketIOClient("http://localhost:3030/harihari-staff");
-
-    socket.on("call-waiter", (table) => {
-      setLink(table);
-    });
+    const socketInput = socketIOClient("http://localhost:3030/harihari-staff");
+    setSocket(socketInput);
   }, []);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("order-status", (result) => {
+        console.log(result);
+        console.log(selectedTable);
+        if (selectedTable === result.table_id) {
+          setOrder(result.orders);
+        }
+      });
+    }
+  }, [socket, selectedTable]);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("call-waiter", (table) => {
+        setLink(table);
+      });
+    }
+  }, [socket]);
 
   const checkOut = async (value) => {
     let id = value.split("$");
@@ -46,7 +64,7 @@ export default function Mainpage() {
   };
 
   useEffect(() => {
-    if(!link) {
+    if (!link) {
       getLink();
     }
   }, [link]);
@@ -94,7 +112,6 @@ export default function Mainpage() {
 
     if (result.success) {
       console.log("success");
-      window.location.reload(false);
     } else {
       console.log("unsuccess");
     }
@@ -106,7 +123,6 @@ export default function Mainpage() {
     );
     if (result.success) {
       console.log("success");
-      window.location.reload(false);
     } else {
       console.log("unsuccess");
     }

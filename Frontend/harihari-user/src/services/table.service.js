@@ -21,9 +21,9 @@ export default new (class TableService {
         return error.response;
       });
   }
-  async callWaiter(uid,status) {
+  async callWaiter(uid) {
     return await http
-      .put("/table/callWaiter", {call_waiter: status}, { headers: { "x-access-token": uid }})
+      .put("/table/callWaiter", {call_waiter: true}, { headers: { "x-access-token": uid }})
       .then((response) => {
         return response.data;
       })

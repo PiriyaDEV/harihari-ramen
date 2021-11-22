@@ -17,15 +17,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 //Choice Pic
-import Chili from "../../images/icon/custom-ramen/icons8-chili-pepper-90@2x.png";
-import Garlic from "../../images/icon/custom-ramen/icons8-garlic-90@2x.png";
-import Richness from "../../images/icon/custom-ramen/icons8-ketchup-64@2x.png";
-import Note from "../../images/icon/custom-ramen/icons8-note-90@2x.png";
-import Grease from "../../images/icon/custom-ramen/icons8-olive-oil-90@2x.png";
-import SpingOnion from "../../images/icon/custom-ramen/icons8-onion-90@2x.png";
-import Pork from "../../images/icon/custom-ramen/icons8-pork-leg-256@2x.png";
+// import Chili from "../../images/icon/custom-ramen/icons8-chili-pepper-90@2x.png";
+// import Garlic from "../../images/icon/custom-ramen/icons8-garlic-90@2x.png";
+// import Richness from "../../images/icon/custom-ramen/icons8-ketchup-64@2x.png";
+// import Note from "../../images/icon/custom-ramen/icons8-note-90@2x.png";
+// import Grease from "../../images/icon/custom-ramen/icons8-olive-oil-90@2x.png";
+// import SpingOnion from "../../images/icon/custom-ramen/icons8-onion-90@2x.png";
+// import Pork from "../../images/icon/custom-ramen/icons8-pork-leg-256@2x.png";
 import Soup from "../../images/icon/custom-ramen/icons8-soup-plate-64-2@2x.png";
-import Noodle from "../../images/icon/custom-ramen/noodle.svg";
+// import Noodle from "../../images/icon/custom-ramen/noodle.svg";
 
 export default function DetailPopup(props) {
   const { t } = useTranslation();
