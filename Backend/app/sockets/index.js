@@ -13,11 +13,8 @@ exports.initialize = (server, corsOptions) => {
 
   exportSocket = io;
 
-  let customerCount = 0;
-  let staffCount = 0;
-
   io.of("/harihari-customer").on("connection", (socket) => {
-    customerCount++;
+    let customerCount = io.of("/harihari-customer").sockets.size;
     logger.socket(
       `[${customerCount} customer(s)] Connected >>> id ${socket.id}`
     );
@@ -26,7 +23,7 @@ exports.initialize = (server, corsOptions) => {
     socket.join(room_id);
 
     socket.on("disconnect", () => {
-      customerCount--;
+      customerCount = io.of("/harihari-customer").sockets.size;
       logger.socket(
         `[${customerCount} customer(s)] Disconnected >>> id ${socket.id}`
       );
@@ -34,13 +31,14 @@ exports.initialize = (server, corsOptions) => {
   });
 
   io.of("/harihari-staff").on("connection", (socket) => {
-    staffCount++;
+    let staffCount = io.of("/harihari-staff").sockets.size;
     logger.socket(`[${staffCount} staff(s)] Connected >>> id ${socket.id}`);
 
     socket.join("staff");
+    // logger.socket(io.of("/harihari-staff").adapter.rooms)
 
     socket.on("disconnect", () => {
-      staffCount--;
+      staffCount = io.of("/harihari-staff").sockets.size;
       logger.socket(
         `[${staffCount} staff(s)] Disconnected >>> id ${socket.id}`
       );

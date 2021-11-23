@@ -64,6 +64,60 @@ exports.createOrderMenu = async (info) => {
   }
 };
 
+exports.createCustomRamen = async (custom) => {
+  custom.status = true;
+  custom.created_at = Date.now();
+  custom.updated_at = Date.now();
+
+  try {
+    const [result, fields] = await sql.query(
+      `INSERT INTO custom_ramens SET ?`,
+      custom
+    );
+
+    logger.info(
+      `Inserted ${result.affectedRows} menu >>> id: ${result.insertId}`
+    );
+    return {
+      ramen_id: result.insertId,
+      ...custom,
+    };
+  } catch (error) {
+    logger.error(error);
+  }
+};
+
+exports.findCustomRamen = async (custom) => {
+  try {
+    const [result, fields] = await sql.query(
+      `SELECT
+          *
+        FROM
+          custom_ramens
+        WHERE
+          soup_type = ${custom.soup_type}
+          AND noodle = ${custom.noodle}
+          AND spring_onion = ${custom.spring_onion}
+          AND garlic = ${custom.garlic}
+          AND spice = ${custom.spice}
+          AND chashu = ${custom.chashu}
+          AND richness = ${custom.richness}
+          AND grease = ${custom.grease}`,
+      custom
+    );
+
+    if (result.length) {
+      logger.info(`Found ramen >>> id: ${result[0].ramen_id}`);
+      return { isFound: true, ...result[0] };
+    } else {
+      logger.info(`Not found ramen`);
+      return { isFound: false };
+    }
+  } catch (error) {
+    logger.error(error);
+  }
+};
+
 exports.getSubtotalByOrder = async (order) => {
   try {
     const [result, fields] = await sql.query(

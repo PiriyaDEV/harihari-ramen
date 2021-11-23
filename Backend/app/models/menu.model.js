@@ -178,63 +178,63 @@ exports.getCustomRamen = async (result) => {
   try {
     const [result, fields] = await sql.query(
       `SELECT
-      RC.choice_id,
-      RC.image_url,
-      (
-        SELECT
-          JSON_OBJECT(
-            'name',
-            I.name,
-            'category',
-            I.category,
-            'description',
-            I.description
-          )
+        RC.choice_id,
+        RC.image_url,
+        (
+          SELECT
+            JSON_OBJECT(
+              'name',
+              I.name,
+              'category',
+              I.category,
+              'description',
+              I.description
+            )
+          FROM
+            info_ramen_choices I
+          WHERE
+            I.choice_id = RC.choice_id
+            AND I.language = 'en'
+            AND I.status = 1
+        ) AS en,
+        (
+          SELECT
+            JSON_OBJECT(
+              'name',
+              I.name,
+              'category',
+              I.category,
+              'description',
+              I.description
+            )
+          FROM
+            info_ramen_choices I
+          WHERE
+            I.choice_id = RC.choice_id
+            AND I.language = 'jp'
+            AND I.status = 1
+        ) AS jp,
+        (
+          SELECT
+            JSON_OBJECT(
+              'name',
+              I.name,
+              'category',
+              I.category,
+              'description',
+              I.description
+            )
+          FROM
+            info_ramen_choices I
+          WHERE
+            I.choice_id = RC.choice_id
+            AND I.language = 'th'
+            AND I.status = 1
+        ) AS th
         FROM
-         info_ramen_choices I
+          ramen_choices RC
         WHERE
-          I.choice_id = RC.choice_id
-          AND I.language = 'en'
-          AND I.status = 1
-      ) AS en,
-      (
-        SELECT
-          JSON_OBJECT(
-            'name',
-            I.name,
-            'category',
-            I.category,
-            'description',
-            I.description
-          )
-        FROM
-         info_ramen_choices I
-        WHERE
-          I.choice_id = RC.choice_id
-          AND I.language = 'jp'
-          AND I.status = 1
-      ) AS jp,
-      (
-        SELECT
-          JSON_OBJECT(
-            'name',
-            I.name,
-            'category',
-            I.category,
-            'description',
-            I.description
-          )
-        FROM
-       info_ramen_choices I
-        WHERE
-          I.choice_id = RC.choice_id
-          AND I.language = 'th'
-          AND I.status = 1
-      ) AS th
-      FROM
-        ramen_choices RC
-      WHERE
-        RC.status = 1`
+          RC.status = 1`
     );
 
     logger.info(`Selected ${result.length} choice(s)`);
