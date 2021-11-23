@@ -1,12 +1,3 @@
-.nm-text {
-  font-family: heisei-maru-gothic-std, sans-serif;
-  font-weight: 400;
-  font-style: normal;
-  font-size: 4.5em;
-  margin: 0;
-  line-height: 50px;
-}
-
 .th {
   font-family: "K2D", sans-serif !important;
 }
@@ -20,81 +11,90 @@
   font-family: "K2D", sans-serif !important;
 }
 
+.nm-text {
+  font-family: heisei-maru-gothic-std, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 3em;
+  line-height: 30px;
+  margin: 0;
+}
+
 .sm-text {
   font-family: heisei-maru-gothic-std, sans-serif;
   font-weight: 400;
   font-style: normal;
-  font-size: 3.5em;
   margin: 0;
-  line-height: 38px;
+  font-size: 2.25em;
+  line-height: 28px;
 }
 
 .ssm-text {
   font-family: heisei-maru-gothic-std, sans-serif;
   font-weight: 400;
   font-style: normal;
-  font-size: 3.25em;
   margin: 0;
-  line-height: 32px;
+  font-size: 1.75em;
+  line-height: 22px;
 }
 
 .md-text {
   font-family: heisei-maru-gothic-std, sans-serif;
   font-weight: 800;
   font-style: normal;
-  font-size: 4.75em;
   margin: 0;
-  line-height: 51px;
+  font-size: 3em;
+  line-height: 41px;
 }
 
 .bracket {
   font-family: heisei-maru-gothic-std, sans-serif;
   font-weight: 400;
   font-style: normal;
-  font-size: 2.625em;
   margin: 0;
-  line-height: 30px;
+  font-size: 1.625em;
+  line-height: 20px;
 }
 
 .xm-text {
   font-family: heisei-maru-gothic-std, sans-serif;
   font-weight: 400;
   font-style: normal;
-  font-size: 3em;
   margin: 0;
-  line-height: 30px;
+  font-size: 1.4em;
+  line-height: 20px;
 }
 
 .bg-text {
   font-family: heisei-maru-gothic-std, sans-serif;
   font-weight: 800;
   font-style: normal;
-  font-size: 8em;
   margin: 0;
-  line-height: 110px;
+  font-size: 7.5em;
+  line-height: 100px;
 }
 
 .title {
   font-family: heisei-maru-gothic-std, sans-serif;
   font-weight: 800;
   font-style: normal;
-  font-size: 6.5em;
   margin: 0;
-  line-height: 58px;
+  font-size: 5em;
+  line-height: 48px;
 }
 
 .menu-header {
   font-family: heisei-maru-gothic-std, sans-serif;
   font-weight: 800;
   font-style: normal;
-  font-size: 6em;
   margin: 0;
-  line-height: 41px;
+  font-size: 4.5em;
+  line-height: 31px;
 }
 
 .red-btn {
   color: #ffffff;
-  font-size: 4.5em;
+  font-size: 3em;
   font-weight: 800;
   font-style: normal;
   border: 3px solid var(--unnamed-color-232322);
@@ -114,7 +114,7 @@
   margin-right: 16px;
 }
 
-@media screen and (max-width: 1650px) {
+/* @media screen and (max-width: 1650px) {
   .nm-text {
     font-size: 3em;
     line-height: 30px;
@@ -163,7 +163,7 @@
   .red-btn {
     font-size: 3em;
   }
-}
+} */
 
 @media screen and (max-width: 1100px) {
   .nm-text {

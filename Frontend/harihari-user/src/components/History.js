@@ -44,7 +44,7 @@ export default function History() {
   useEffect(() => {
     if (socket) {
       socket.on("order-history", (orders) => {
-        setOrderHistory(orders)
+        setOrderHistory(orders);
       });
     }
   }, [socket]);
@@ -71,11 +71,7 @@ export default function History() {
   const getAPIOrderHistory = async (id) => {
     await orderService
       .getOrderHistory(id)
-      .then((data) =>
-        setOrderHistory(
-          data
-        )
-      );
+      .then((data) => setOrderHistory(data));
   };
 
   const subTotal = (order) => {
@@ -116,9 +112,7 @@ export default function History() {
 
             <div id="table-box">
               <h1 className="bracket">{t("table")}</h1>
-              {link &&
-              <h1 className="md-text">{link.table_id}</h1>
-              }
+              {link && <h1 className="md-text">{link.table_id}</h1>}
               <div className="lg-box">
                 <div className="lg-text section">
                   {lg === " en" ? (
@@ -207,32 +201,38 @@ export default function History() {
                         <h1 className={"sm-text menu-name" + lg}>
                           {t("basket.subtotal")}
                         </h1>
-                        <h1 className="sm-text k2d">
-                          {subTotal(history.menus).toFixed(2)}
-                        </h1>
+                        {history && (
+                          <h1 className="sm-text k2d">
+                            {subTotal(history.menus).toFixed(2)}
+                          </h1>
+                        )}
                       </div>
                       <div className="history-price-menu">
                         <h1 className={"sm-text menu-name" + lg}>
                           {t("basket.VAT")} 7%
                         </h1>
-                        <h1 className="sm-text k2d">
-                          {(subTotal(history.menus) * 0.07).toFixed(2)}
-                        </h1>
+                        {history && (
+                          <h1 className="sm-text k2d">
+                            {(subTotal(history.menus) * 0.07).toFixed(2)}
+                          </h1>
+                        )}
                       </div>
                       <div className="history-price-menu total">
                         <h1 className={"sm-text menu-name" + lg}>
                           {t("basket.total")}
                         </h1>
-                        <h1 className="sm-text k2d">
-                          ฿{" "}
-                          {(
-                            subTotal(history.menus) +
-                            subTotal(history.menus) * 0.07
-                          ).toFixed(2)}
-                        </h1>
+                        {history && (
+                          <h1 className="sm-text k2d">
+                            ฿{" "}
+                            {(
+                              subTotal(history.menus) +
+                              subTotal(history.menus) * 0.07
+                            ).toFixed(2)}
+                          </h1>
+                        )}
                       </div>
 
-                      {history.status !== "ordered" ? (
+                      {history && history.status !== "ordered" ? (
                         <button
                           className={"cancel-btn disable section md-text" + lg}
                         >
@@ -272,4 +272,3 @@ let linkToHome = (value, lgs) => {
   let path = "/home/";
   window.location = web + lgs + path + value;
 };
-

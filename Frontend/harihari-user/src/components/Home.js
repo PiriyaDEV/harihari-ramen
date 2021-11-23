@@ -265,7 +265,14 @@ export default function Home() {
               </div>
               <div
                 className="menu-box"
-                onClick={() => MenuSelect("history", id, lgs)}
+                onClick={() => CheckValid(
+                  "history",
+                  id,
+                  lgs,
+                  orderHistory,
+                  getTextToAlert,
+                  checkOut.bill.items
+                )}
               >
                 <h1 className={"md-text" + lg}>
                   {t("orderHistory.1")} <br />
@@ -324,11 +331,22 @@ function MenuSelect(page, value, lgs) {
 function CheckValid(page, value, lgs, orderHistory, getTextToAlert, billItem) {
   let web = "http://localhost:3000/";
   let path = "/" + page + "/";
-  if (orderHistory.length === 0 && billItem.length !== 0) {
-    window.location = web + lgs + path + value;
-  } else {
-    getTextToAlert();
+  if(page === "checkout") {
+    if (orderHistory.length === 0 && billItem.length !== 0) {
+      window.location = web + lgs + path + value;
+    } else {
+      getTextToAlert();
+    }
   }
+  console.log (orderHistory)
+  if(page === "history") {
+    if (orderHistory.length !== 0) {
+      window.location = web + lgs + path + value;
+    } else {
+      getTextToAlert();
+    }
+  }
+ 
 }
 
 // function CheckHaveTable(numTable, link) {

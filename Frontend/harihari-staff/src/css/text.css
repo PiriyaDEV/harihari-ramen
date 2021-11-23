@@ -1,231 +1,230 @@
+.th {
+  font-family: "K2D", sans-serif !important;
+}
+
+.jp,
+.en {
+  font-family: heisei-maru-gothic-std, sans-serif !important;
+}
+
+.k2d {
+  font-family: "K2D", sans-serif !important;
+}
+
 .nm-text {
-    font-family: heisei-maru-gothic-std, sans-serif;
-    font-weight: 400;
-    font-style: normal;
-    font-size: 4.5em;
-    margin: 0;
-    line-height: 40px;
-  }
-  
-  .th {
-    font-family: "K2D", sans-serif !important;
-  }
-  
-  .jp,
-  .en {
-    font-family: heisei-maru-gothic-std, sans-serif !important;
-  }
-  
-  .k2d{
-    font-family: "K2D", sans-serif !important;
-  }
-  
-  .sm-text {
-    font-family: heisei-maru-gothic-std, sans-serif;
-    font-weight: 400;
-    font-style: normal;
-    font-size: 3.5em;
-    margin: 0;
-    line-height: 38px;
-  }
-  
-  .ssm-text {
-    font-family: heisei-maru-gothic-std, sans-serif;
-    font-weight: 400;
-    font-style: normal;
-    font-size: 3.25em;
-    margin: 0;
-    line-height: 32px;
-  }
-  
-  .md-text {
-    font-family: heisei-maru-gothic-std, sans-serif;
-    font-weight: 800;
-    font-style: normal;
-    font-size: 4.75em;
-    margin: 0;
-    line-height: 51px;
-  }
-  
-  .bracket {
-    font-family: heisei-maru-gothic-std, sans-serif;
-    font-weight: 400;
-    font-style: normal;
-    font-size: 2.625em;
-    margin: 0;
-    line-height: 30px;
-  }
-  
-  .xm-text {
-    font-family: heisei-maru-gothic-std, sans-serif;
-    font-weight: 400;
-    font-style: normal;
+  font-family: heisei-maru-gothic-std, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 3em;
+  margin: 0;
+  line-height: 30px;
+}
+
+.sm-text {
+  font-family: heisei-maru-gothic-std, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 2.25em;
+  margin: 0;
+  line-height: 28px;
+}
+
+.ssm-text {
+  font-family: heisei-maru-gothic-std, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 1.75em;
+  margin: 0;
+  line-height: 22px;
+}
+
+.md-text {
+  font-family: heisei-maru-gothic-std, sans-serif;
+  font-weight: 800;
+  font-style: normal;
+  font-size: 3em;
+  margin: 0;
+  line-height: 41px;
+}
+
+.bracket {
+  font-family: heisei-maru-gothic-std, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 1.625em;
+  margin: 0;
+  line-height: 20px;
+}
+
+.xm-text {
+  font-family: heisei-maru-gothic-std, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 1.4em;
+  margin: 0;
+  line-height: 20px;
+}
+
+.bg-text {
+  font-family: heisei-maru-gothic-std, sans-serif;
+  font-weight: 800;
+  font-style: normal;
+  font-size: 7.5em;
+  margin: 0;
+  line-height: 100px;
+}
+
+.title {
+  font-family: heisei-maru-gothic-std, sans-serif;
+  font-weight: 800;
+  font-style: normal;
+  font-size: 5em;
+  margin: 0;
+  line-height: 48px;
+}
+
+.menu-header {
+  font-family: heisei-maru-gothic-std, sans-serif;
+  font-weight: 800;
+  font-style: normal;
+  margin: 0;
+  font-size: 4.5em;
+  line-height: 31px;
+}
+
+.red-btn {
+  color: #ffffff;
+  font-size: 3em;
+  font-weight: 800;
+  font-style: normal;
+  border: 3px solid var(--unnamed-color-232322);
+  background: #e14842 0% 0% no-repeat padding-box;
+  border: 3px solid #232322;
+  border-radius: 10px;
+  padding: 8px 60px;
+  cursor: pointer;
+}
+
+.center-text {
+  text-align: center;
+}
+
+.fa {
+  margin-bottom: 7px;
+  margin-right: 16px;
+}
+
+/* @media screen and (max-width: 1650px) {
+  .nm-text {
     font-size: 3em;
-    margin: 0;
     line-height: 30px;
   }
-  
-  .bg-text {
-    font-family: heisei-maru-gothic-std, sans-serif;
-    font-weight: 800;
-    font-style: normal;
-    font-size: 8em;
-    margin: 0;
-    line-height: 110px;
+
+  .sm-text {
+    font-size: 2.25em;
+    line-height: 28px;
   }
-  
-  .title {
-    font-family: heisei-maru-gothic-std, sans-serif;
-    font-weight: 800;
-    font-style: normal;
-    font-size: 6.5em;
-    margin: 0;
-    line-height: 58px;
+
+  .ssm-text {
+    font-size: 1.75em;
+    line-height: 22px;
   }
-  
-  .menu-header {
-    font-family: heisei-maru-gothic-std, sans-serif;
-    font-weight: 800;
-    font-style: normal;
-    font-size: 6em;
-    margin: 0;
+
+  .md-text {
+    font-size: 3em;
     line-height: 41px;
   }
-  
-  .red-btn {
-    color: #ffffff;
+
+  .bracket {
+    font-size: 1.625em;
+    line-height: 20px;
+  }
+
+  .xm-text {
+    font-size: 1.4em;
+    line-height: 20px;
+  }
+
+  .bg-text {
+    font-size: 7.5em;
+    line-height: 100px;
+  }
+
+  .title {
+    font-size: 5em;
+    line-height: 48px;
+  }
+
+  .menu-header {
     font-size: 4.5em;
-    font-weight: 800;
-    font-style: normal;
-    border: 3px solid var(--unnamed-color-232322);
-    background: #e14842 0% 0% no-repeat padding-box;
-    border: 3px solid #232322;
-    border-radius: 10px;
-    padding: 8px 60px;
-    cursor: pointer;
+    line-height: 31px;
   }
-  
-  .center-text {
-    text-align: center;
+
+  .red-btn {
+    font-size: 3em;
   }
-  
-  .fa{
-    margin-bottom: 7px;
-    margin-right: 16px;
+} */
+
+@media screen and (max-width: 1100px) {
+  .nm-text {
+    font-size: 2.5em;
   }
-  
-  @media screen and (max-width: 1650px) {
-    .nm-text {
-      font-size: 3em;
-      line-height: 30px;
-    }
-  
-    .sm-text {
-      font-size: 2.25em;
-      line-height: 28px;
-    }
-  
-    .ssm-text {
-      font-size: 1.75em;
-      line-height: 22px;
-    }
-  
-    .md-text {
-      font-size: 3em;
-      line-height: 41px;
-    }
-  
-    .bracket {
-      font-size: 1.625em;
-      line-height: 20px;
-    }
-  
-    .xm-text {
-      font-size: 1.4em;
-      line-height: 20px;
-    }
-  
-    .bg-text {
-      font-size: 7.5em;
-      line-height: 100px;
-    }
-  
-    .title {
-      font-size: 5em;
-      line-height: 48px;
-    }
-  
-    .menu-header {
-      font-size: 4.5em;
-      line-height: 31px;
-    }
-  
-    .red-btn {
-      font-size: 3em;
-    }
+
+  .sm-text {
+    font-size: 1.75em;
   }
-  
-  @media screen and (max-width: 1100px) {
-    .nm-text {
-      font-size: 2.5em;
-    }
-  
-    .sm-text {
-      font-size: 1.75em;
-    }
-  
-    .ssm-text {
-      font-size: 1.25em;
-    }
-  
-    .md-text {
-      font-size: 2.75em;
-    }
-  
-    .bg-text {
-      font-size: 7em;
-    }
-  
-    .title {
-      font-size: 4.5em;
-    }
-  
-    .menu-header {
-      font-size: 4em;
-    }
-  
-    .red-btn {
-      font-size: 2.5em;
-    }
+
+  .ssm-text {
+    font-size: 1.25em;
   }
-  
-  @media screen and (max-width: 767px) {
-    .nm-text {
-      font-size: 2.25em;
-    }
-  
-    .sm-text {
-      font-size: 1.5em;
-    }
-  
-    .md-text {
-      font-size: 2.5em;
-    }
-  
-    .bg-text {
-      font-size: 6.75em;
-    }
-  
-    .title {
-      font-size: 4.25em;
-    }
-  
-    .menu-header {
-      font-size: 3.75em;
-    }
-  
-    .red-btn {
-      font-size: 2.25em;
-    }
+
+  .md-text {
+    font-size: 2.75em;
   }
-  
+
+  .bg-text {
+    font-size: 7em;
+  }
+
+  .title {
+    font-size: 4.5em;
+  }
+
+  .menu-header {
+    font-size: 4em;
+  }
+
+  .red-btn {
+    font-size: 2.5em;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .nm-text {
+    font-size: 2.25em;
+  }
+
+  .sm-text {
+    font-size: 1.5em;
+  }
+
+  .md-text {
+    font-size: 2.5em;
+  }
+
+  .bg-text {
+    font-size: 6.75em;
+  }
+
+  .title {
+    font-size: 4.25em;
+  }
+
+  .menu-header {
+    font-size: 3.75em;
+  }
+
+  .red-btn {
+    font-size: 2.25em;
+  }
+}
