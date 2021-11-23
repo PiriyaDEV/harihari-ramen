@@ -108,3 +108,20 @@
 .custom-padding {
   margin: 13px 0px 13px 0px;
 }
+
+.custom-img {
+  width: 350px;
+}
+
+.custom-abs{
+  position: absolute;
+}
+
+#custom-img-section {
+  border-top-left-radius: 7px;
+  border-bottom-left-radius: 7px;
+  border-right: 3px solid #232322;
+  width: 460px;
+  height: 460px;
+  position: relative;
+}

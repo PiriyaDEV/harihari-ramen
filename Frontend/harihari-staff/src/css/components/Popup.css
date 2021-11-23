@@ -1,4 +1,5 @@
-#qr-popup {
+#qr-popup,
+#info-popup {
   background-color: #ffffff;
   width: fit-content;
   border: 3px solid #232322;
@@ -41,9 +42,20 @@
   }
 }
 
+@media screen and (max-width: 767px) {
+  #info-popup {
+    padding: 50px 30px 20px 30px;
+    width: 80%
+  }
+}
+
 @media screen and (max-width: 360px) {
   .qr-code {
     width: 170px;
+  }
+
+  #info-popup {
+    padding: 50px 15px 10px 15px;
   }
 
   #qr-popup {

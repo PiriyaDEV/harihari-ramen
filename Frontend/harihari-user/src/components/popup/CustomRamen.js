@@ -27,6 +27,9 @@ import { faArrowRight, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import Soup from "../../images/icon/custom-ramen/icons8-soup-plate-64-2@2x.png";
 // import Noodle from "../../images/icon/custom-ramen/noodle.svg";
 
+import Bowl from "../../images/Element/Bowl.PNG"
+import Miso from "../../images/Element/Miso.PNG"
+
 export default function DetailPopup(props) {
   const { t } = useTranslation();
   const { lgs } = useParams();
@@ -89,11 +92,15 @@ export default function DetailPopup(props) {
           alt=""
           onClick={props.back}
         ></img>
-        <img
+        {/* <img
           className="detail-img"
           src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Shoyu_ramen%2C_at_Kasukabe_Station_%282014.05.05%29_1.jpg/1200px-Shoyu_ramen%2C_at_Kasukabe_Station_%282014.05.05%29_1.jpg"
           alt=""
-        ></img>
+        ></img> */}
+        <div id="custom-img-section" className="section">
+          <img className="custom-img" src={Bowl} alt=""/>
+          <img className="custom-img custom-abs" src={Miso} alt=""/>
+        </div>
         {continueClick === false ? (
           <div id="detail-popup-info" className="fixed-detail">
             <div className="info-padding">

@@ -260,10 +260,10 @@ export default function Menu() {
                   {t("categortyMenu.dessert")}
                 </h1>
                 <h1
-                  className={checkCategory("Beverage") + lg}
-                  onClick={() => changeCategory("Beverage")}
+                  className={checkCategory("Extra") + lg}
+                  onClick={() => changeCategory("Extra")}
                 >
-                  EatPlay
+                  Extra
                 </h1>
                 <h1
                   className={checkCategory("Beverage") + lg}

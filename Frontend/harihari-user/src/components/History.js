@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import tableService from "../services/table.service.js";
 import orderService from "../services/order.service.js";
 import ConfirmPopup from "./popup/ConfirmPopup.js";
+import socketIOClient from "socket.io-client";
 
 //CSS
 import "../css/page.css";
@@ -28,6 +29,25 @@ export default function History() {
   const [cancel, setCancel] = useState(false);
   const [orderSelect, setOrderSelect] = useState("");
   const [orderIndex, setOrderIndex] = useState("");
+  const [socket, setSocket] = useState(null);
+
+  useEffect(() => {
+    const socketInput = socketIOClient(
+      "http://localhost:3030/harihari-customer",
+      {
+        auth: { id: id },
+      }
+    );
+    setSocket(socketInput);
+  }, [id]);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("order-history", (orders) => {
+        setOrderHistory(orders)
+      });
+    }
+  }, [socket]);
 
   useEffect(() => {
     if (!link && !orderHistory) {
@@ -131,11 +151,11 @@ export default function History() {
           <div id="history-list">
             {orderHistory &&
               orderHistory.map((history, order) => (
-                <div key={order}>
+                <div>
                   <div className="history-header">
                     <div>
                       <h1 className={"md-text" + lg}>
-                        {t("history.order")} {order + 1}
+                        {t("history.order")} {history.order_id}
                       </h1>
                       <h1 className="sm-text k2d history-price">
                         ฿{" "}

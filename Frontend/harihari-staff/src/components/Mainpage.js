@@ -28,6 +28,7 @@ export default function Mainpage() {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
+    console.log("check life cycle");
     const socketInput = socketIOClient("http://localhost:3030/harihari-staff");
     setSocket(socketInput);
   }, []);
@@ -35,14 +36,15 @@ export default function Mainpage() {
   useEffect(() => {
     if (socket) {
       socket.on("order-status", (result) => {
-        console.log(result);
-        console.log(selectedTable);
-        if (selectedTable === result.table_id) {
+        console.log("Update ", result.table_id);
+        console.log("Current ", parseInt(document.getElementById("myTableId").innerText.slice(6)));
+        console.log(parseInt(document.getElementById("myTableId").innerText.slice(6)) === result.table_id);
+        if (parseInt(document.getElementById("myTableId").innerText.slice(6)) === result.table_id) {
           setOrder(result.orders);
         }
       });
     }
-  }, [socket, selectedTable]);
+  }, [socket]);
 
   useEffect(() => {
     if (socket) {
@@ -117,6 +119,14 @@ export default function Mainpage() {
     }
   };
 
+  const subTotal = (order) => {
+    var tempSum = 0;
+    for (let i = 0; i < order.length; i++) {
+      tempSum = tempSum + order[i].quantity * order[i].price;
+    }
+    return tempSum;
+  };
+
   const callWaiterClick = async () => {
     let result = await tableService.callWaiter(
       link[selectedTable - 1].guest_uid
@@ -169,25 +179,65 @@ export default function Mainpage() {
 
       {orderSelect && (
         <div id="order-info-popup" className="section popup">
-          <div className="page-container">
-            {orderMenu &&
-              orderMenu.map((menu, id) => (
-                <div id="order-info-table">
-                  <h1>{menu.en}</h1>
-                  {menu.comment ? <h1>{menu.comment}</h1> : <h1>-</h1>}
-                  <h1>{menu.quantity}</h1>
-                  <h1>{menu.price.toFixed(2)}</h1>
+          <div id="info-popup" className="page-container">
+            <div id="info-header">
+              <h1 className="sm-text">Name</h1>
+              <h1 className="sm-text">Comment</h1>
+              <h1 className="sm-text">Quantity</h1>
+              <h1 className="sm-text info-price-text">Price</h1>
+            </div>
+
+            <div id="info-menu-section">
+              {orderMenu &&
+                orderMenu.map((menu, id) => (
+                  <div id="order-info-table">
+                    <h1 className="sm-text">{menu.en}</h1>
+                    {menu.comment ? (
+                      <h1 className="sm-text">{menu.comment}</h1>
+                    ) : (
+                      <h1 className="sm-text">-</h1>
+                    )}
+                    <h1 className="sm-text">{menu.quantity}</h1>
+                    <h1 className="sm-text info-price-text">
+                      {menu.price.toFixed(2)}
+                    </h1>
+                  </div>
+                ))}
+            </div>
+
+            {orderMenu && (
+              <div id="info-price-box">
+                <div className="info-price">
+                  <h1 className="sm-text">Subtotal</h1>
+                  <h1 className="sm-text">{subTotal(orderMenu).toFixed(2)}</h1>
                 </div>
-              ))}
-            <button
+                <div className="info-price">
+                  <h1 className="sm-text">VAT (7%)</h1>
+                  <h1 className="sm-text">
+                    {(subTotal(orderMenu) * 0.07).toFixed(2)}
+                  </h1>
+                </div>
+                <div className="info-price">
+                  <h1 className="sm-text total">Total</h1>
+                  <h1 className="sm-text total">
+                    ฿{" "}
+                    {(subTotal(orderMenu) + subTotal(orderMenu) * 0.07).toFixed(
+                      2
+                    )}
+                  </h1>
+                </div>
+              </div>
+            )}
+
+            <div
+              className="closeIcon"
               onClick={() => {
                 setOrderSelect(!orderSelect);
                 setOrderMenu(null);
               }}
-              className="sm-text"
             >
-              Close
-            </button>
+              <img src={closeIcon} alt=""></img>
+            </div>
           </div>
         </div>
       )}
@@ -229,7 +279,7 @@ export default function Mainpage() {
               <div id="table-info" className="staff-box">
                 <div id="table-info-header">
                   <div>
-                    <h1 className="sm-text bold">Table {selectedTable}</h1>
+                    <h1 id="myTableId" className="sm-text bold">Table {selectedTable}</h1>
                     <h1 className="sm-text">Check-in time: 15:45:03</h1>
                   </div>
                   <div>
@@ -271,9 +321,9 @@ export default function Mainpage() {
                             <FontAwesomeIcon
                               icon={faInfoCircle}
                               className="fa fa-info"
-                              onClick={() => orderClick(order[i].menus)}
+                              onClick={() => orderClick(x.menus)}
                             />
-                            {order.length - i}
+                            {x.order_id}
                           </h1>
                           <select
                             onChange={changeStatus}

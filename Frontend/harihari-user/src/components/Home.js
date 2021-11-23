@@ -58,13 +58,17 @@ export default function Home() {
           )
         );
       });
+    }
+  }, [socket]);
 
+  useEffect(() => {
+    if (socket) {
       socket.on("call-waiter", (newValue) => {
         setLink((link) => ({ ...link, call_waiter: newValue }));
         setWaiter(newValue);
       });
     }
-  }, [id, callWaiter, link, socket]);
+  }, [link, socket]);
 
   const getLink = async (id) => {
     await tableService.getTableById(id).then((data) => setLink(data));
@@ -127,7 +131,7 @@ export default function Home() {
   });
 
   const callWaiterClick = async () => {
-    if(!link.call_waiter) {
+    if (!link.call_waiter) {
       await tableService.callWaiter(id);
     }
   };

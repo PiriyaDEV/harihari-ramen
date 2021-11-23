@@ -35,12 +35,13 @@
 }
 
 #menu-choice-container > h1:not(:last-child) {
-  margin-right: 60px;
+  margin-right: 40px;
 }
 
 #menu-choice-container > h1,
 .fa {
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .inactive {

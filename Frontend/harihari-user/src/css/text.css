@@ -16,7 +16,7 @@
   font-family: heisei-maru-gothic-std, sans-serif !important;
 }
 
-.k2d{
+.k2d {
   font-family: "K2D", sans-serif !important;
 }
 
@@ -51,7 +51,7 @@
   font-family: heisei-maru-gothic-std, sans-serif;
   font-weight: 400;
   font-style: normal;
-  font-size: 3.125em;
+  font-size: 2.625em;
   margin: 0;
   line-height: 30px;
 }
@@ -109,7 +109,7 @@
   text-align: center;
 }
 
-.fa{
+.fa {
   margin-bottom: 7px;
   margin-right: 16px;
 }
@@ -226,5 +226,15 @@
 
   .red-btn {
     font-size: 2.25em;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  #table-box {
+    padding: 8px 5px !important;
+  }
+
+  .menu-header {
+    font-size: 3.25em;
   }
 }
