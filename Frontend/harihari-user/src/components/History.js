@@ -14,7 +14,7 @@ import "../css/components/History.css";
 import "../css/element/languageBtn.css";
 
 //JS
-import { getDateTimes } from "../utilities/Time";
+import { getDateTimes, getTimes } from "../utilities/Time";
 
 //Icon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -160,8 +160,11 @@ export default function History() {
                       </h1>
                     </div>
                     <div>
-                      <h1 className="bracket header-blue-text">
+                      <h1 className="bracket header-blue-text date-pc">
                         {getDateTimes(history.created_at)}
+                      </h1>
+                      <h1 className="bracket header-blue-text date-mb">
+                        {getTimes(history.created_at)}
                       </h1>
                       <h1 className="bracket header-blue-text status">
                         {history.status}

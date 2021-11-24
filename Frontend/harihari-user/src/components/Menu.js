@@ -30,6 +30,7 @@ export default function Menu() {
   const [searchMenu, setSearchMenu] = useState();
   const [orderToggle, setOrderToggle] = useState(false);
   const [custom, setCustom] = useState(false);
+  const [mbBasket, setmbBasket] = useState(false);
   const [storedItems, setStoreItems] = useState(
     JSON.parse(localStorage.getItem("items"))
   );
@@ -197,13 +198,26 @@ export default function Menu() {
       <div id="menu" className="section">
         <div id="menu-container" className="page-container">
           <div id="menu-header-container" className="section">
-            <div className="section">
+            <div
+              className={`section ${mbBasket === true ? "mb-basket" : null}`}
+            >
               <FontAwesomeIcon
                 icon={faChevronLeft}
                 className="menu-header fa"
                 onClick={() => linkToHome(id, lgs)}
               />
               <h1 className={"menu-header" + lg}>{t("orderFoodIn")}</h1>
+            </div>
+
+            <div
+              className={`section basket-header ${mbBasket === false ? "mb-basket" : null}`}
+            >
+              <FontAwesomeIcon
+                icon={faChevronLeft}
+                className="menu-header fa"
+                onClick={() => setmbBasket(false)}
+              />
+              <h1 className={"menu-header" + lg}>Basket</h1>
             </div>
 
             <div id="table-box">
@@ -239,7 +253,7 @@ export default function Menu() {
           </div>
 
           <div id="menu-main-container">
-            <div>
+            <div className={`${mbBasket === true ? "mb-basket" : null}`}>
               <div id="menu-choice-container">
                 <h1
                   className={checkCategory("Appetizer") + lg}
@@ -347,8 +361,11 @@ export default function Menu() {
             </div>
 
             <div id="basket-section">
-              <div id="basket-container">
-                <h1 className={"md-text" + lg}>{t("basket.yourBasket")}</h1>
+              <div
+                id="basket-container"
+                className={`${mbBasket === false ? "mb-basket" : null}`}
+              >
+                <h1 className={`md-text ${mbBasket === true ? "mb-basket" : null}` + lg}>{t("basket.yourBasket")}</h1>
                 <div id="basket-item-box">
                   {storedItems !== null &&
                     storedItems.map((x, i) => (
@@ -426,6 +443,18 @@ export default function Menu() {
 
                 <div onClick={() => setOrderToggle(true)} id="order-box">
                   <h1 className={"md-text" + lg}>{t("basket.order")}</h1>
+                  <h1 className={"bracket" + lg}>
+                    {storedItems !== null ? (
+                      <span>
+                        {totalOrder()} {t("basket.item")}
+                      </span>
+                    ) : (
+                      <span>0 {t("basket.item")}</span>
+                    )}
+                  </h1>
+                </div>
+                <div id="basket-mb-box" onClick={() => setmbBasket(true)}>
+                  <h1 className={"md-text" + lg}>Basket</h1>
                   <h1 className={"bracket" + lg}>
                     {storedItems !== null ? (
                       <span>

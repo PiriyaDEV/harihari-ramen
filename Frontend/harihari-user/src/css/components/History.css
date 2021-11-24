@@ -8,6 +8,10 @@
   margin-bottom: 50px;
 }
 
+.date-mb {
+  display: none;
+}
+
 .history-header,
 .history-info {
   border: 3px solid #232322;
@@ -114,9 +118,23 @@
   width: inherit;
 }
 
+@media screen and (max-width: 470px) {
+  #history-list > div {
+    margin-bottom: 20px;
+  }
+}
+
 @media screen and (max-width: 360px) {
-  .history-header > div{
+  .history-header > div:first-child {
     display: flex;
-    flex-direction: column;
+    /* flex-direction: column; */
+  }
+
+  .date-mb {
+    display: block;
+  }
+
+  .date-pc {
+    display: none;
   }
 }
