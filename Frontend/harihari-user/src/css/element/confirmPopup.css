@@ -50,3 +50,29 @@
   background: #ffffff 0% 0% no-repeat padding-box;
   color: #232322;
 }
+
+@media screen and (max-width: 476px) {
+  .popup-btn-section {
+    flex-direction: column;
+  }
+
+  .popup-p {
+    width: fit-content;
+  }
+
+  .close-img {
+    width: 20px !important;
+  }
+
+  #confirm-box {
+    padding: 30px 20px 20px 20px;
+  }
+
+  .popup-btn-section {
+    gap: 10px;
+  }
+
+  .popup-btn-red, .popup-btn-white{
+    padding: 1px 15px;
+  }
+}

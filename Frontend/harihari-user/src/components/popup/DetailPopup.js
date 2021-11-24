@@ -69,54 +69,57 @@ export default function DetailPopup(props) {
 
         <div id="detail-popup-info">
           <div>
-          <div className="info-padding">
-            <h1 className={"md-text" + lg}>
-              {lgs === "th" && <span>{props.menu.th.name}</span>}
-              {lgs === "en" && <span>{props.menu.en.name}</span>}
-              {lgs === "jp" && <span>{props.menu.jp.name}</span>}
-            </h1>
-            <h1 className="sm-text k2d">฿ {props.menu.price}</h1>
-            <div id="detail-desc">
-              <h1 className={"bracket" + lg}>
-                {lgs === "th" && <span>{props.menu.th.description}</span>}
-                {lgs === "en" && <span>{props.menu.en.description}</span>}
-                {lgs === "jp" && <span>{props.menu.jp.description}</span>}
-              </h1>
+            <div className="info-padding">
+              <div id="detail-menu-header">
+                <h1 className={"md-text" + lg}>
+                  {lgs === "th" && <span>{props.menu.th.name}</span>}
+                  {lgs === "en" && <span>{props.menu.en.name}</span>}
+                  {lgs === "jp" && <span>{props.menu.jp.name}</span>}
+                </h1>
+                <h1 className="sm-text k2d menu-price bold">฿ {props.menu.price}</h1>
+              </div>
+
+              <div id="detail-desc">
+                <h1 className={"bracket" + lg}>
+                  {lgs === "th" && <span>{props.menu.th.description}</span>}
+                  {lgs === "en" && <span>{props.menu.en.description}</span>}
+                  {lgs === "jp" && <span>{props.menu.jp.description}</span>}
+                </h1>
+              </div>
             </div>
-          </div>
 
-          <hr className="gray-line"></hr>
+            <hr className="gray-line"></hr>
 
-          <div className="info-padding">
-            <h1 className={"sm-text comment" + lg}>{t("basket.request")}</h1>
-            <textarea
-              className={"bracket comment-box" + lg}
-              rows="4"
-              cols="50"
-              placeholder={placeHolderRequest()}
-              value={commentRequest}
-              onChange={Request}
-            ></textarea>
-          </div>
-
-          <hr className="gray-line"></hr>
-
-          <div id="amount-box" className="section">
-            <div
-              className="num-icon section"
-              onClick={() => clickAmount("minus")}
-            >
-              <img src={minusIcon} alt=""></img>
+            <div className="info-padding">
+              <h1 className={"sm-text comment" + lg}>{t("basket.request")}</h1>
+              <textarea
+                className={"bracket comment-box" + lg}
+                rows="3"
+                cols="50"
+                placeholder={placeHolderRequest()}
+                value={commentRequest}
+                onChange={Request}
+              ></textarea>
             </div>
-            {/* {amountNum && <h1>Test</h1>} */}
-            <h1 className="md-text od-amount">{amountNum}</h1>
-            <div
-              className="num-icon section"
-              onClick={() => clickAmount("plus")}
-            >
-              <img src={plusIcon} alt=""></img>
+
+            <hr className="gray-line"></hr>
+
+            <div id="amount-box" className="section">
+              <div
+                className="num-icon section"
+                onClick={() => clickAmount("minus")}
+              >
+                <img src={minusIcon} alt=""></img>
+              </div>
+              {/* {amountNum && <h1>Test</h1>} */}
+              <h1 className="md-text od-amount">{amountNum}</h1>
+              <div
+                className="num-icon section"
+                onClick={() => clickAmount("plus")}
+              >
+                <img src={plusIcon} alt=""></img>
+              </div>
             </div>
-          </div>
           </div>
 
           <div

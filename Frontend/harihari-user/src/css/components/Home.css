@@ -185,6 +185,10 @@
     display: block;
   }
 
+  br{
+    display: none;
+  }
+
   #home {
     width: 100%;
     height: inherit;
@@ -237,7 +241,13 @@
   }
 
   #ramen-icon {
-    width: 64px;
+    width: 80px;
+  }
+
+  #home-title-box{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
   }
 
   .menu-box {
@@ -246,6 +256,10 @@
 
   .menu-box > h1 {
     left: 10px;
+  }
+
+  #table-text-box{
+    flex-direction: column;
   }
 }
 

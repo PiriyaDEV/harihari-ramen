@@ -201,7 +201,7 @@ export default function Home() {
                 <div>
                   <img id="ramen-icon" src={RamenPic} alt="" />
                 </div>
-                <div>
+                <div id="home-title-box">
                   {link && (
                     <h1 className={"title" + lg}>
                       {t("table")} {link.table_id}

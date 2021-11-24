@@ -38,7 +38,7 @@
 }
 
 .history-box {
-  max-height: 180px;
+  max-height: 300px;
   overflow-y: auto;
 }
 
@@ -116,6 +116,20 @@
 
 .menu-name {
   width: inherit;
+}
+
+@media screen and (max-width: 1100px) {
+  .history-box {
+    height: 100% !important;
+    max-height: max-content;
+    margin-bottom: 50px;
+  }
+}
+
+@media screen and (max-width: 495px) {
+  .history-box::-webkit-scrollbar {
+    width: 3px;
+  }
 }
 
 @media screen and (max-width: 470px) {

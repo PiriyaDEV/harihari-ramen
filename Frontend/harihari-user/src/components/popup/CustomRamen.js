@@ -27,8 +27,8 @@ import { faArrowRight, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import Soup from "../../images/icon/custom-ramen/icons8-soup-plate-64-2@2x.png";
 // import Noodle from "../../images/icon/custom-ramen/noodle.svg";
 
-import Bowl from "../../images/Element/Bowl.PNG"
-import Miso from "../../images/Element/Miso.PNG"
+import Bowl from "../../images/Element/Bowl.PNG";
+import Miso from "../../images/Element/Miso.PNG";
 
 export default function DetailPopup(props) {
   const { t } = useTranslation();
@@ -85,7 +85,7 @@ export default function DetailPopup(props) {
   // console.log(props.menu);
   return (
     <div id="detail-popup-section" className="section popup">
-      <div id="detail-popup" className="page-container">
+      <div id="detail-popup" className="custom-width page-container">
         <img
           className="close-popup"
           src={closeIcon}
@@ -98,10 +98,11 @@ export default function DetailPopup(props) {
           alt=""
         ></img> */}
         <div id="custom-img-section" className="section">
-          <img className="custom-img" src={Bowl} alt=""/>
-          <img className="custom-img custom-abs" src={Miso} alt=""/>
+          <img className="custom-img" src={Bowl} alt="" />
+          <img className="custom-img custom-abs" src={Miso} alt="" />
         </div>
-        {continueClick === false ? (
+
+        {continueClick === false && (
           <div id="detail-popup-info" className="fixed-detail">
             <div className="info-padding">
               <h1 className={"md-text" + lg}>Custom Ramen</h1>
@@ -131,7 +132,9 @@ export default function DetailPopup(props) {
               </div>
             </div>
           </div>
-        ) : (
+        )}
+
+        {continueClick === true && (
           <div id="detail-popup-info" className="fixed-detail">
             <div>
               <div>
@@ -172,7 +175,7 @@ export default function DetailPopup(props) {
                 <div id="note-section">
                   <h1 className="bracket">Note to our cook</h1>
                   <textarea
-                    className={"bracket comment-box" + lg}
+                    className={"bracket comment-box custom-comment" + lg}
                     rows="6"
                     cols="50"
                     placeholder={placeHolderRequest()}
@@ -242,7 +245,6 @@ export default function DetailPopup(props) {
             </div>
           </div>
         )}
-        ;
       </div>
     </div>
   );

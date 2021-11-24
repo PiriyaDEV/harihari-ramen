@@ -48,12 +48,11 @@ export default function CheckOut() {
   };
 
   const getAPIBill = async (id) => {
-    await BillService.summary(id).then((data) => setCheckOut(data)
-    );
+    await BillService.summary(id).then((data) => setCheckOut(data));
   };
 
-  if(checkOut) {
-    if(checkOut.bill.items.length === 0) {
+  if (checkOut) {
+    if (checkOut.bill.items.length === 0) {
       window.location = "http://localhost:3000/invalid";
     }
   }
@@ -72,7 +71,13 @@ export default function CheckOut() {
 
   return (
     <div>
-      {cancel && <ConfirmPopup cancel={cancelClick} uid={checkOut.bill.uid} page="checkout" />}
+      {cancel && (
+        <ConfirmPopup
+          cancel={cancelClick}
+          uid={checkOut.bill.uid}
+          page="checkout"
+        />
+      )}
       <div id="history" className="section">
         <div id="history-container" className="page-container">
           <div id="menu-header-container" className="section">
@@ -82,7 +87,9 @@ export default function CheckOut() {
                 className="menu-header fa"
                 onClick={() => linkToHome(id, lgs, "/home/")}
               />
-              <h1 className={"menu-header" + lg}>{t("checkOut.checkOutFull")}</h1>
+              <h1 className={"menu-header" + lg}>
+                {t("checkOut.checkOutFull")}
+              </h1>
             </div>
 
             <div id="table-box">
@@ -144,51 +151,54 @@ export default function CheckOut() {
                     </div>
                   ))}
               </div>
-              <hr className="hr-black"></hr>
-              <div className="history-price-menu">
-                <h1 className={"sm-text menu-name" + lg}>
-                  {t("basket.subtotal")}
-                </h1>
-                {checkOut && (
-                  <h1 className="sm-text k2d">
-                    {subTotal(checkOut.bill.items).toFixed(2)}
-                  </h1>
-                )}
-              </div>
-              <div className="history-price-menu">
-                <h1 className={"sm-text menu-name" + lg}>
-                  {t("basket.VAT")} 7%
-                </h1>
-                {checkOut && (
-                  <h1 className="sm-text k2d">
-                    {(subTotal(checkOut.bill.items) * 0.07).toFixed(2)}
-                  </h1>
-                )}
-              </div>
-              <div id="checkout-btn-section">
-                <div>
+
+              <div>
+                <hr className="hr-black"></hr>
+                <div className="history-price-menu">
                   <h1 className={"sm-text menu-name" + lg}>
-                    {t("basket.total")}
+                    {t("basket.subtotal")}
                   </h1>
                   {checkOut && (
-                    <h1 className="md-text k2d">
-                      {" "}
-                      ฿{" "}
-                      {numberWithCommas(
-                        (
-                          subTotal(checkOut.bill.items) +
-                          subTotal(checkOut.bill.items) * 0.07
-                        ).toFixed(2)
-                      )}
+                    <h1 className="sm-text k2d">
+                      {subTotal(checkOut.bill.items).toFixed(2)}
                     </h1>
                   )}
                 </div>
-                <button
-                  className="md-text check-out-btn"
-                  onClick={() => setCancel(true)}
-                >
-                  {t("checkOut.checkOutFull")}
-                </button>
+                <div className="history-price-menu">
+                  <h1 className={"sm-text menu-name" + lg}>
+                    {t("basket.VAT")} 7%
+                  </h1>
+                  {checkOut && (
+                    <h1 className="sm-text k2d">
+                      {(subTotal(checkOut.bill.items) * 0.07).toFixed(2)}
+                    </h1>
+                  )}
+                </div>
+                <div id="checkout-btn-section">
+                  <div>
+                    <h1 className={"sm-text menu-name" + lg}>
+                      {t("basket.total")}
+                    </h1>
+                    {checkOut && (
+                      <h1 className="md-text k2d">
+                        {" "}
+                        ฿{" "}
+                        {numberWithCommas(
+                          (
+                            subTotal(checkOut.bill.items) +
+                            subTotal(checkOut.bill.items) * 0.07
+                          ).toFixed(2)
+                        )}
+                      </h1>
+                    )}
+                  </div>
+                  <button
+                    className="md-text check-out-btn"
+                    onClick={() => setCancel(true)}
+                  >
+                    {t("checkOut.checkOutFull")}
+                  </button>
+                </div>
               </div>
             </div>
           </div>

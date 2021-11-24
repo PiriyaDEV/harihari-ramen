@@ -79,7 +79,7 @@
 }
 
 #bill-menu-list {
-  max-height: 310px;
+  height: 450px;
   overflow-y: auto;
 }
 
@@ -100,6 +100,32 @@
   /* box-shadow: 0 0 1px rgba(255, 255, 255, 1); */
 }
 
+@media screen and (max-width: 1100px) {
+  .history-price-menu {
+    padding: 0px 20px;
+  }
+
+  br{
+    display: none;
+  }
+
+  #checkout-box{
+    margin-bottom: 120px;
+  }
+
+  #checkout-btn-section {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: calc(100% - 40px);
+    background-color: #ffffff;
+    box-shadow: 0px -10px 10px #86868629;
+    border: none;
+    border-radius: 0px;
+    padding: 10px 20px;
+  }
+}
+
 @media screen and (max-width: 767px) {
   #bill-box {
     display: flex;
@@ -108,8 +134,20 @@
     gap: 30px;
   }
 
+  #bill-menu-list {
+    max-height: 100%;
+    height: 100%;
+    overflow-y: auto;
+  }
+
   #bill-qr > div > p {
     margin: 10px 0px 5px 0px;
+  }
+}
+
+@media screen and (max-width: 495px) {
+  #bill-menu-list::-webkit-scrollbar {
+    width: 3px;
   }
 }
 
@@ -118,8 +156,7 @@
     width: 220px;
   }
 
-
-.qr-code {
-  width: 180px !important;
-}
+  .qr-code {
+    width: 180px !important;
+  }
 }
