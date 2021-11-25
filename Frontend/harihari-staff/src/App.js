@@ -3,7 +3,6 @@ import React from "react";
 // import React from "react";
 import { Route, Switch } from "react-router-dom";
 
-import Receipt from "./components/Receipt";
 import Mainpage from "./components/Mainpage";
 
 function App() {
@@ -11,10 +10,7 @@ function App() {
     <div>
       <Switch>
         <Route exact path="/">
-            <Mainpage />
-          </Route>
-        <Route path="/receipt">
-          <Receipt />
+          <Mainpage />
         </Route>
         {/* <Route path="/:id">
           <p>ไม่มี pathนี้</p>

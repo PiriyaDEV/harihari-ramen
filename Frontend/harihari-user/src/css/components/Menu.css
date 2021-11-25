@@ -246,7 +246,7 @@
 #basket-item-box::-webkit-scrollbar,
 #menu-list-container::-webkit-scrollbar {
   height: 5px;
-  width: 5px;
+  width: 3px;
   padding-bottom: 30px;
 }
 
