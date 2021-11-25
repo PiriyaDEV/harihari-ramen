@@ -8,6 +8,12 @@
   height: 460px;
 }
 
+#custom-img-section {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
 .note {
   color: #314975;
 }
@@ -25,6 +31,7 @@
 .custom-icon {
   width: 20px;
   margin-right: 10px;
+  margin-bottom: 4px;
 }
 
 .choice-section {
@@ -36,6 +43,11 @@
   height: 10px;
   border: 2px solid #232323;
   border-radius: 50%;
+  cursor: pointer;
+}
+
+.choice-done{
+  background-color: #e14842 !important;
 }
 
 .radio-box {
@@ -91,6 +103,11 @@
   width: 100%;
 }
 
+.done-box {
+  width: 100%;
+  text-align: center !important;
+}
+
 #continue-box-section {
   gap: 10px;
   padding: 0px 10px;
@@ -107,6 +124,11 @@
 
 .custom-img {
   width: 350px;
+  -webkit-transition: background-color 150ms linear, color 150ms linear;
+}
+
+.description{
+  color: #8e8e8e;
 }
 
 .custom-abs {
@@ -152,7 +174,7 @@
     max-height: 200px;
   }
 
-  .custom-comment{
+  .custom-comment {
     width: 100%;
   }
 }

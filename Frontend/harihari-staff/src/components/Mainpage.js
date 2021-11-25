@@ -22,13 +22,13 @@ export default function Mainpage() {
   const [qrPopup, setQR] = useState(false);
   const [showCam, setShowCam] = useState(false);
   const [orderMenu, setOrderMenu] = useState();
+  const [customMenu, setCustomMenu] = useState();
   const [orderSelect, setOrderSelect] = useState(false);
   const [selectOrder, setSelectOrder] = useState("");
   const [showCheckOut, setCheckOut] = useState(false);
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    console.log("check life cycle");
     const socketInput = socketIOClient("http://localhost:3030/harihari-staff");
     setSocket(socketInput);
   }, []);
@@ -36,10 +36,10 @@ export default function Mainpage() {
   useEffect(() => {
     if (socket) {
       socket.on("order-status", (result) => {
-        console.log("Update ", result.table_id);
-        console.log("Current ", parseInt(document.getElementById("myTableId").innerText.slice(6)));
-        console.log(parseInt(document.getElementById("myTableId").innerText.slice(6)) === result.table_id);
-        if (parseInt(document.getElementById("myTableId").innerText.slice(6)) === result.table_id) {
+        if (
+          parseInt(document.getElementById("myTableId").innerText.slice(6)) ===
+          result.table_id
+        ) {
           setOrder(result.orders);
         }
       });
@@ -93,8 +93,9 @@ export default function Mainpage() {
       .then((data) => setOrder(data));
   };
 
-  const orderClick = (menu) => {
+  const orderClick = (menu, custom) => {
     setOrderMenu(menu);
+    setCustomMenu(custom);
     setOrderSelect(true);
   };
 
@@ -119,10 +120,17 @@ export default function Mainpage() {
     }
   };
 
-  const subTotal = (order) => {
+  const subTotal = (order, custom) => {
     var tempSum = 0;
-    for (let i = 0; i < order.length; i++) {
-      tempSum = tempSum + order[i].quantity * order[i].price;
+    if (order) {
+      for (let i = 0; i < order.length; i++) {
+        tempSum = tempSum + order[i].quantity * order[i].price;
+      }
+    }
+    if (custom) {
+      for (let i = 0; i < custom.length; i++) {
+        tempSum = tempSum + custom[i].quantity * custom[i].price;
+      }
     }
     return tempSum;
   };
@@ -203,27 +211,54 @@ export default function Mainpage() {
                     </h1>
                   </div>
                 ))}
+              {customMenu &&
+                customMenu.map((menu, id) => (
+                  <div>
+                    <div id="order-info-table">
+                      <h1 className="sm-text">Custom Ramen</h1>
+                      {menu.comment ? (
+                        <h1 className="sm-text">{menu.comment}</h1>
+                      ) : (
+                        <h1 className="sm-text">-</h1>
+                      )}
+                      <h1 className="sm-text">{menu.quantity}</h1>
+                      <h1 className="sm-text info-price-text">
+                        {menu.price.toFixed(2)}
+                      </h1>
+                    </div>
+                    <div>
+                      <h1 className="xm-text gray-text">
+                        {menu.en.soup_type},{menu.en.noodle},
+                        {menu.en.spring_onion},{menu.en.garlic},{menu.en.spice},
+                        {menu.en.chashu},{menu.en.richness}
+                      </h1>
+                    </div>
+                  </div>
+                ))}
             </div>
 
             {orderMenu && (
               <div id="info-price-box">
                 <div className="info-price">
                   <h1 className="sm-text">Subtotal</h1>
-                  <h1 className="sm-text">{subTotal(orderMenu).toFixed(2)}</h1>
+                  <h1 className="sm-text">
+                    {subTotal(orderMenu, customMenu).toFixed(2)}
+                  </h1>
                 </div>
                 <div className="info-price">
                   <h1 className="sm-text">VAT (7%)</h1>
                   <h1 className="sm-text">
-                    {(subTotal(orderMenu) * 0.07).toFixed(2)}
+                    {(subTotal(orderMenu, customMenu) * 0.07).toFixed(2)}
                   </h1>
                 </div>
                 <div className="info-price">
                   <h1 className="sm-text total">Total</h1>
                   <h1 className="sm-text total">
                     ฿{" "}
-                    {(subTotal(orderMenu) + subTotal(orderMenu) * 0.07).toFixed(
-                      2
-                    )}
+                    {(
+                      subTotal(orderMenu, customMenu) +
+                      subTotal(orderMenu, customMenu) * 0.07
+                    ).toFixed(2)}
                   </h1>
                 </div>
               </div>
@@ -279,7 +314,9 @@ export default function Mainpage() {
               <div id="table-info" className="staff-box">
                 <div id="table-info-header">
                   <div>
-                    <h1 id="myTableId" className="sm-text bold">Table {selectedTable}</h1>
+                    <h1 id="myTableId" className="sm-text bold">
+                      Table {selectedTable}
+                    </h1>
                     <h1 className="sm-text">Check-in time: 15:45:03</h1>
                   </div>
                   <div>
@@ -321,7 +358,7 @@ export default function Mainpage() {
                             <FontAwesomeIcon
                               icon={faInfoCircle}
                               className="fa fa-info"
-                              onClick={() => orderClick(x.menus)}
+                              onClick={() => orderClick(x.menus, x.custom)}
                             />
                             {x.order_id}
                           </h1>

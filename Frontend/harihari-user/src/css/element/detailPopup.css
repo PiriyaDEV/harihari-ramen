@@ -183,6 +183,10 @@
     height: 220px;
   }
 
+  .menu-price {
+    font-size: 2.15em;
+  }
+
   #amount-box {
     margin: 10px 0px;
   }

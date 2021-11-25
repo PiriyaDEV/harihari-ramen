@@ -20,3 +20,9 @@
   color: #ffffff;
   width: fit-content;
 }
+
+@media screen and (max-width: 476px) {
+  .lg-box > div {
+    padding: 1px 5px;
+  }
+}

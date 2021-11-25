@@ -21,18 +21,25 @@ export default function ConfirmOrder(props) {
     let path = "/home/";
 
     let items = [];
-    items = props.menuOrder.map((item) => {
-      return {
-        product_id: item.product_id,
-        quantity: item.quantity,
-        comment: item.comment ? item.comment : null,
-      };
+    if(props.menuOrder) {
+      items = props.menuOrder.map((item) => {
+        return {
+          product_id: item.product_id,
+          quantity: item.quantity,
+          comment: item.comment ? item.comment : null,
+        };
+      });
+    }
+    
+    props.menuCustom.forEach(custom => {
+      delete custom.images
     });
 
-    let result = await OrderService.createOrder(items, id);
+    let result = await OrderService.createOrder(items, props.menuCustom, id);
 
     if (result.success) {
       localStorage.removeItem("items");
+      localStorage.removeItem("customRamen");
       window.location = web + lgs + path + id;
     } else {
       window.location = web + "invalid";

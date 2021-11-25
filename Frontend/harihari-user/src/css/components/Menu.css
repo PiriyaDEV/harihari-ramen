@@ -138,6 +138,18 @@
   cursor: pointer;
 }
 
+.custom-gray{
+  color: #8e8e8e !important;
+}
+
+.custom-remove{
+  justify-content: flex-end;
+}
+
+.custom-ramen-pics{
+  object-fit: contain !important;
+}
+
 #menu-list-container {
   display: flex;
   justify-content: flex-start;
@@ -279,6 +291,7 @@
   background-color: rgba(0, 0, 0, 0.5);
   /* box-shadow: 0 0 1px rgba(255, 255, 255, 1); */
 }
+
 
 @media screen and (max-width: 1650px) {
   .basket-no {

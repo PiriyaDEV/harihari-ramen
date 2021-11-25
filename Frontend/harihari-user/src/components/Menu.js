@@ -18,6 +18,10 @@ import "../css/element/languageBtn.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 
+//Custom Ramen Mockup
+import MockupRamen from "../images/Custom Ramen Pic/mockup.png";
+import WoodenTable from "../images/Custom Ramen Pic/woodentable.png";
+
 export default function Menu() {
   const { t, i18n } = useTranslation();
   const { id, lgs } = useParams();
@@ -31,8 +35,12 @@ export default function Menu() {
   const [orderToggle, setOrderToggle] = useState(false);
   const [custom, setCustom] = useState(false);
   const [mbBasket, setmbBasket] = useState(false);
+  const [menuRamen, setMenuRamen] = useState("");
   const [storedItems, setStoreItems] = useState(
     JSON.parse(localStorage.getItem("items"))
+  );
+  const [storedCustom, setStoreCustom] = useState(
+    JSON.parse(localStorage.getItem("customRamen"))
   );
 
   useEffect(() => {
@@ -43,6 +51,17 @@ export default function Menu() {
     setLg(" " + lgs);
     getMainMenu();
   }, [i18n, lgs, link, id]);
+
+  useEffect(() => {
+    const getDataRamen = async () => {
+      await menuService.customRamen().then((data) => {
+        setMenuRamen(data);
+      });
+    };
+    if (!menuRamen) {
+      getDataRamen();
+    }
+  }, [menuRamen]);
 
   useLayoutEffect(() => {
     setMainMenu(tempMenu.filter((menu) => menu.en.category === "Appetizer"));
@@ -110,6 +129,7 @@ export default function Menu() {
     setMenuClick(false);
     var tempLocal = [];
     let found = false;
+
     tempLocal = JSON.parse(localStorage.getItem("items")) || [];
 
     for (let i = 0; i < tempLocal.length; i++) {
@@ -140,36 +160,66 @@ export default function Menu() {
     await setSearchMenu("");
   };
 
-  const RemoveBasket = (menu) => {
+  const RemoveBasket = (index, item) => {
     var tempLocal = [];
-    setStoreItems(JSON.parse(localStorage.getItem("items")));
-    tempLocal = JSON.parse(localStorage.getItem("items")) || [];
-    for (let i = 0; i < tempLocal.length; i++) {
-      if (menu.product_id === tempLocal[i].product_id) {
-        tempLocal.splice(i, 1);
-        localStorage.setItem("items", JSON.stringify(tempLocal));
-        setStoreItems(tempLocal);
-        break;
-      }
+    if (item === "items") {
+      setStoreItems(JSON.parse(localStorage.getItem(item)));
+    } else {
+      setStoreCustom(JSON.parse(localStorage.getItem(item)));
+    }
+    tempLocal = JSON.parse(localStorage.getItem(item)) || [];
+    if (item === "items") {
+      tempLocal.splice(index, 1);
+      localStorage.setItem(item, JSON.stringify(tempLocal));
+      setStoreItems(tempLocal);
+    } else {
+      tempLocal.splice(index, 1);
+      localStorage.setItem(item, JSON.stringify(tempLocal));
+      setStoreCustom(tempLocal);
     }
   };
 
   const subTotal = () => {
     var tempLocal = [];
+    var tempCustom = [];
     tempLocal = JSON.parse(localStorage.getItem("items")) || [];
+    tempCustom = JSON.parse(localStorage.getItem("customRamen")) || [];
     var tempSum = 0;
     for (let i = 0; i < tempLocal.length; i++) {
       tempSum = tempSum + tempLocal[i].quantity * tempLocal[i].price;
     }
+    for (let i = 0; i < tempCustom.length; i++) {
+      tempSum = tempSum + tempCustom[i].quantity * tempCustom[i].price;
+    }
+
     return tempSum;
   };
 
+  function returnCustom(id) {
+    for (let i = 0; i < menuRamen.length; i++) {
+      if (parseInt(id) === menuRamen[i].choice_id) {
+        if (lgs === "en") {
+          return menuRamen[i].en.name;
+        } else if (lgs === "th") {
+          return menuRamen[i].th.name;
+        } else {
+          return menuRamen[i].jp.name;
+        }
+      }
+    }
+  }
+
   const totalOrder = () => {
     var tempLocal = [];
+    var tempCustom = "";
     tempLocal = JSON.parse(localStorage.getItem("items")) || [];
+    tempCustom = JSON.parse(localStorage.getItem("customRamen")) || [];
     var tempOrder = 0;
     for (let i = 0; i < tempLocal.length; i++) {
       tempOrder = tempOrder + tempLocal[i].quantity;
+    }
+    for (let i = 0; i < tempCustom.length; i++) {
+      tempOrder = tempOrder + tempCustom[i].quantity;
     }
     return tempOrder;
   };
@@ -189,7 +239,12 @@ export default function Menu() {
   return (
     <div>
       {orderToggle === true && (
-        <ConfirmPopup cancel={orderClick} menuOrder={storedItems} page="menu" />
+        <ConfirmPopup
+          cancel={orderClick}
+          menuOrder={storedItems}
+          menuCustom={storedCustom}
+          page="menu"
+        />
       )}
       {menuClick === true && (
         <DetailPopup menu={searchMenu} back={backMenu} addItem={AddBasket} />
@@ -210,7 +265,9 @@ export default function Menu() {
             </div>
 
             <div
-              className={`section basket-header ${mbBasket === false ? "mb-basket" : null}`}
+              className={`section basket-header ${
+                mbBasket === false ? "mb-basket" : null
+              }`}
             >
               <FontAwesomeIcon
                 icon={faChevronLeft}
@@ -296,8 +353,11 @@ export default function Menu() {
                     className="menu-box"
                   >
                     <img
-                      className="menu-pics"
-                      src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Shoyu_ramen%2C_at_Kasukabe_Station_%282014.05.05%29_1.jpg/1200px-Shoyu_ramen%2C_at_Kasukabe_Station_%282014.05.05%29_1.jpg"
+                      className="menu-pics custom-ramen-pics"
+                      style={{
+                        backgroundImage: `url(${WoodenTable})`,
+                      }}
+                      src={MockupRamen}
                       alt=""
                       // onClick={() => findMenu(mainMenu[i])}
                     ></img>
@@ -314,7 +374,7 @@ export default function Menu() {
                         >
                           Custom Ramen
                         </h1>
-                        <h1 className="bracket menu-price k2d">฿ 290.00</h1>
+                        <h1 className="bracket menu-price k2d">฿ 169.00</h1>
                       </div>
                     </div>
                   </div>
@@ -365,7 +425,13 @@ export default function Menu() {
                 id="basket-container"
                 className={`${mbBasket === false ? "mb-basket" : null}`}
               >
-                <h1 className={`md-text ${mbBasket === true ? "mb-basket" : null}` + lg}>{t("basket.yourBasket")}</h1>
+                <h1
+                  className={
+                    `md-text ${mbBasket === true ? "mb-basket" : null}` + lg
+                  }
+                >
+                  {t("basket.yourBasket")}
+                </h1>
                 <div id="basket-item-box">
                   {storedItems !== null &&
                     storedItems.map((x, i) => (
@@ -403,7 +469,7 @@ export default function Menu() {
                           <div className="section basket-edit">
                             <h1
                               className={"xm-text bracket-edit" + lg}
-                              onClick={() => RemoveBasket(storedItems[i])}
+                              onClick={() => RemoveBasket(i, "items")}
                             >
                               {t("basket.delete")}
                             </h1>
@@ -413,6 +479,56 @@ export default function Menu() {
                               onClick={() => findMenu(storedItems[i])}
                             >
                               {t("basket.edit")}
+                            </h1>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+
+                  {storedCustom !== null &&
+                    storedCustom.map((x, i) => (
+                      <div className="basket-item" key={i}>
+                        <div className="basket-name">
+                          <h1 className="md-text basket-no">
+                            X{storedCustom[i].quantity}
+                          </h1>
+                          <div>
+                            <h1 className={"sm-text menu-name" + lg}>
+                              {lgs === "th" && <span>ราเมงตามใจท่าน</span>}
+                              {lgs === "en" && <span>Custom Ramen</span>}
+                              {lgs === "jp" && <span>Japanese Name</span>}
+                            </h1>
+                            {storedCustom[i].comment !== null && (
+                              <h1 className="bracket">
+                                {storedCustom[i].comment}
+                              </h1>
+                            )}
+                            {storedCustom[i] !== null && (
+                              <h1 className="xm-text custom-gray">
+                                {returnCustom(storedCustom[i].soup_type)},
+                                {returnCustom(storedCustom[i].noodle)},
+                                {returnCustom(storedCustom[i].spring_onion)},
+                                {returnCustom(storedCustom[i].garlic)},
+                                {returnCustom(storedCustom[i].spice)},
+                                {returnCustom(storedCustom[i].chashu)},
+                                {returnCustom(storedCustom[i].richness)}
+                              </h1>
+                            )}
+                          </div>
+                        </div>
+
+                        <div>
+                          <h1 className="sm-text k2d basket-price">
+                            {(
+                              storedCustom[i].price * storedCustom[i].quantity
+                            ).toFixed(2)}
+                          </h1>
+                          <div className="section basket-edit custom-remove">
+                            <h1
+                              className={"xm-text bracket-edit" + lg}
+                              onClick={() => RemoveBasket(i, "customRamen")}
+                            >
+                              {t("basket.delete")}
                             </h1>
                           </div>
                         </div>
@@ -453,7 +569,13 @@ export default function Menu() {
                     )}
                   </h1>
                 </div>
-                <div id="basket-mb-box" onClick={() => setmbBasket(true)}>
+                <div
+                  id="basket-mb-box"
+                  onClick={() => {
+                    setmbBasket(true);
+                    setOrderToggle(true);
+                  }}
+                >
                   <h1 className={"md-text" + lg}>Basket</h1>
                   <h1 className={"bracket" + lg}>
                     {storedItems !== null ? (

@@ -107,12 +107,13 @@ export default function Home() {
 
   useLayoutEffect(() => {
     if (orderHistory.length > 0) {
-      let lastestOrder = orderHistory[0];
+
+      let oldestOrder = orderHistory[0];
       //Status Order: 0 is Order, 1 is Received Order, 2 is Prepare, 3 is Served
-      if (lastestOrder.status === "ordered") setWidth(0);
-      else if (lastestOrder.status === "received") setWidth(1);
-      else if (lastestOrder.status === "preparing") setWidth(2);
-      else if (lastestOrder.status === "serving") setWidth(3);
+      if (oldestOrder.status === "ordered") setWidth(0);
+      else if (oldestOrder.status === "received") setWidth(1);
+      else if (oldestOrder.status === "preparing") setWidth(2);
+      else if (oldestOrder.status === "serving") setWidth(3);
     } else {
       setWidth(-1);
     }

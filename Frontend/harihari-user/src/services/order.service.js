@@ -1,11 +1,11 @@
 import http from "../http-common";
 
 export default new (class OrderService {
-  async createOrder(menu, uid) {
+  async createOrder(menu, menuCustom, uid) {
     return await http
       .post(
         "/order/create",
-        { info: menu },
+        { info: menu, custom: menuCustom },
         { headers: { "x-access-token": uid } }
       )
       .then((response) => {

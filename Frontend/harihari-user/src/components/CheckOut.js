@@ -57,10 +57,17 @@ export default function CheckOut() {
     }
   }
 
-  const subTotal = (order) => {
+  const subTotal = (order, custom) => {
     var tempSum = 0;
-    for (let i = 0; i < order.length; i++) {
-      tempSum = tempSum + order[i].quantity * order[i].price;
+    if (order) {
+      for (let i = 0; i < order.length; i++) {
+        tempSum = tempSum + order[i].quantity * order[i].price;
+      }
+    }
+    if (custom) {
+      for (let i = 0; i < custom.length; i++) {
+        tempSum = tempSum + custom[i].quantity * custom[i].price;
+      }
     }
     return tempSum;
   };
@@ -150,6 +157,56 @@ export default function CheckOut() {
                       </div>
                     </div>
                   ))}
+
+                {checkOut.bill &&
+                  checkOut.bill.custom.map((element, i) => (
+                    <div className="history-menu" key={i}>
+                      <div className="basket-name">
+                        <h1 className="md-text basket-no">
+                          X{element.quantity}
+                        </h1>
+                        <div>
+                          <h1 className={"sm-text menu-name" + lg}>
+                            {lgs === "th" && <span>ราเมงตามใจท่าน</span>}
+                            {lgs === "en" && <span>Custom Ramen</span>}
+                            {lgs === "jp" && <span>Japanese Name</span>}
+                          </h1>
+                          <h1 className="bracket">{element.comment}</h1>
+                          {element !== null && (
+                            <h1 className="xm-text custom-gray">
+                              {lgs === "en" ? (
+                                <span>
+                                  {element.en.soup_type},{element.en.noodle},
+                                  {element.en.spring_onion},{element.en.garlic},
+                                  {element.en.spice},{element.en.chashu},
+                                  {element.en.richness}
+                                </span>
+                              ) : lgs === "th" ? (
+                                <span>
+                                  {element.th.soup_type},{element.th.noodle},
+                                  {element.th.spring_onion},{element.th.garlic},
+                                  {element.th.spice},{element.th.chashu},
+                                  {element.th.richness}
+                                </span>
+                              ) : (
+                                <span>
+                                  {element.jp.soup_type},{element.jp.noodle},
+                                  {element.jp.spring_onion},{element.jp.garlic},
+                                  {element.jp.spice},{element.jp.chashu},
+                                  {element.jp.richness}
+                                </span>
+                              )}
+                            </h1>
+                          )}
+                        </div>
+                      </div>
+                      <div>
+                        <h1 className="sm-text k2d">
+                          {element.price.toFixed(2)}
+                        </h1>
+                      </div>
+                    </div>
+                  ))}
               </div>
 
               <div>
@@ -160,7 +217,10 @@ export default function CheckOut() {
                   </h1>
                   {checkOut && (
                     <h1 className="sm-text k2d">
-                      {subTotal(checkOut.bill.items).toFixed(2)}
+                      {subTotal(
+                        checkOut.bill.items,
+                        checkOut.bill.custom
+                      ).toFixed(2)}
                     </h1>
                   )}
                 </div>
@@ -170,7 +230,10 @@ export default function CheckOut() {
                   </h1>
                   {checkOut && (
                     <h1 className="sm-text k2d">
-                      {(subTotal(checkOut.bill.items) * 0.07).toFixed(2)}
+                      {(
+                        subTotal(checkOut.bill.items, checkOut.bill.custom) *
+                        0.07
+                      ).toFixed(2)}
                     </h1>
                   )}
                 </div>
@@ -185,8 +248,15 @@ export default function CheckOut() {
                         ฿{" "}
                         {numberWithCommas(
                           (
-                            subTotal(checkOut.bill.items) +
-                            subTotal(checkOut.bill.items) * 0.07
+                            subTotal(
+                              checkOut.bill.items,
+                              checkOut.bill.custom
+                            ) +
+                            subTotal(
+                              checkOut.bill.items,
+                              checkOut.bill.custom
+                            ) *
+                              0.07
                           ).toFixed(2)
                         )}
                       </h1>

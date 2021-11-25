@@ -74,10 +74,19 @@ export default function History() {
       .then((data) => setOrderHistory(data));
   };
 
-  const subTotal = (order) => {
+  console.log(orderHistory);
+
+  const subTotal = (order, custom) => {
     var tempSum = 0;
-    for (let i = 0; i < order.length; i++) {
-      tempSum = tempSum + order[i].quantity * order[i].price;
+    if (order) {
+      for (let i = 0; i < order.length; i++) {
+        tempSum = tempSum + order[i].quantity * order[i].price;
+      }
+    }
+    if (custom) {
+      for (let i = 0; i < custom.length; i++) {
+        tempSum = tempSum + custom[i].quantity * custom[i].price;
+      }
     }
     return tempSum;
   };
@@ -154,8 +163,8 @@ export default function History() {
                       <h1 className="sm-text k2d history-price">
                         ฿{" "}
                         {(
-                          subTotal(history.menus) +
-                          subTotal(history.menus) * 0.07
+                          subTotal(history.menus, history.custom) +
+                          subTotal(history.menus, history.custom) * 0.07
                         ).toFixed(2)}
                       </h1>
                     </div>
@@ -198,6 +207,63 @@ export default function History() {
                               </div>
                             </div>
                           ))}
+                        {history &&
+                          history.custom.map((element, i) => (
+                            <div className="history-menu" key={i}>
+                              <div className="basket-name">
+                                <h1 className="md-text basket-no">
+                                  X{element.quantity}
+                                </h1>
+                                <div>
+                                  <h1 className={"sm-text menu-name" + lg}>
+                                    {lgs === "th" && (
+                                      <span>ราเมงตามใจท่าน</span>
+                                    )}
+                                    {lgs === "en" && <span>Custom Ramen</span>}
+                                    {lgs === "jp" && <span>Japanese Name</span>}
+                                  </h1>
+                                  <h1 className="bracket">{element.comment}</h1>
+                                  {element !== null && (
+                                    <h1 className="xm-text custom-gray">
+                                      {lgs === "en" ? (
+                                        <span>
+                                          {element.en.soup_type},
+                                          {element.en.noodle},
+                                          {element.en.spring_onion},
+                                          {element.en.garlic},{element.en.spice}
+                                          ,{element.en.chashu},
+                                          {element.en.richness}
+                                        </span>
+                                      ) : lgs === "th" ? (
+                                        <span>
+                                          {element.th.soup_type},
+                                          {element.th.noodle},
+                                          {element.th.spring_onion},
+                                          {element.th.garlic},{element.th.spice}
+                                          ,{element.th.chashu},
+                                          {element.th.richness}
+                                        </span>
+                                      ) : (
+                                        <span>
+                                          {element.jp.soup_type},
+                                          {element.jp.noodle},
+                                          {element.jp.spring_onion},
+                                          {element.jp.garlic},{element.jp.spice}
+                                          ,{element.jp.chashu},
+                                          {element.jp.richness}
+                                        </span>
+                                      )}
+                                    </h1>
+                                  )}
+                                </div>
+                              </div>
+                              <div>
+                                <h1 className="sm-text k2d">
+                                  {element.price.toFixed(2)}
+                                </h1>
+                              </div>
+                            </div>
+                          ))}
                       </div>
                       <hr className="hr-black"></hr>
                       <div className="history-price-menu">
@@ -206,7 +272,7 @@ export default function History() {
                         </h1>
                         {history && (
                           <h1 className="sm-text k2d">
-                            {subTotal(history.menus).toFixed(2)}
+                            {subTotal(history.menus, history.custom).toFixed(2)}
                           </h1>
                         )}
                       </div>
@@ -216,7 +282,9 @@ export default function History() {
                         </h1>
                         {history && (
                           <h1 className="sm-text k2d">
-                            {(subTotal(history.menus) * 0.07).toFixed(2)}
+                            {(
+                              subTotal(history.menus, history.custom) * 0.07
+                            ).toFixed(2)}
                           </h1>
                         )}
                       </div>
@@ -228,8 +296,8 @@ export default function History() {
                           <h1 className="sm-text k2d">
                             ฿{" "}
                             {(
-                              subTotal(history.menus) +
-                              subTotal(history.menus) * 0.07
+                              subTotal(history.menus, history.custom) +
+                              subTotal(history.menus, history.custom) * 0.07
                             ).toFixed(2)}
                           </h1>
                         )}

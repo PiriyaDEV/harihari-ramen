@@ -394,6 +394,10 @@
   padding: 3px 10px;
 }
 
+.gray-text{
+  color: #8e8e8e !important;
+}
+
 .fa-info {
   margin-top: 5px;
   cursor: pointer;
@@ -479,7 +483,7 @@
 
 @media screen and (max-width: 1100px) {
   #table-clr-section {
-    max-height: 70px;
+    max-height: 110px;
   }
 
   .mainpage-container {

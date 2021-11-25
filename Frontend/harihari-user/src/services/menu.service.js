@@ -11,7 +11,7 @@ export default new (class MenuService {
         return error.response;
       });
   }
-  async customRamen(value) {
+  async customRamen() {
     return await http
       .get("/menu/customRamen")
       .then((response) => {
