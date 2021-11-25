@@ -10,12 +10,14 @@ exports.summary = async (req, res) => {
     let billResult = await Bill.getLatestBillByTable(bill);
 
     let billSummary = await Bill.getBillSummary(billResult);
+    let billCustomSummary = await Bill.getBillCustomSummary(billResult);
 
     return res.status(200).json({
       bill: {
         uid: billResult.uid,
-        items: billSummary
-      }
+        items: billSummary,
+        custom: billCustomSummary,
+      },
     });
   } catch (error) {
     return res.status(500).json({

@@ -19,11 +19,9 @@ async function addCustomRamen(customs, infoArr, orderResult) {
         spice: custom.spice,
         chashu: custom.chashu,
         richness: custom.richness,
-        grease: custom.grease,
       };
 
       let customCreateResult = await Order.createCustomRamen(newCustomRamen);
-
       ramen_id = customCreateResult.ramen_id;
     }
 
@@ -82,7 +80,6 @@ exports.create = async (req, res) => {
 
     let orderMenuResult = await Order.createOrderMenu(infoArr);
 
-    //fix query to compatiable with the old subtotal
     let newSubtotal = await Order.getSubtotalByOrder(orderResult);
 
     let updateBill = {
@@ -90,6 +87,17 @@ exports.create = async (req, res) => {
       subtotal: Number(billResult.subtotal) + Number(newSubtotal),
     };
     await Bill.update(updateBill);
+
+    let result = await Order.getOrderHistory(billResult);
+
+    const socket = socketIO.getSocket();
+    const room_id = table.guest_uid;
+
+    socket.of("/harihari-staff").to("staff").emit("order-status", {
+      table_id: table.table_id,
+      orders: result,
+    });
+    socket.of("/harihari-customer").to(room_id).emit("order-history", result);
 
     return res.status(201).json({
       success: true,
@@ -113,6 +121,10 @@ exports.getOrderHistory = async (req, res) => {
 
   try {
     let billResult = await Bill.getLatestBillByTable(bill);
+
+    if (!billResult.isFound) {
+      return res.status(200).json([]);
+    }
 
     let order = {
       bill_id: billResult.bill_id,

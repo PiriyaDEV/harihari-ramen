@@ -159,6 +159,7 @@ exports.checkout = async (req, res) => {
     await Table.update(updateTable);
 
     let billSummary = await Bill.getBillSummary(billResult);
+    let billCustomSummary = await Bill.getBillCustomSummary(billResult);
 
     return res.status(200).json({
       success: true,
@@ -168,6 +169,7 @@ exports.checkout = async (req, res) => {
         uid: billResult.uid,
         checkout_at: updateBill.checkout_at,
         items: billSummary,
+        custom: billCustomSummary,
       },
     });
   } catch (error) {

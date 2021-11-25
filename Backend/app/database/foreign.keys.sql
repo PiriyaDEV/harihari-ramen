@@ -39,8 +39,6 @@ ALTER TABLE custom_ramens
   ADD FOREIGN KEY (chashu)  REFERENCES ramen_choices(choice_id)
     ON UPDATE CASCADE ON DELETE CASCADE,
   ADD FOREIGN KEY (richness)  REFERENCES ramen_choices(choice_id)
-    ON UPDATE CASCADE ON DELETE CASCADE,
-  ADD FOREIGN KEY (grease)  REFERENCES ramen_choices(choice_id)
     ON UPDATE CASCADE ON DELETE CASCADE;
 
 -- Add Foreign Key To Info_ramen_choices Table

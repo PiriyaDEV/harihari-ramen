@@ -42,7 +42,7 @@ server.listen(PORT, () => {
   logger.info(`Hari Hari Ramen's API server is running on port ${PORT}.`);
 });
 
-// initial socket module
+// initialize socket module
 require("./app/sockets/index").initialize(server, corsOptions);
 
 // handle 404 requests

@@ -84,12 +84,11 @@ CREATE TABLE IF NOT EXISTS custom_ramens(
   spice                   INT             NOT NULL,
   chashu                  INT             NOT NULL,
   richness                INT             NOT NULL,
-  grease                  INT             NOT NULL,
   status                  BOOLEAN         NOT NULL,
   created_at              BIGINT          NOT NULL,
   updated_at              BIGINT          NOT NULL,
   PRIMARY KEY (ramen_id),
-  UNIQUE (soup_type, noodle, spring_onion, garlic, spice, chashu, richness, grease)
+  UNIQUE (soup_type, noodle, spring_onion, garlic, spice, chashu, richness)
 );
 
 -- Create Ramen_choices Table
