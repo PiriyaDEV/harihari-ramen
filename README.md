@@ -1,6 +1,6 @@
 # Hari Hari Ramen
 
-<img src="Frontend/harihari-user/src/images/Full Logo.png"/>
+<img style="width:200px;" src="Frontend/harihari-user/src/images/Full Logo.png"/>
 
 Hari Hari Ramen is a restaurant that offers a social distancing ordering system at the restaurant. We aim to make contact between customers and our staff as little as possible. Hari Hari Ramen Web Application can be accessed via a QR Code at each table, and the customer can order the food using the web application, view order status and order history, call the waiter, and checkout. 
 
