@@ -1,3 +1,5 @@
+-- Data For Info Ramen Choice Table --
+
 INSERT INTO `info_ramen_choices` (`choice_id`, `language`, `name`, `category`, `description`, `status`, `created_at`, `updated_at`) VALUES
 (1, 'en', 'Shoyu Ramen', 'Broth', 'Clear broth made from chicken, pork bone, bonito, or kombu seaweed.', 1, 1637836882425, 1637836882425),
 (1, 'jp', '醤油ラーメン', 'スープ', '鶏肉、豚骨、かつお、昆布の透明なスープ。', 1, 1637836882425, 1637836882425),

@@ -1,6 +1,7 @@
 const sql = require("../database/connection");
 const logger = require("../../lib/logger/index");
 
+// function using for creating new table
 exports.create = async (table) => {
   table.reserve = false;
   table.call_waiter = false;
@@ -16,10 +17,12 @@ exports.create = async (table) => {
     );
     return { table_id: result.insertId, ...table };
   } catch (error) {
+    // if query error
     logger.error(error);
   }
 };
 
+// function for updating table
 exports.update = async (table) => {
   table.updated_at = Date.now();
 
@@ -31,10 +34,12 @@ exports.update = async (table) => {
 
     logger.info(`Updated table >>> id: ${table.table_id}`);
   } catch (error) {
+    // if query error
     logger.error(error);
   }
 };
 
+// function that use to find the existing table
 exports.find = async (table) => {
   try {
     const [result, fields] = await sql.query(
@@ -42,18 +47,23 @@ exports.find = async (table) => {
       table
     );
 
+    // found data
     if (result.length) {
       logger.info(`Found table >>> id: ${result[0].table_id}`);
       return { isFound: true, ...result[0] };
-    } else {
+    }
+    // not found data
+    else {
       logger.info(`Not found table >>> id: ${table.guest_uid}`);
       return { isFound: false };
     }
   } catch (error) {
+    // if query error
     logger.error(error);
   }
 };
 
+// function that query all tables in the database
 exports.getTables = async (result) => {
   try {
     const [result, fields] = await sql.query(
@@ -63,6 +73,7 @@ exports.getTables = async (result) => {
     logger.info(`Selected ${result.length} table(s)`);
     return result;
   } catch (error) {
+    // if query error
     logger.error(error);
   }
 };

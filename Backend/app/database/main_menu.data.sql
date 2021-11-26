@@ -1,3 +1,5 @@
+-- Data For Main Menu Table --
+
 INSERT INTO `main_menus` (`product_id`, `image_url`, `price`, `status`, `created_at`, `updated_at`) VALUES
 (NULL, '/images/menus/1637853454028-Karaage.jpeg', 79.00, 1, 1637853454061, 1637853454061),
 (NULL, '/images/menus/1637853559495-SpicyChashuSalad.jpeg', 119.00, 1, 1637853559566, 1637853559566),
@@ -16,4 +18,16 @@ INSERT INTO `main_menus` (`product_id`, `image_url`, `price`, `status`, `created
 (NULL, '/images/menus/1637855860174-Greentea.jpeg', 29.00, 1, 1637855860178, 1637855860178),
 (NULL, '/images/menus/1637855941581-Coke.jpeg', 25.00, 1, 1637855941595, 1637855941595),
 (NULL, '/images/menus/1637856006782-Cokezero.jpeg', 25.00, 1, 1637856006790, 1637856006790),
-(NULL, '/images/menus/1637856070267-Water.jpeg', 10.00, 1, 1637856070272, 1637856070272);
+(NULL, '/images/menus/1637856070267-Water.jpeg', 10.00, 1, 1637856070272, 1637856070272),
+(NULL, '/images/menus/1637883096001-Lean_Chashu.png', 29.00, 1, 1637883096056, 1637883096056),
+(NULL, '/images/menus/1637883301085-Fatty_Chashu.png', 29.00, 1, 1637883301126, 1637883301126),
+(NULL, '/images/menus/1637883406182-Spring_Onion.png', 5.00, 1, 1637883406218, 1637883406218),
+(NULL, '/images/menus/1637884095911-Boiled_Egg.jpg', 10.00, 1, 1637884095926, 1637884095926),
+(NULL, '/images/menus/1637884198895-Jewear_mushroom.jpg', 15.00, 1, 1637884198912, 1637884198912),
+(NULL, '/images/menus/1637884296476-Seaweed.jpg', 10.00, 1, 1637884296491, 1637884296491),
+(NULL, '/images/menus/1637884382593-Noodle.png', 15.00, 1, 1637884382696, 1637884382696),
+(NULL, '/images/menus/1637884462022-Soup.png', 10.00, 1, 1637884462112, 1637884462112),
+(NULL, '/images/menus/1637884701352-Tsukemen.jpeg', 185.00, 1, 1637884701367, 1637884701367),
+(NULL, '/images/menus/1637884800100-TomYamKung.jpeg', 219.00, 1, 1637884800117, 1637884800117),
+(NULL, '/images/menus/1637884963622-Zaru_Ramen.png', 98.00, 1, 1637884963641, 1637884963641),
+(NULL, '/images/menus/1637885066320-Tantummen.jpeg', 139.00, 1, 1637885066329, 1637885066329);

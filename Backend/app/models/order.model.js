@@ -1,6 +1,7 @@
 const sql = require("../database/connection");
 const logger = require("../../lib/logger/index");
 
+// function that create order
 exports.createOrder = async (order) => {
   order.status = "ordered";
   order.created_at = Date.now();
@@ -14,10 +15,12 @@ exports.createOrder = async (order) => {
     );
     return { order_id: result.insertId, ...order };
   } catch (error) {
+    // if query error
     logger.error(error);
   }
 };
 
+// function that update order
 exports.updateOrder = async (order) => {
   order.updated_at = Date.now();
 
@@ -29,10 +32,12 @@ exports.updateOrder = async (order) => {
 
     logger.info(`Updated order >>> id: ${order.order_id}`);
   } catch (error) {
+    // if query error
     logger.error(error);
   }
 };
 
+// function that create menu for the order
 exports.createOrderMenu = async (info) => {
   try {
     const [result, fields] = await sql.query(
@@ -60,10 +65,12 @@ exports.createOrderMenu = async (info) => {
       inserted: result.affectedRows,
     };
   } catch (error) {
+    // if query error
     logger.error(error);
   }
 };
 
+// function that create menu for the custom ramen
 exports.createCustomRamen = async (custom) => {
   custom.status = true;
   custom.created_at = Date.now();
@@ -83,10 +90,12 @@ exports.createCustomRamen = async (custom) => {
       ...custom,
     };
   } catch (error) {
+    // if query error
     logger.error(error);
   }
 };
 
+// function that query for specific ramen choice
 exports.findCustomRamen = async (custom) => {
   try {
     const [result, fields] = await sql.query(
@@ -105,18 +114,23 @@ exports.findCustomRamen = async (custom) => {
       custom
     );
 
+    // found data
     if (result.length) {
       logger.info(`Found ramen >>> id: ${result[0].ramen_id}`);
       return { isFound: true, ...result[0] };
-    } else {
+    }
+    // not found data
+    else {
       logger.info(`Not found ramen`);
       return { isFound: false };
     }
   } catch (error) {
+    // if query error
     logger.error(error);
   }
 };
 
+// function that get subtotal of that specific order
 exports.getSubtotalByOrder = async (order) => {
   try {
     const [result, fields] = await sql.query(
@@ -137,10 +151,12 @@ exports.getSubtotalByOrder = async (order) => {
 
     return result[0].subtotal;
   } catch (error) {
+    // if query error
     logger.error(error);
   }
 };
 
+// function that will get order history of that order
 exports.getOrderHistory = async (order) => {
   try {
     const [result, fields] = await sql.query(
@@ -148,343 +164,350 @@ exports.getOrderHistory = async (order) => {
         O.order_id,
         O.status,
         O.created_at,
-        (
-          SELECT
-            JSON_ARRAYAGG(
-              JSON_OBJECT(
-                'product_id',
-                OM.product_id,
-                'price',
-                MM.price,
-                'quantity',
-                OM.quantity,
-                'comment',
-                OM.comment,
-                'en',
-                (
-                  SELECT
-                    IMM.name
-                  FROM
-                    info_main_menus IMM
-                  WHERE
-                    IMM.product_id = OM.product_id
-                    AND IMM.language = 'en'
-                    AND IMM.status = 1
-                ),
-                'jp',
-                (
-                  SELECT
-                    IMM.name
-                  FROM
-                    info_main_menus IMM
-                  WHERE
-                    IMM.product_id = OM.product_id
-                    AND IMM.language = 'jp'
-                    AND IMM.status = 1
-                ),
-                'th',
-                (
-                  SELECT
-                    IMM.name
-                  FROM
-                    info_main_menus IMM
-                  WHERE
-                    IMM.product_id = OM.product_id
-                    AND IMM.language = 'th'
-                    AND IMM.status = 1
+        IFNULL(
+          (
+            SELECT
+              JSON_ARRAYAGG(
+                JSON_OBJECT(
+                  'product_id',
+                  OM.product_id,
+                  'price',
+                  MM.price,
+                  'quantity',
+                  OM.quantity,
+                  'comment',
+                  OM.comment,
+                  'en',
+                  (
+                    SELECT
+                      IMM.name
+                    FROM
+                      info_main_menus IMM
+                    WHERE
+                      IMM.product_id = OM.product_id
+                      AND IMM.language = 'en'
+                      AND IMM.status = 1
+                  ),
+                  'jp',
+                  (
+                    SELECT
+                      IMM.name
+                    FROM
+                      info_main_menus IMM
+                    WHERE
+                      IMM.product_id = OM.product_id
+                      AND IMM.language = 'jp'
+                      AND IMM.status = 1
+                  ),
+                  'th',
+                  (
+                    SELECT
+                      IMM.name
+                    FROM
+                      info_main_menus IMM
+                    WHERE
+                      IMM.product_id = OM.product_id
+                      AND IMM.language = 'th'
+                      AND IMM.status = 1
+                  )
                 )
               )
-            )
-          FROM
-            order_menus OM
-            LEFT JOIN main_menus MM ON OM.product_id = MM.product_id
-          WHERE
-            OM.order_id = O.order_id
-            AND OM.status = 1
-            AND OM.product_id IS NOT NULL
-        ) AS menus,
-        (
-          SELECT
-            JSON_ARRAYAGG(
-              JSON_OBJECT(
-                'ramen_id',
-                OM.ramen_id,
-                'price',
-                CR.price,
-                'quantity',
-                OM.quantity,
-                'comment',
-                OM.comment,
-                'en',
-                (
-                  SELECT
-                    JSON_OBJECT(
-                      'soup_type',
-                      (
-                        SELECT
-                          IRC.name
-                        FROM
-                          info_ramen_choices IRC
-                        WHERE
-                          CR.soup_type = IRC.choice_id
-                          AND IRC.language = 'en'
-                          AND IRC.status = 1
-                      ),
-                      'noodle',
-                      (
-                        SELECT
-                          IRC.name
-                        FROM
-                          info_ramen_choices IRC
-                        WHERE
-                          CR.noodle = IRC.choice_id
-                          AND IRC.language = 'en'
-                          AND IRC.status = 1
-                      ),
-                      'spring_onion',
-                      (
-                        SELECT
-                          IRC.name
-                        FROM
-                          info_ramen_choices IRC
-                        WHERE
-                          CR.spring_onion = IRC.choice_id
-                          AND IRC.language = 'en'
-                          AND IRC.status = 1
-                      ),
-                      'garlic',
-                      (
-                        SELECT
-                          IRC.name
-                        FROM
-                          info_ramen_choices IRC
-                        WHERE
-                          CR.garlic = IRC.choice_id
-                          AND IRC.language = 'en'
-                          AND IRC.status = 1
-                      ),
-                      'spice',
-                      (
-                        SELECT
-                          IRC.name
-                        FROM
-                          info_ramen_choices IRC
-                        WHERE
-                          CR.spice = IRC.choice_id
-                          AND IRC.language = 'en'
-                          AND IRC.status = 1
-                      ),
-                      'chashu',
-                      (
-                        SELECT
-                          IRC.name
-                        FROM
-                          info_ramen_choices IRC
-                        WHERE
-                          CR.chashu = IRC.choice_id
-                          AND IRC.language = 'en'
-                          AND IRC.status = 1
-                      ),
-                      'richness',
-                      (
-                        SELECT
-                          IRC.name
-                        FROM
-                          info_ramen_choices IRC
-                        WHERE
-                          CR.richness = IRC.choice_id
-                          AND IRC.language = 'en'
-                          AND IRC.status = 1
+            FROM
+              order_menus OM
+              LEFT JOIN main_menus MM ON OM.product_id = MM.product_id
+            WHERE
+              OM.order_id = O.order_id
+              AND OM.status = 1
+              AND OM.product_id IS NOT NULL
+          ),
+          JSON_ARRAY()
+          ) AS menus,
+        IFNULL(
+          (
+            SELECT
+              JSON_ARRAYAGG(
+                JSON_OBJECT(
+                  'ramen_id',
+                  OM.ramen_id,
+                  'price',
+                  CR.price,
+                  'quantity',
+                  OM.quantity,
+                  'comment',
+                  OM.comment,
+                  'en',
+                  (
+                    SELECT
+                      JSON_OBJECT(
+                        'soup_type',
+                        (
+                          SELECT
+                            IRC.name
+                          FROM
+                            info_ramen_choices IRC
+                          WHERE
+                            CR.soup_type = IRC.choice_id
+                            AND IRC.language = 'en'
+                            AND IRC.status = 1
+                        ),
+                        'noodle',
+                        (
+                          SELECT
+                            IRC.name
+                          FROM
+                            info_ramen_choices IRC
+                          WHERE
+                            CR.noodle = IRC.choice_id
+                            AND IRC.language = 'en'
+                            AND IRC.status = 1
+                        ),
+                        'spring_onion',
+                        (
+                          SELECT
+                            IRC.name
+                          FROM
+                            info_ramen_choices IRC
+                          WHERE
+                            CR.spring_onion = IRC.choice_id
+                            AND IRC.language = 'en'
+                            AND IRC.status = 1
+                        ),
+                        'garlic',
+                        (
+                          SELECT
+                            IRC.name
+                          FROM
+                            info_ramen_choices IRC
+                          WHERE
+                            CR.garlic = IRC.choice_id
+                            AND IRC.language = 'en'
+                            AND IRC.status = 1
+                        ),
+                        'spice',
+                        (
+                          SELECT
+                            IRC.name
+                          FROM
+                            info_ramen_choices IRC
+                          WHERE
+                            CR.spice = IRC.choice_id
+                            AND IRC.language = 'en'
+                            AND IRC.status = 1
+                        ),
+                        'chashu',
+                        (
+                          SELECT
+                            IRC.name
+                          FROM
+                            info_ramen_choices IRC
+                          WHERE
+                            CR.chashu = IRC.choice_id
+                            AND IRC.language = 'en'
+                            AND IRC.status = 1
+                        ),
+                        'richness',
+                        (
+                          SELECT
+                            IRC.name
+                          FROM
+                            info_ramen_choices IRC
+                          WHERE
+                            CR.richness = IRC.choice_id
+                            AND IRC.language = 'en'
+                            AND IRC.status = 1
+                        )
                       )
-                    )
-                ),
-                'jp',
-                (
-                  SELECT
-                    JSON_OBJECT(
-                      'soup_type',
-                      (
-                        SELECT
-                          IRC.name
-                        FROM
-                          info_ramen_choices IRC
-                        WHERE
-                          CR.soup_type = IRC.choice_id
-                          AND IRC.language = 'jp'
-                          AND IRC.status = 1
-                      ),
-                      'noodle',
-                      (
-                        SELECT
-                          IRC.name
-                        FROM
-                          info_ramen_choices IRC
-                        WHERE
-                          CR.noodle = IRC.choice_id
-                          AND IRC.language = 'jp'
-                          AND IRC.status = 1
-                      ),
-                      'spring_onion',
-                      (
-                        SELECT
-                          IRC.name
-                        FROM
-                          info_ramen_choices IRC
-                        WHERE
-                          CR.spring_onion = IRC.choice_id
-                          AND IRC.language = 'jp'
-                          AND IRC.status = 1
-                      ),
-                      'garlic',
-                      (
-                        SELECT
-                          IRC.name
-                        FROM
-                          info_ramen_choices IRC
-                        WHERE
-                          CR.garlic = IRC.choice_id
-                          AND IRC.language = 'jp'
-                          AND IRC.status = 1
-                      ),
-                      'spice',
-                      (
-                        SELECT
-                          IRC.name
-                        FROM
-                          info_ramen_choices IRC
-                        WHERE
-                          CR.spice = IRC.choice_id
-                          AND IRC.language = 'jp'
-                          AND IRC.status = 1
-                      ),
-                      'chashu',
-                      (
-                        SELECT
-                          IRC.name
-                        FROM
-                          info_ramen_choices IRC
-                        WHERE
-                          CR.chashu = IRC.choice_id
-                          AND IRC.language = 'jp'
-                          AND IRC.status = 1
-                      ),
-                      'richness',
-                      (
-                        SELECT
-                          IRC.name
-                        FROM
-                          info_ramen_choices IRC
-                        WHERE
-                          CR.richness = IRC.choice_id
-                          AND IRC.language = 'jp'
-                          AND IRC.status = 1
+                  ),
+                  'jp',
+                  (
+                    SELECT
+                      JSON_OBJECT(
+                        'soup_type',
+                        (
+                          SELECT
+                            IRC.name
+                          FROM
+                            info_ramen_choices IRC
+                          WHERE
+                            CR.soup_type = IRC.choice_id
+                            AND IRC.language = 'jp'
+                            AND IRC.status = 1
+                        ),
+                        'noodle',
+                        (
+                          SELECT
+                            IRC.name
+                          FROM
+                            info_ramen_choices IRC
+                          WHERE
+                            CR.noodle = IRC.choice_id
+                            AND IRC.language = 'jp'
+                            AND IRC.status = 1
+                        ),
+                        'spring_onion',
+                        (
+                          SELECT
+                            IRC.name
+                          FROM
+                            info_ramen_choices IRC
+                          WHERE
+                            CR.spring_onion = IRC.choice_id
+                            AND IRC.language = 'jp'
+                            AND IRC.status = 1
+                        ),
+                        'garlic',
+                        (
+                          SELECT
+                            IRC.name
+                          FROM
+                            info_ramen_choices IRC
+                          WHERE
+                            CR.garlic = IRC.choice_id
+                            AND IRC.language = 'jp'
+                            AND IRC.status = 1
+                        ),
+                        'spice',
+                        (
+                          SELECT
+                            IRC.name
+                          FROM
+                            info_ramen_choices IRC
+                          WHERE
+                            CR.spice = IRC.choice_id
+                            AND IRC.language = 'jp'
+                            AND IRC.status = 1
+                        ),
+                        'chashu',
+                        (
+                          SELECT
+                            IRC.name
+                          FROM
+                            info_ramen_choices IRC
+                          WHERE
+                            CR.chashu = IRC.choice_id
+                            AND IRC.language = 'jp'
+                            AND IRC.status = 1
+                        ),
+                        'richness',
+                        (
+                          SELECT
+                            IRC.name
+                          FROM
+                            info_ramen_choices IRC
+                          WHERE
+                            CR.richness = IRC.choice_id
+                            AND IRC.language = 'jp'
+                            AND IRC.status = 1
+                        )
                       )
-                    )
-                ),
-                'th',
-                (
-                  SELECT
-                    JSON_OBJECT(
-                      'soup_type',
-                      (
-                        SELECT
-                          IRC.name
-                        FROM
-                          info_ramen_choices IRC
-                        WHERE
-                          CR.soup_type = IRC.choice_id
-                          AND IRC.language = 'th'
-                          AND IRC.status = 1
-                      ),
-                      'noodle',
-                      (
-                        SELECT
-                          IRC.name
-                        FROM
-                          info_ramen_choices IRC
-                        WHERE
-                          CR.noodle = IRC.choice_id
-                          AND IRC.language = 'th'
-                          AND IRC.status = 1
-                      ),
-                      'spring_onion',
-                      (
-                        SELECT
-                          IRC.name
-                        FROM
-                          info_ramen_choices IRC
-                        WHERE
-                          CR.spring_onion = IRC.choice_id
-                          AND IRC.language = 'th'
-                          AND IRC.status = 1
-                      ),
-                      'garlic',
-                      (
-                        SELECT
-                          IRC.name
-                        FROM
-                          info_ramen_choices IRC
-                        WHERE
-                          CR.garlic = IRC.choice_id
-                          AND IRC.language = 'th'
-                          AND IRC.status = 1
-                      ),
-                      'spice',
-                      (
-                        SELECT
-                          IRC.name
-                        FROM
-                          info_ramen_choices IRC
-                        WHERE
-                          CR.spice = IRC.choice_id
-                          AND IRC.language = 'th'
-                          AND IRC.status = 1
-                      ),
-                      'chashu',
-                      (
-                        SELECT
-                          IRC.name
-                        FROM
-                          info_ramen_choices IRC
-                        WHERE
-                          CR.chashu = IRC.choice_id
-                          AND IRC.language = 'th'
-                          AND IRC.status = 1
-                      ),
-                      'richness',
-                      (
-                        SELECT
-                          IRC.name
-                        FROM
-                          info_ramen_choices IRC
-                        WHERE
-                          CR.richness = IRC.choice_id
-                          AND IRC.language = 'th'
-                          AND IRC.status = 1
+                  ),
+                  'th',
+                  (
+                    SELECT
+                      JSON_OBJECT(
+                        'soup_type',
+                        (
+                          SELECT
+                            IRC.name
+                          FROM
+                            info_ramen_choices IRC
+                          WHERE
+                            CR.soup_type = IRC.choice_id
+                            AND IRC.language = 'th'
+                            AND IRC.status = 1
+                        ),
+                        'noodle',
+                        (
+                          SELECT
+                            IRC.name
+                          FROM
+                            info_ramen_choices IRC
+                          WHERE
+                            CR.noodle = IRC.choice_id
+                            AND IRC.language = 'th'
+                            AND IRC.status = 1
+                        ),
+                        'spring_onion',
+                        (
+                          SELECT
+                            IRC.name
+                          FROM
+                            info_ramen_choices IRC
+                          WHERE
+                            CR.spring_onion = IRC.choice_id
+                            AND IRC.language = 'th'
+                            AND IRC.status = 1
+                        ),
+                        'garlic',
+                        (
+                          SELECT
+                            IRC.name
+                          FROM
+                            info_ramen_choices IRC
+                          WHERE
+                            CR.garlic = IRC.choice_id
+                            AND IRC.language = 'th'
+                            AND IRC.status = 1
+                        ),
+                        'spice',
+                        (
+                          SELECT
+                            IRC.name
+                          FROM
+                            info_ramen_choices IRC
+                          WHERE
+                            CR.spice = IRC.choice_id
+                            AND IRC.language = 'th'
+                            AND IRC.status = 1
+                        ),
+                        'chashu',
+                        (
+                          SELECT
+                            IRC.name
+                          FROM
+                            info_ramen_choices IRC
+                          WHERE
+                            CR.chashu = IRC.choice_id
+                            AND IRC.language = 'th'
+                            AND IRC.status = 1
+                        ),
+                        'richness',
+                        (
+                          SELECT
+                            IRC.name
+                          FROM
+                            info_ramen_choices IRC
+                          WHERE
+                            CR.richness = IRC.choice_id
+                            AND IRC.language = 'th'
+                            AND IRC.status = 1
+                        )
                       )
-                    )
+                  )
                 )
               )
-              )
-          FROM
-            order_menus OM
-            LEFT JOIN custom_ramens CR ON OM.ramen_id = CR.ramen_id
-          WHERE
-            OM.order_id = O.order_id
-            AND OM.status = 1
-            AND OM.ramen_id IS NOT NULL
-        ) AS custom
+            FROM
+              order_menus OM
+              LEFT JOIN custom_ramens CR ON OM.ramen_id = CR.ramen_id
+            WHERE
+              OM.order_id = O.order_id
+              AND OM.status = 1
+              AND OM.ramen_id IS NOT NULL
+          ),
+          JSON_ARRAY()
+          ) AS custom
         FROM
           Orders O
         WHERE
           O.bill_id = ${order.bill_id}
         ORDER BY
-          O.created_at DESC`
+          O.created_at`
     );
 
     logger.info(`Selected ${result.length} order(s)`);
     return result;
   } catch (error) {
+    // if query error
     logger.error(error);
   }
 };

@@ -1,7 +1,7 @@
 {
   "name": "harihari-ramen-api-server",
   "version": "1.0.0",
-  "description": "Hari Hari Ramen's API Server",
+  "description": "Hari Hari Ramen's API Server and Socket IO",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

@@ -1,6 +1,7 @@
 const sql = require("../database/connection");
 const logger = require("../../lib/logger/index");
 
+// function using for creating new bill
 exports.create = async (bill) => {
   bill.subtotal = 0;
   bill.status = true;
@@ -16,10 +17,12 @@ exports.create = async (bill) => {
     );
     return { bill_id: result.insertId, ...bill };
   } catch (error) {
+    // if query error
     logger.error(error);
   }
 };
 
+// function for updating bill
 exports.update = async (bill) => {
   bill.updated_at = Date.now();
 
@@ -31,10 +34,12 @@ exports.update = async (bill) => {
 
     logger.info(`Updated bill >>> id: ${bill.bill_id}`);
   } catch (error) {
+    // if query error
     logger.error(error);
   }
 };
 
+// function that use for query leastest bill by using table
 exports.getLatestBillByTable = async (bill) => {
   try {
     const [result, fields] = await sql.query(
@@ -46,18 +51,23 @@ exports.getLatestBillByTable = async (bill) => {
         LIMIT 1`
     );
 
+    // found data
     if (result.length) {
       logger.info(`Found bill >>> id: ${result[0].bill_id}`);
       return { isFound: true, ...result[0] };
-    } else {
+    }
+    // not found data
+    else {
       logger.info(`Not found bill >>> id: ${bill.table_id}`);
       return { isFound: false };
     }
   } catch (error) {
+    // if query error
     logger.error(error);
   }
 };
 
+// function that query for summary for that bill (main menus)
 exports.getBillSummary = async (bill) => {
   try {
     const [result, fields] = await sql.query(
@@ -117,10 +127,12 @@ exports.getBillSummary = async (bill) => {
     );
     return result;
   } catch (error) {
+    // if query error
     logger.error(error);
   }
 };
 
+// function that query for summary for that bill (custom ramens)
 exports.getBillCustomSummary = async (bill) => {
   try {
     const [result, fields] = await sql.query(
@@ -395,6 +407,7 @@ exports.getBillCustomSummary = async (bill) => {
     );
     return result;
   } catch (error) {
+    // if query error
     logger.error(error);
   }
 };

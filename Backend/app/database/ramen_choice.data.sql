@@ -1,3 +1,5 @@
+-- Data For Ramen Choice Table --
+
 INSERT INTO `ramen_choices` (`choice_id`, `image_url`, `status`, `created_at`, `updated_at`) VALUES
 (NULL, '/images/choices/1637836882383-Shoyu.png', 1, 1637836882411, 1637836882411),
 (NULL, '/images/choices/1637836919834-Miso.png', 1, 1637836919869, 1637836919869),
