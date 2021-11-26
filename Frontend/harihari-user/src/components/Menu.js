@@ -274,7 +274,7 @@ export default function Menu() {
                 className="menu-header fa"
                 onClick={() => setmbBasket(false)}
               />
-              <h1 className={"menu-header" + lg}>Basket</h1>
+              <h1 className={"menu-header" + lg}>{t("basket.basketText")}</h1>
             </div>
 
             <div id="table-box">
@@ -316,31 +316,31 @@ export default function Menu() {
                   className={checkCategory("Appetizer") + lg}
                   onClick={() => changeCategory("Appetizer")}
                 >
-                  {t("categortyMenu.appetizer")}
+                  {t("categoryMenu.appetizer")}
                 </h1>
                 <h1
                   className={checkCategory("Ramen") + lg}
                   onClick={() => changeCategory("Ramen")}
                 >
-                  {t("categortyMenu.ramen")}
+                  {t("categoryMenu.ramen")}
                 </h1>
                 <h1
                   className={checkCategory("Dessert") + lg}
                   onClick={() => changeCategory("Dessert")}
                 >
-                  {t("categortyMenu.dessert")}
+                  {t("categoryMenu.dessert")}
                 </h1>
                 <h1
                   className={checkCategory("Extra") + lg}
                   onClick={() => changeCategory("Extra")}
                 >
-                  Extra
+                  {t("categoryMenu.extra")}
                 </h1>
                 <h1
                   className={checkCategory("Beverage") + lg}
                   onClick={() => changeCategory("Beverage")}
                 >
-                  {t("categortyMenu.beverage")}
+                  {t("categoryMenu.beverage")}
                 </h1>
               </div>
               <div id="menu-list-container">
@@ -372,7 +372,7 @@ export default function Menu() {
                             // (checkItems(mainMenu[i], i) === true ? " menu-no" : "")
                           }
                         >
-                          Custom Ramen
+                          {t("customRamen.title")}
                         </h1>
                         <h1 className="bracket menu-price k2d">฿ 169.00</h1>
                       </div>
@@ -496,7 +496,7 @@ export default function Menu() {
                             <h1 className={"sm-text menu-name" + lg}>
                               {lgs === "th" && <span>ราเมงตามใจท่าน</span>}
                               {lgs === "en" && <span>Custom Ramen</span>}
-                              {lgs === "jp" && <span>Japanese Name</span>}
+                              {lgs === "jp" && <span>カスタムラーメン</span>}
                             </h1>
                             {storedCustom[i].comment !== null && (
                               <h1 className="bracket">
@@ -569,24 +569,41 @@ export default function Menu() {
                     )}
                   </h1>
                 </div>
-                <div
-                  id="basket-mb-box"
-                  onClick={() => {
-                    setmbBasket(true);
-                    setOrderToggle(true);
-                  }}
-                >
-                  <h1 className={"md-text" + lg}>Basket</h1>
-                  <h1 className={"bracket" + lg}>
-                    {storedItems !== null ? (
-                      <span>
-                        {totalOrder()} {t("basket.item")}
-                      </span>
-                    ) : (
-                      <span>0 {t("basket.item")}</span>
-                    )}
-                  </h1>
-                </div>
+                {mbBasket === false ? (
+                  <div
+                    id="basket-mb-box"
+                    onClick={() => {
+                      setmbBasket(true);
+                    }}
+                  >
+                    <h1 className={"md-text" + lg}>{t("basket.basketText")}</h1>
+                    <h1 className={"bracket" + lg}>
+                      {storedItems !== null ? (
+                        <span>
+                          {totalOrder()} {t("basket.item")}
+                        </span>
+                      ) : (
+                        <span>0 {t("basket.item")}</span>
+                      )}
+                    </h1>
+                  </div>
+                ) : (
+                  <div
+                    id="basket-mb-box"
+                    onClick={() => setOrderToggle(true)}
+                  >
+                    <h1 className={"md-text" + lg}>{t("basket.order")}</h1>
+                    <h1 className={"bracket" + lg}>
+                      {storedItems !== null ? (
+                        <span>
+                          {totalOrder()} {t("basket.item")}
+                        </span>
+                      ) : (
+                        <span>0 {t("basket.item")}</span>
+                      )}
+                    </h1>
+                  </div>
+                )}
               </div>
             </div>
           </div>

@@ -64,6 +64,64 @@ export default function History() {
     window.location = web + lng + path + id;
   };
 
+  const orderStatusText = (value) => {
+    console.log(lgs)
+    if(value === "ordered") {
+      if(lgs === "en") {
+        return "Ordered"
+      }else if(lgs === "th") {
+        return "สั่งอาหารแล้ว"
+      } else {
+        return "順序付けられました"
+      }
+    }
+    if(value === "received") {
+      if(lgs === "en") {
+        return "Received Ordered"
+      } else if(lgs === "th") {
+        return "รับออร์เดอร์แล้ว"
+      } else {
+        return "受注"
+      }
+    }
+    if(value === "cancel") {
+      if(lgs === "en") {
+        return "Cancel"
+      }else if(lgs === "th") {
+        return "ยกเลิกอาหาร"
+      } else {
+        return "食べ物をキャンセルする"
+      }
+    }
+    if(value === "served") {
+      if(lgs === "en") {
+        return "Served"
+      }else if(lgs === "th") {
+        return "เสิร์ฟแล้ว"
+      } else {
+        return "提供"
+      }
+    }
+    if(value === "preparing") {
+      if(lgs === "en") {
+        return "Preparing Order"
+      }else if(lgs === "th") {
+        return "กำลังทำอาหาร"
+      } else {
+        return "注文の準備"
+      }
+    }
+    if(value === "serving") {
+      if(lgs === "en") {
+        return "Serving"
+      }else if(lgs === "th") {
+        return "กำลังเสิร์ฟ"
+      } else {
+        return "サービング"
+      }
+    }
+  };
+
   const getLink = async (id) => {
     await tableService.getTableById(id).then((data) => setLink(data));
   };
@@ -176,7 +234,7 @@ export default function History() {
                         {getTimes(history.created_at)}
                       </h1>
                       <h1 className="bracket header-blue-text status">
-                        {history.status}
+                        {orderStatusText(history.status)}
                       </h1>
                     </div>
                   </div>

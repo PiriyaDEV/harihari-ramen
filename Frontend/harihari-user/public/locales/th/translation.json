@@ -39,15 +39,17 @@
         "2": "โปรดติดต่อพนักงาน"
     },
     "orderFoodIn" : "สั่งอาหาร",
-    "categortyMenu" : {
+    "categoryMenu" : {
         "appetizer" : "อาหารจานหลัก",
         "ramen" : "ราเมง",
         "dessert" : "ของหวาน",
-        "beverage" : "เครื่องดื่ม"
+        "beverage" : "เครื่องดื่ม",
+        "extra": "พิเศษ"
     },
     "basket" : {
         "yourBasket" : "ตะกร้าของคุณ",
         "subtotal" : "ยอดรวมอาหาร",
+        "basketText" : "ตะกร้า",
         "VAT": "VAT",
         "delete": "ลบ",
         "edit" : "แก้ไข",
@@ -64,27 +66,50 @@
     },
     "popup" : {
         "history": {
-            "header": "Cancel Order",
+            "header": "ยกเลิกการสั่ง",
             "text":{
-             "1":"Do you confirm to cancel",
-             "2":"? You cannot undo this action."
+             "1":"คุณยืนยันที่จะยกเลิก",
+             "2":"? คุณไม่สามารถยกเลิกการกระทำนี้ไ"
             }
         },
         "menu": {
-            "header": "Cancel Order",
-            "text":"Do you want to confirm basket or not? You cannot undo this action."
+            "header": "ยืนยันรายการ",
+            "text":"ต้องการคอนเฟิร์มตะกร้าหรือไม่? คุณไม่สามารถยกเลิกการกระทำนี้ได้"
         },
         "checkout": {
-            "header": "Cancel Order",
-            "text":"Do you want to check out or not?"
+            "header": "เช็คเอาท์",
+            "text":"คุณต้องการที่จะเช็คเอาท์หรือไม่?"
         },
         "alert": {
-            "header": "Cancel Order",
-            "text":"You can't check out, because the food has not yet been served"
+            "header": "เตือน",
+            "text":"เช็คเอ้าท์ไม่ได้เพราะอาหารยังไม่เสิร์ฟ"
         },
         "button": {
-            "confirm": "Confirm",
-            "back": "Back"
+            "confirm": "ตกลง",
+            "back": "ย้อนกลับ",
+            "next": "ต่อไป",
+            "continue":" ดำเนินต่อ",
+            "order" : "สั่ง"
+        }
+    },
+    "noOrder" : {
+        "1": "ชั่วยามนี้ยังไม่มีการสั่งออเดอร์",
+        "2": "ชักช้าอยู่ไยไฉนไม่ลงมือ 'สั่งอาหาร'"
+    },
+    "customRamen": {
+        "title": "ราเมงตามใจท่าน",
+        "Text" : "อาหารจานพิเศษของเรา ซึ่งคุณสามารถเลือกได้ว่าต้องการทานอย่างไร ไม่ว่าจะเป็นซุป บะหมี่ ประเภทของหมู และอื่นๆ",
+        "note" : "หมายเหตุ: โปรดเลือกอย่างน้อยหนึ่งข้อในทุกคำถาม",
+        "noteTitle" : "หมายเหตุ",
+        "noteCook" : "หมายเหตุถึงพ่อครัวของเรา"
+    },
+    "bill": {
+        "title": "ใบเสร็จ",
+        "table": "โต๊ะ",
+        "checkout": "คิวอาร์โค็ด สำหรับชำระเงิน",
+        "text": {
+            "1":"โปรดแสดงคิวอาร์โค็ดนี้",
+            "2":"แก่พนักงานเสิร์ฟเพื่อชำระเงินให้เสร็จสิ้น"
         }
     }
 }

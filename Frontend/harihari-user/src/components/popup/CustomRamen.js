@@ -379,16 +379,15 @@ export default function CustomRamen(props) {
         {continueClick === false && (
           <div id="detail-popup-info" className="fixed-detail">
             <div className="info-padding">
-              <h1 className={"md-text" + lg}>Custom Ramen</h1>
+              <h1 className={"md-text" + lg}>{t("customRamen.title")}</h1>
               <h1 className="sm-text k2d">฿ 169.00</h1>
               <div id="detail-desc">
                 <h1 className={"bracket" + lg}>
-                  Our specialist dish, where you can pick how you want to eat on
-                  your own from soup, noodle, type of pork, and more.
+                {t("customRamen.Text")}
                 </h1>
               </div>
               <h1 className={"bracket note" + lg}>
-                Note: please pick at least one in all question
+              {t("customRamen.note")}
               </h1>
             </div>
 
@@ -398,7 +397,7 @@ export default function CustomRamen(props) {
                 className="info-padding continue-box"
                 onClick={() => setContinue(true)}
               >
-                <h1 className={"sm-text" + lg}>Continue</h1>
+                <h1 className={"sm-text" + lg}>{t("popup.button.continue")}</h1>
                 <FontAwesomeIcon
                   icon={faArrowRight}
                   className="sm-text fa fa-arrow"
@@ -430,7 +429,7 @@ export default function CustomRamen(props) {
                             )}
                           </span>
                         ) : (
-                          <span>Notes</span>
+                          <span>{t("customRamen.noteTitle")}</span>
                         )}
                       </h1>
                     )}
@@ -647,7 +646,7 @@ export default function CustomRamen(props) {
                 </div>
               ) : (
                 <div id="note-section">
-                  <h1 className="bracket">Note to our cook</h1>
+                  <h1 className={"bracket"+ lg}>{t("customRamen.noteCook")}</h1>
                   <textarea
                     className={"bracket comment-box custom-comment" + lg}
                     rows="6"
@@ -693,7 +692,7 @@ export default function CustomRamen(props) {
                   icon={faArrowLeft}
                   className="sm-text fa-arrow-left"
                 />
-                <h1 className={"sm-text" + lg}>Back</h1>
+                <h1 className={"sm-text" + lg}>{t("popup.button.back")}</h1>
               </div>
               {lastChoice === false ? (
                 <div
@@ -701,7 +700,7 @@ export default function CustomRamen(props) {
                   className="custom-padding continue-box black-box"
                   onClick={() => clickNext(choiceIndex)}
                 >
-                  <h1 className={"sm-text" + lg}>Next</h1>
+                  <h1 className={"sm-text" + lg}>{t("popup.button.next")}</h1>
                   <FontAwesomeIcon
                     icon={faArrowRight}
                     className="sm-text fa-arrow"
@@ -718,7 +717,7 @@ export default function CustomRamen(props) {
                   id="add-box"
                   className="custom-padding continue-box gray-box"
                 >
-                  <h1 className={"sm-text" + lg}>Order</h1>
+                  <h1 className={"sm-text" + lg}>{t("popup.button.order")}</h1>
                 </div>
               ) : (
                 <div
@@ -726,7 +725,7 @@ export default function CustomRamen(props) {
                   className="custom-padding done-box section"
                   onClick={() => setLocalCustom()}
                 >
-                  <h1 className={"sm-text" + lg}>Order</h1>
+                  <h1 className={"sm-text" + lg}>{t("popup.button.order")}</h1>
                 </div>
               )}
             </div>

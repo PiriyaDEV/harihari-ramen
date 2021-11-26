@@ -39,15 +39,17 @@
         "2": "ウェイターに連絡する"
     },
     "orderFoodIn" : "注文食べ物",
-    "categortyMenu" : {
+    "categoryMenu" : {
         "appetizer" : "前菜",
         "ramen" : "ラーメン",
         "dessert" : "デザート",
-        "beverage" : "飲む"
+        "beverage" : "飲む",
+        "extra": "特別な"
     },
     "basket" : {
         "yourBasket" : "あなたのバスケット",
         "subtotal" : "小計",
+        "basketText" : "バスケット",
         "VAT": "VAT",
         "delete": "消去",
         "edit" : "編集",
@@ -84,7 +86,30 @@
         },
         "button": {
             "confirm": "確認",
-            "back": "戻る"
+            "back": "戻る",
+            "next": "次",
+            "continue":" 継続する",
+            "order" : "注文"
+        }
+    },
+    "noOrder" : {
+        "1": "現在、注文は処理されていません。",
+        "2": "「食べ物を注文する」をクリックして注文できます"
+    },
+    "customRamen": {
+        "title": "カスタムラーメン",
+        "Text" : "スープ、ラーメン、豚肉の種類など、自分で食べたいものを選べる名物料理。",
+        "note" : "注：すべての質問で少なくとも1つ選択してください",
+        "noteTitle" : "ノート",
+        "noteCook" : "私たちの料理人への注意"
+    },
+    "bill": {
+        "title": "明細書",
+        "table": "テーブル",
+        "checkout": "QR コードをチェックアウト",
+        "text": {
+            "1":"チェックアウトを完了するには、",
+            "2":"このQRコードをウェイターに提示してください"
         }
     }
 }

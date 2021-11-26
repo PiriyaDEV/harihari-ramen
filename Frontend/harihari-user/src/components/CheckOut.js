@@ -169,7 +169,7 @@ export default function CheckOut() {
                           <h1 className={"sm-text menu-name" + lg}>
                             {lgs === "th" && <span>ราเมงตามใจท่าน</span>}
                             {lgs === "en" && <span>Custom Ramen</span>}
-                            {lgs === "jp" && <span>Japanese Name</span>}
+                            {lgs === "jp" && <span>カスタムラーメン</span>}
                           </h1>
                           <h1 className="bracket">{element.comment}</h1>
                           {element !== null && (

@@ -39,14 +39,16 @@
         "2": "contact the waiter"
     },
     "orderFoodIn" : "Order Food",
-    "categortyMenu" : {
+    "categoryMenu" : {
         "appetizer" : "Appetizer",
         "ramen" : "Ramen",
         "dessert" : "Dessert",
-        "beverage" : "Beverage"
+        "beverage" : "Beverage",
+        "extra": "Extra"
     },
     "basket" : {
         "yourBasket" : "YOUR BASKET",
+        "basketText" : "Basket",
         "subtotal" : "Subtotal",
         "VAT": "VAT",
         "delete": "Delete",
@@ -71,20 +73,43 @@
             }
         },
         "menu": {
-            "header": "Cancel Order",
+            "header": "Confirm Order",
             "text":"Do you want to confirm basket or not? You cannot undo this action."
         },
         "checkout": {
-            "header": "Cancel Order",
+            "header": "Check Out",
             "text":"Do you want to check out or not?"
         },
         "alert": {
-            "header": "Cancel Order",
+            "header": "Alert",
             "text":"You can't check out, because the food has not yet been served"
         },
         "button": {
             "confirm": "Confirm",
-            "back": "Back"
+            "back": "Back",
+            "next": "Next",
+            "continue":" Continue",
+            "order" : "Order"
+        }
+    },
+    "noOrder" : {
+        "1": "No order is currently being process.",
+        "2": "You can order by click 'Order food'"
+    },
+    "customRamen": {
+        "title": "Custom Ramen",
+        "Text" : "Our specialist dish, where you can pick how you want to eat on your own from soup, noodle, type of pork, and more.",
+        "note" : "Note: please pick at least one in all question",
+        "noteTitle" : "Notes",
+        "noteCook" : "Note to our cook"
+    },
+    "bill": {
+        "title": "Bill",
+        "table": "TABLE",
+        "checkout": "Check Out QR code",
+        "text": {
+            "1":"Please show this QR code to our",
+            "2":"waiter to complete the checkout"
         }
     }
 }

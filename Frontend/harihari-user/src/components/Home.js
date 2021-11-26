@@ -222,7 +222,7 @@ export default function Home() {
               <p className={"bracket" + lg}>
                 {t("orderLeft.1")}{" "}
                 {orderHistory !== null ? (
-                  <span>{orderHistory.length}</span>
+                  <span>{orderHistory.length} </span>
                 ) : (
                   <span>0</span>
                 )}
@@ -237,8 +237,8 @@ export default function Home() {
                   </span>
                 ) : (
                   <span>
-                    No order is currently being process. <br />
-                    You can order by click 'Order food'
+                    {t("noOrder.1")} <br />
+                    {t("noOrder.2")}
                   </span>
                 )}
               </p>

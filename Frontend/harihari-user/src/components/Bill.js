@@ -88,7 +88,7 @@ export default function Bill() {
         <div id="history-container" className="page-container">
           <div id="menu-header-container" className="section">
             <div className="section">
-              <h1 className={"menu-header" + lg}>Bill</h1>
+              <h1 className={"menu-header" + lg}>{t("bill.title")}</h1>
             </div>
 
             <div id="table-box">
@@ -130,7 +130,11 @@ export default function Bill() {
                   <img id="bill-logo" src={HariLogo} alt="" />
                 </div>
                 <div className="bill-table">
-                  <h1 className={"ssm-text menu-name" + lg}>TABLE 12</h1>
+                  {link && (
+                    <h1 className={"ssm-text menu-name" + lg}>
+                      {t("bill.table")} {link.table_id}
+                    </h1>
+                  )}
                   {link && (
                     <h1 className={"ssm-text" + lg}>
                       {getDateTimes(link.checkin_at)}
@@ -176,7 +180,7 @@ export default function Bill() {
                             <h1 className={"sm-text menu-name" + lg}>
                               {lgs === "th" && <span>ราเมงตามใจท่าน</span>}
                               {lgs === "en" && <span>Custom Ramen</span>}
-                              {lgs === "jp" && <span>Japanese Name</span>}
+                              {lgs === "jp" && <span>カスタムラーメン</span>}
                             </h1>
                             <h1 className="bracket">{element.comment}</h1>
                             {element !== null && (
@@ -220,10 +224,12 @@ export default function Bill() {
               <div id="bill-qr-section">
                 <div id="bill-qr">
                   <div>
-                    <h1 className="nm-text menu-name">Check Out QR code</h1>
-                    <p className="bracket">
-                      Please show this QR code to our <br />
-                      waiter to complete the checkout
+                    <h1 className={"nm-text menu-name" + lg}>
+                      {t("bill.checkout")}
+                    </h1>
+                    <p className={"bracket" + lg}>
+                      {t("bill.text.1")} <br />
+                      {t("bill.text.2")}
                     </p>
                   </div>
                   <div className="section">
@@ -239,8 +245,10 @@ export default function Bill() {
                     </h1>
                     {checkOut && (
                       <h1 className="sm-text k2d">
-                        {subTotal(checkOut.bill.items,
-                        checkOut.bill.custom).toFixed(2)}
+                        {subTotal(
+                          checkOut.bill.items,
+                          checkOut.bill.custom
+                        ).toFixed(2)}
                       </h1>
                     )}
                   </div>
@@ -250,8 +258,10 @@ export default function Bill() {
                     </h1>
                     {checkOut && (
                       <h1 className="sm-text k2d">
-                        {(subTotal(checkOut.bill.items,
-                        checkOut.bill.custom) * 0.07).toFixed(2)}
+                        {(
+                          subTotal(checkOut.bill.items, checkOut.bill.custom) *
+                          0.07
+                        ).toFixed(2)}
                       </h1>
                     )}
                   </div>
@@ -265,10 +275,15 @@ export default function Bill() {
                         ฿{" "}
                         {numberWithCommas(
                           (
-                            subTotal(checkOut.bill.items,
-                              checkOut.bill.custom) +
-                            subTotal(checkOut.bill.items,
-                              checkOut.bill.custom) * 0.07
+                            subTotal(
+                              checkOut.bill.items,
+                              checkOut.bill.custom
+                            ) +
+                            subTotal(
+                              checkOut.bill.items,
+                              checkOut.bill.custom
+                            ) *
+                              0.07
                           ).toFixed(2)
                         )}
                       </h1>
