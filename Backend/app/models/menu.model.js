@@ -1,6 +1,7 @@
 const sql = require("../database/connection");
 const logger = require("../../lib/logger/index");
 
+// function use for create main menu
 exports.createMainMenu = async (menu) => {
   menu.status = true;
   menu.created_at = Date.now();
@@ -17,10 +18,12 @@ exports.createMainMenu = async (menu) => {
     );
     return { product_id: result.insertId, ...menu };
   } catch (error) {
+    // if query error
     logger.error(error);
   }
 };
 
+// function to create information for main menu
 exports.createInfoMainMenu = async (info) => {
   try {
     const [result, fields] = await sql.query(
@@ -48,10 +51,12 @@ exports.createInfoMainMenu = async (info) => {
       inserted: result.affectedRows,
     };
   } catch (error) {
+    // if query error
     logger.error(error);
   }
 };
 
+// function to create ramen choice
 exports.createChoice = async (choice) => {
   choice.status = true;
   choice.created_at = Date.now();
@@ -68,10 +73,12 @@ exports.createChoice = async (choice) => {
     );
     return { choice_id: result.insertId, ...choice };
   } catch (error) {
+    // if query error
     logger.error(error);
   }
 };
 
+// function to create information for ramen choice
 exports.createInfoChoice = async (info) => {
   try {
     const [result, fields] = await sql.query(
@@ -99,10 +106,12 @@ exports.createInfoChoice = async (info) => {
       inserted: result.affectedRows,
     };
   } catch (error) {
+    // if query error
     logger.error(error);
   }
 };
 
+// function that query for all main menu to view categorize by language
 exports.getMainMenus = async (result) => {
   try {
     const [result, fields] = await sql.query(
@@ -170,6 +179,79 @@ exports.getMainMenus = async (result) => {
     logger.info(`Selected ${result.length} menu(s)`);
     return result;
   } catch (error) {
+    // if query error
+    logger.error(error);
+  }
+};
+
+// function that query for all custom ramen choices, categorized by language
+exports.getCustomRamen = async (result) => {
+  try {
+    const [result, fields] = await sql.query(
+      `SELECT
+        RC.choice_id,
+        RC.image_url,
+        (
+          SELECT
+            JSON_OBJECT(
+              'name',
+              I.name,
+              'category',
+              I.category,
+              'description',
+              I.description
+            )
+          FROM
+            info_ramen_choices I
+          WHERE
+            I.choice_id = RC.choice_id
+            AND I.language = 'en'
+            AND I.status = 1
+        ) AS en,
+        (
+          SELECT
+            JSON_OBJECT(
+              'name',
+              I.name,
+              'category',
+              I.category,
+              'description',
+              I.description
+            )
+          FROM
+            info_ramen_choices I
+          WHERE
+            I.choice_id = RC.choice_id
+            AND I.language = 'jp'
+            AND I.status = 1
+        ) AS jp,
+        (
+          SELECT
+            JSON_OBJECT(
+              'name',
+              I.name,
+              'category',
+              I.category,
+              'description',
+              I.description
+            )
+          FROM
+            info_ramen_choices I
+          WHERE
+            I.choice_id = RC.choice_id
+            AND I.language = 'th'
+            AND I.status = 1
+        ) AS th
+        FROM
+          ramen_choices RC
+        WHERE
+          RC.status = 1`
+    );
+
+    logger.info(`Selected ${result.length} choice(s)`);
+    return result;
+  } catch (error) {
+    // if query error
     logger.error(error);
   }
 };
