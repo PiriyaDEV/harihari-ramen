@@ -38,6 +38,8 @@ export default function Home() {
   const [alertPopup, setAlert] = useState(false);
   const [checkOut, setCheckOut] = useState("");
   const [socket, setSocket] = useState(null);
+  const [checkHistory, setChectHistory] = useState();
+  const [text, setText] = useState();
 
   useEffect(() => {
     const socketInput = socketIOClient(
@@ -57,6 +59,7 @@ export default function Home() {
             (order) => order.status !== "served" && order.status !== "cancel"
           )
         );
+        setChectHistory(orders);
       });
     }
   }, [socket]);
@@ -79,15 +82,14 @@ export default function Home() {
   };
 
   const getAPIOrderHistory = async (id) => {
-    await orderService
-      .getOrderHistory(id)
-      .then((data) =>
-        setOrderHistory(
-          data.filter(
-            (order) => order.status !== "served" && order.status !== "cancel"
-          )
+    await orderService.getOrderHistory(id).then((data) => {
+      setOrderHistory(
+        data.filter(
+          (order) => order.status !== "served" && order.status !== "cancel"
         )
       );
+      setChectHistory(data);
+    });
   };
 
   useEffect(() => {
@@ -107,7 +109,6 @@ export default function Home() {
 
   useLayoutEffect(() => {
     if (orderHistory.length > 0) {
-
       let oldestOrder = orderHistory[0];
       //Status Order: 0 is Order, 1 is Received Order, 2 is Prepare, 3 is Served
       if (oldestOrder.status === "ordered") setWidth(0);
@@ -137,7 +138,9 @@ export default function Home() {
     }
   };
 
-  const getTextToAlert = () => {
+  const getTextToAlert = (value) => {
+    console.log(value)
+    setText(value);
     setAlert(true);
   };
 
@@ -167,7 +170,7 @@ export default function Home() {
 
   return (
     <div>
-      {alertPopup && <ConfirmPopup cancel={cancelClick} page="home" />}
+      {alertPopup && <ConfirmPopup cancel={cancelClick} text={text} page="home" />}
       <div id="home" className="section">
         <div id="home-container" className="page-container">
           <div>
@@ -266,14 +269,16 @@ export default function Home() {
               </div>
               <div
                 className="menu-box"
-                onClick={() => CheckValid(
-                  "history",
-                  id,
-                  lgs,
-                  orderHistory,
-                  getTextToAlert,
-                  checkOut.bill.items
-                )}
+                onClick={() =>
+                  CheckValid(
+                    "history",
+                    id,
+                    lgs,
+                    checkHistory,
+                    getTextToAlert,
+                    checkOut.bill.items
+                  )
+                }
               >
                 <h1 className={"md-text" + lg}>
                   {t("orderHistory.1")} <br />
@@ -303,7 +308,7 @@ export default function Home() {
                     "checkout",
                     id,
                     lgs,
-                    orderHistory,
+                    checkHistory,
                     getTextToAlert,
                     checkOut.bill.items
                   )
@@ -332,22 +337,21 @@ function MenuSelect(page, value, lgs) {
 function CheckValid(page, value, lgs, orderHistory, getTextToAlert, billItem) {
   let web = "http://localhost:3000/";
   let path = "/" + page + "/";
-  if(page === "checkout") {
+  if (page === "checkout") {
     if (orderHistory.length === 0 && billItem.length !== 0) {
       window.location = web + lgs + path + value;
     } else {
-      getTextToAlert();
+      getTextToAlert("checkOut");
     }
   }
-  console.log (orderHistory)
-  if(page === "history") {
+  // console.log(orderHistory);
+  if (page === "history") {
     if (orderHistory.length !== 0) {
       window.location = web + lgs + path + value;
     } else {
-      getTextToAlert();
+      getTextToAlert("orderHistory");
     }
   }
- 
 }
 
 // function CheckHaveTable(numTable, link) {

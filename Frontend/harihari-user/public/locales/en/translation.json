@@ -82,7 +82,10 @@
         },
         "alert": {
             "header": "Alert",
-            "text":"You can't check out, because the food has not yet been served"
+            "text":{
+                "1":"You can't check out, because the food has not yet been served",
+                "2":"You can't see order history, because the order has not yet been ordered"
+            }
         },
         "button": {
             "confirm": "Confirm",
