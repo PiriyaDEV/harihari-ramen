@@ -51,11 +51,11 @@ PORT=3030
 BASE_URL=http://localhost:3030
 
 # DATABASE CONNECTION
-DB_HOST=YOUR_DATABASE_HOST          // ex. localhost
-DB_PORT=YOUR_DATABASE_PORT          // ex. 3306
-DB_USER=YOUR_DATABASE_USERNAME      // ex. user
-DB_PASSWORD=YOUR_DATABASE_PASSWORD  // ex. P@ssw0rd1234!
-DB_NAME=YOUR_DATABASE_NAME          // ex. harihari-ramen
+DB_HOST=YOUR_DATABASE_HOST          # ex. localhost
+DB_PORT=YOUR_DATABASE_PORT          # ex. 3306
+DB_USER=YOUR_DATABASE_USERNAME      # ex. user
+DB_PASSWORD=YOUR_DATABASE_PASSWORD  # ex. P@ssw0rd1234!
+DB_NAME=YOUR_DATABASE_NAME          # ex. harihari-ramen
 ```
 
 For the queries on this project were all file in ./app/models
