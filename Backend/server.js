@@ -3,7 +3,6 @@ const express = require("express");
 const http = require("http");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const socketIO = require("socket.io");
 
 const logger = require("./lib/logger/index");
 
@@ -43,16 +42,8 @@ server.listen(PORT, () => {
   logger.info(`Hari Hari Ramen's API server is running on port ${PORT}.`);
 });
 
-// initial socket 
-const socket = socketIO(server, {
-  transports: ["polling"],
-  cors: {
-    cors: corsOptions,
-  },
-});
-
-// parse to socket module
-require("./app/sockets/index")(socket);
+// initialize socket module
+require("./app/sockets/index").initialize(server, corsOptions);
 
 // handle 404 requests
 app.use((req, res) => {

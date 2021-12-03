@@ -1,5 +1,9 @@
 -- Hari Hari Ramen Database Foreign Keys --
 
+
+
+
+
 -- Add Foreign Key To Bills Table
 ALTER TABLE bills
   ADD FOREIGN KEY (table_id)    REFERENCES tables(table_id)
@@ -24,11 +28,21 @@ ALTER TABLE info_main_menus
   ADD FOREIGN KEY (product_id)  REFERENCES main_menus(product_id)
     ON UPDATE CASCADE ON DELETE CASCADE;
 
--- Add Foreign Key To Custom_ramen_details Table
-ALTER TABLE custom_ramen_details
-  ADD FOREIGN KEY (ramen_id)    REFERENCES custom_ramens(ramen_id)
+-- Add Foreign Key To Custom_ramens Table
+ALTER TABLE custom_ramens
+  ADD FOREIGN KEY (soup_type)  REFERENCES ramen_choices(choice_id)
     ON UPDATE CASCADE ON DELETE CASCADE,
-  ADD FOREIGN KEY (choice_id)   REFERENCES ramen_choices(choice_id)
+  ADD FOREIGN KEY (noodle)  REFERENCES ramen_choices(choice_id)
+    ON UPDATE CASCADE ON DELETE CASCADE,
+  ADD FOREIGN KEY (spring_onion)  REFERENCES ramen_choices(choice_id)
+    ON UPDATE CASCADE ON DELETE CASCADE,
+  ADD FOREIGN KEY (garlic)  REFERENCES ramen_choices(choice_id)
+    ON UPDATE CASCADE ON DELETE CASCADE,
+  ADD FOREIGN KEY (spice)  REFERENCES ramen_choices(choice_id)
+    ON UPDATE CASCADE ON DELETE CASCADE,
+  ADD FOREIGN KEY (chashu)  REFERENCES ramen_choices(choice_id)
+    ON UPDATE CASCADE ON DELETE CASCADE,
+  ADD FOREIGN KEY (richness)  REFERENCES ramen_choices(choice_id)
     ON UPDATE CASCADE ON DELETE CASCADE;
 
 -- Add Foreign Key To Info_ramen_choices Table
