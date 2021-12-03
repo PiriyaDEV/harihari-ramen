@@ -1,5 +1,6 @@
 import http from "../http-common";
 
+// Call the order api to get the order information.
 export default new (class OrderService {
   async createOrder(menu, menuCustom, uid) {
     return await http

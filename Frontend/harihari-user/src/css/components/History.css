@@ -141,7 +141,6 @@
 @media screen and (max-width: 360px) {
   .history-header > div:first-child {
     display: flex;
-    /* flex-direction: column; */
   }
 
   .date-mb {

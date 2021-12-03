@@ -20,27 +20,28 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
 
 //JS
-import { getTimes } from "../utilities/Time";
+import { getTimes } from "../utilities/Time"; //import function to get the date time format of the home page.
 
 //Image
 import RamenPic from "../images/Mini Logo.png";
 
 export default function Home() {
-  const { id, lgs } = useParams();
-  const [width, setWidth] = useState(0);
-  const intermediaryBalls = 2;
-  const calculatedWidth = (width / (intermediaryBalls + 1)) * 100;
-  const { t, i18n } = useTranslation();
-  const [link, setLink] = useState();
-  const [orderHistory, setOrderHistory] = useState("");
-  const [callWaiter, setWaiter] = useState(false);
-  const [lg, setLg] = useState(" " + lgs);
-  const [alertPopup, setAlert] = useState(false);
-  const [checkOut, setCheckOut] = useState("");
-  const [socket, setSocket] = useState(null);
-  const [checkHistory, setChectHistory] = useState();
-  const [text, setText] = useState();
+  const { id, lgs } = useParams();                                  // received uid and languange from the param.       
+  const [width, setWidth] = useState(0);                            // used to set the width of the order status ball.
+  const intermediaryBalls = 2;                                      // used to initial the order status ball.
+  const calculatedWidth = (width / (intermediaryBalls + 1)) * 100;  // used to calculate a width of the order status ball.
+  const { t, i18n } = useTranslation();                             // used for i18n.
+  const [link, setLink] = useState();                               // received uid_table from API.
+  const [orderHistory, setOrderHistory] = useState("");             // used to collect the order history information of the user.
+  const [callWaiter, setWaiter] = useState(false);                  // used to set css button of call waiter
+  const [lg, setLg] = useState(" " + lgs);                          // used for change the css of the text.
+  const [alertPopup, setAlert] = useState(false);                   // used to check alert and close popup.
+  const [checkOut, setCheckOut] = useState("");                     // received uid_bill and information of the bill from API
+  const [socket, setSocket] = useState(null);                       // used to set the socket.
+  const [checkHistory, setChectHistory] = useState();               // used to collect all of the order history information.
+  const [text, setText] = useState();                               // used to set order text.
 
+  // used to call socket
   useEffect(() => {
     const socketInput = socketIOClient(
       "http://localhost:3030/harihari-customer",
@@ -51,6 +52,7 @@ export default function Home() {
     setSocket(socketInput);
   }, [id]);
 
+  // used to set orderHistory if socket on
   useEffect(() => {
     if (socket) {
       socket.on("order-history", (orders) => {
@@ -64,6 +66,7 @@ export default function Home() {
     }
   }, [socket]);
 
+  // used to set callWaiter if socket on
   useEffect(() => {
     if (socket) {
       socket.on("call-waiter", (newValue) => {
@@ -73,14 +76,17 @@ export default function Home() {
     }
   }, [link, socket]);
 
+  // used to call api and set uid_table
   const getLink = async (id) => {
     await tableService.getTableById(id).then((data) => setLink(data));
   };
 
+  // used to get uid + bill id of the table to create a unique path that avoid user to entered this page.
   const getAPIBill = async (id) => {
     await BillService.summary(id).then((data) => setCheckOut(data));
   };
 
+  // used to get the order list from the database.
   const getAPIOrderHistory = async (id) => {
     await orderService.getOrderHistory(id).then((data) => {
       setOrderHistory(
@@ -92,6 +98,7 @@ export default function Home() {
     });
   };
 
+  // used to call function and set change languange.
   useEffect(() => {
     if (!link && !orderHistory && !checkOut) {
       getLink(id);
@@ -107,6 +114,7 @@ export default function Home() {
     }
   }, [i18n, lgs, link, orderHistory, id, checkOut]);
 
+  // used to set width before render.
   useLayoutEffect(() => {
     if (orderHistory.length > 0) {
       let oldestOrder = orderHistory[0];
@@ -120,45 +128,49 @@ export default function Home() {
     }
   }, [orderHistory]);
 
+  // used to change the language of the website.
   const clickChangeLanguage = (lng) => {
     let web = "http://localhost:3000/";
     let path = "/home/";
     window.location = web + lng + path + id;
   };
 
+  // used to change langauge of the order status in home page.
   const [orderStatusText] = useState({
     en: ["Ordered", "Received Order", "Preparing Order", "Serving"],
     th: ["สั่งอาหารแล้ว", "รับออร์เดอร์แล้ว", "กำลังทำอาหาร", "กำลังเสิร์ฟ"],
     jp: ["順序付けられました", "受注", "注文の準備", "サービング"],
   });
 
+  // used to call a waiter.
   const callWaiterClick = async () => {
     if (!link.call_waiter) {
       await tableService.callWaiter(id);
     }
   };
 
+  //used to show to alert box if user entered the choice with invalid condition.
   const getTextToAlert = (value) => {
-    console.log(value)
     setText(value);
     setAlert(true);
   };
 
+  //used to close the alert and confirmation popup.
   const cancelClick = (toggle) => {
     setAlert(toggle);
   };
 
+  // this function used to show the order status ball in the order status section.
   const timeLineBalls = (n, current, text) =>
     Array(n)
       .fill(0)
-      //ใช้ index ในการเปลี่ยน bar
+      //use an index to change the bar.
       .map((i, index) => (
         <div id="tl-ball" key={index}>
           <div
             className={`timeline__ball ${current > index ? "active" : null} ${
               current === index ? "ongoing" : null
             }`}
-            // onloadd={() => onClick(3)}
           ></div>
           <h1 className={"pg-text bracket" + lg}>
             {lgs === "th" && <span>{text.th[index]}</span>}
@@ -328,15 +340,21 @@ export default function Home() {
   );
 }
 
+// this function used to move the user into the choice that user select with the uid of the user.
 function MenuSelect(page, value, lgs) {
   let web = "http://localhost:3000/";
   let path = "/" + page + "/";
   window.location = web + lgs + path + value;
 }
 
+// used to check the condition that user click the checkout and history page button
+// with the invalid case or not and it will show the alert popup.
+// checkout - user must order the item and every item must be served already.
+// history - user must order the item.
 function CheckValid(page, value, lgs, orderHistory, getTextToAlert, billItem) {
   let web = "http://localhost:3000/";
   let path = "/" + page + "/";
+  //Case of the checkout page
   if (page === "checkout") {
     if (orderHistory.length === 0 && billItem.length !== 0) {
       window.location = web + lgs + path + value;
@@ -344,7 +362,8 @@ function CheckValid(page, value, lgs, orderHistory, getTextToAlert, billItem) {
       getTextToAlert("checkOut");
     }
   }
-  // console.log(orderHistory);
+
+  //Case of the history page
   if (page === "history") {
     if (orderHistory.length !== 0) {
       window.location = web + lgs + path + value;
@@ -353,9 +372,3 @@ function CheckValid(page, value, lgs, orderHistory, getTextToAlert, billItem) {
     }
   }
 }
-
-// function CheckHaveTable(numTable, link) {
-//   if (!numTable && link) {
-//     window.location = "http://localhost:3000/invalid";
-//   }
-// }

@@ -114,57 +114,6 @@
   margin-right: 16px;
 }
 
-/* @media screen and (max-width: 1650px) {
-  .nm-text {
-    font-size: 3em;
-    line-height: 30px;
-  }
-
-  .sm-text {
-    font-size: 2.25em;
-    line-height: 28px;
-  }
-
-  .ssm-text {
-    font-size: 1.75em;
-    line-height: 22px;
-  }
-
-  .md-text {
-    font-size: 3em;
-    line-height: 41px;
-  }
-
-  .bracket {
-    font-size: 1.625em;
-    line-height: 20px;
-  }
-
-  .xm-text {
-    font-size: 1.4em;
-    line-height: 20px;
-  }
-
-  .bg-text {
-    font-size: 7.5em;
-    line-height: 100px;
-  }
-
-  .title {
-    font-size: 5em;
-    line-height: 48px;
-  }
-
-  .menu-header {
-    font-size: 4.5em;
-    line-height: 31px;
-  }
-
-  .red-btn {
-    font-size: 3em;
-  }
-} */
-
 @media screen and (max-width: 1100px) {
   .nm-text {
     font-size: 2.5em;
@@ -203,10 +152,6 @@
   .nm-text {
     font-size: 2.25em;
   }
-
-  /* .sm-text {
-    font-size: 1.5em;
-  } */
 
   .md-text {
     font-size: 2.5em;

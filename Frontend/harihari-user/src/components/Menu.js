@@ -23,26 +23,31 @@ import MockupRamen from "../images/Custom Ramen Pic/mockup.png";
 import WoodenTable from "../images/Custom Ramen Pic/woodentable.png";
 
 export default function Menu() {
-  const { t, i18n } = useTranslation();
-  const { id, lgs } = useParams();
-  const [link, setLink] = useState();
-  const [category, setCategory] = useState("Appetizer");
-  const [mainMenu, setMainMenu] = useState([]);
-  const [tempMenu, setTempMenu] = useState([]);
-  const [lg, setLg] = useState(" " + lgs);
-  const [menuClick, setMenuClick] = useState(false);
-  const [searchMenu, setSearchMenu] = useState();
-  const [orderToggle, setOrderToggle] = useState(false);
-  const [custom, setCustom] = useState(false);
-  const [mbBasket, setmbBasket] = useState(false);
-  const [menuRamen, setMenuRamen] = useState("");
+  const { t, i18n } = useTranslation(); // used for i18n.
+  const { id, lgs } = useParams(); // received uid and languange from the param.
+  const [link, setLink] = useState(); // received uid_table from API.
+  const [category, setCategory] = useState("Appetizer"); // used to set category that user selected.
+  const [mainMenu, setMainMenu] = useState([]); // received menu that user selected by category.
+  const [tempMenu, setTempMenu] = useState([]); // received temp of menu from API.
+  const [lg, setLg] = useState(" " + lgs); // used for change the css of the text.
+  const [menuClick, setMenuClick] = useState(false); // used to close and open popup DetailPopup.
+  const [searchMenu, setSearchMenu] = useState(); // collect information of menu that user selected
+  const [orderToggle, setOrderToggle] = useState(false); // used to close and open popup ConfirmPopup.
+  const [custom, setCustom] = useState(false); // used to close and open popup customRamen.
+  const [mbBasket, setmbBasket] = useState(false); // used to check button css
+  const [menuRamen, setMenuRamen] = useState(""); // received information of customRamen.
+
+  //used to get the order in from the local storage.
   const [storedItems, setStoreItems] = useState(
     JSON.parse(localStorage.getItem("items"))
   );
+
+  //used to get the custom ramen in from the local storage.
   const [storedCustom, setStoreCustom] = useState(
     JSON.parse(localStorage.getItem("customRamen"))
   );
 
+  // used to call function and set change languange.
   useEffect(() => {
     if (!link) {
       getLink(id);
@@ -52,6 +57,7 @@ export default function Menu() {
     getMainMenu();
   }, [i18n, lgs, link, id]);
 
+  // used to call api and set information of customRamen.
   useEffect(() => {
     const getDataRamen = async () => {
       await menuService.customRamen().then((data) => {
@@ -63,19 +69,23 @@ export default function Menu() {
     }
   }, [menuRamen]);
 
+  // used to set mainmenu before render
   useLayoutEffect(() => {
     setMainMenu(tempMenu.filter((menu) => menu.en.category === "Appetizer"));
   }, [lgs, tempMenu]);
 
+  // this function used to change the category of the order by user selected category.
   function changeCategory(value) {
     setMainMenu(tempMenu.filter((menu) => menu.en.category === value));
     setCategory(value);
   }
 
+  // used to call api and set uid_table
   const getLink = async (id) => {
     await tableService.getTableById(id).then((data) => setLink(data));
   };
 
+  // used to call api and set mainMenu
   const getMainMenu = async () => {
     return await menuService.getMainMenus().then((data) => {
       setMainMenu(data);
@@ -83,12 +93,14 @@ export default function Menu() {
     });
   };
 
+  // this function used to change the language of user selected.
   const clickChangeLanguage = (lng) => {
     let web = "http://localhost:3000/";
     let path = "/menu/";
     window.location = web + lng + path + id;
   };
 
+  // used to set information of searchMenu and view the information in DetailPopup.
   const findMenu = (menu) => {
     setStoreItems(JSON.parse(localStorage.getItem("items")));
     var tempLocal = [];
@@ -105,16 +117,19 @@ export default function Menu() {
     setMenuClick(true);
   };
 
+  // This function used to close popup.
   const backMenu = () => {
     setSearchMenu("");
     setMenuClick(false);
     setCustom(false);
   };
 
+  // used to order the item.
   const orderClick = (value) => {
     setOrderToggle(value);
   };
 
+  // used to change the css of the category choice that user selected.
   const checkCategory = (value) => {
     if (value === category) {
       return "md-text ";
@@ -122,8 +137,9 @@ export default function Menu() {
     return "md-text inactive";
   };
 
-  //Basket
-
+  // This function used to add the order into the basket.
+  // If the menu has exist in the local storage it will be added in the same menu.
+  // And if the menu is doesn't exist it will added normally into the local storage.
   const AddBasket = async (quantity, comment) => {
     setStoreItems(JSON.parse(localStorage.getItem("items")));
     setMenuClick(false);
@@ -160,6 +176,7 @@ export default function Menu() {
     await setSearchMenu("");
   };
 
+  // This function used to removed the basket.
   const RemoveBasket = (index, item) => {
     var tempLocal = [];
     if (item === "items") {
@@ -179,6 +196,8 @@ export default function Menu() {
     }
   };
 
+  // This function used to calculate a subtotal of the order.
+  // it will return the subtotal of the order.
   const subTotal = () => {
     var tempLocal = [];
     var tempCustom = [];
@@ -195,6 +214,7 @@ export default function Menu() {
     return tempSum;
   };
 
+  // This function used to return the custom ramen name with the selected languages.
   function returnCustom(id) {
     for (let i = 0; i < menuRamen.length; i++) {
       if (parseInt(id) === menuRamen[i].choice_id) {
@@ -209,6 +229,8 @@ export default function Menu() {
     }
   }
 
+  // This function used to calculate a total of the order.
+  // it will return the total of the order.
   const totalOrder = () => {
     var tempLocal = [];
     var tempCustom = "";
@@ -224,6 +246,8 @@ export default function Menu() {
     return tempOrder;
   };
 
+  // This function used to show css of the selected order.
+  // It will make the order name to be red color and it will show the amount of the order.
   const checkItems = (menu, index) => {
     var tempLocal = [];
     tempLocal = JSON.parse(localStorage.getItem("items")) || [];
@@ -359,19 +383,10 @@ export default function Menu() {
                       }}
                       src={MockupRamen}
                       alt=""
-                      // onClick={() => findMenu(mainMenu[i])}
                     ></img>
                     <div className="menu-name-container">
-                      {/* {checkItems(mainMenu[i], i) === true && (
-                    <div className="vl"></div>
-                  )} */}
                       <div>
-                        <h1
-                          className={
-                            "sm-text menu-name" + lg
-                            // (checkItems(mainMenu[i], i) === true ? " menu-no" : "")
-                          }
-                        >
+                        <h1 className={"sm-text menu-name" + lg}>
                           {t("customRamen.title")}
                         </h1>
                         <h1 className="bracket menu-price k2d">฿ 169.00</h1>
@@ -588,10 +603,7 @@ export default function Menu() {
                     </h1>
                   </div>
                 ) : (
-                  <div
-                    id="basket-mb-box"
-                    onClick={() => setOrderToggle(true)}
-                  >
+                  <div id="basket-mb-box" onClick={() => setOrderToggle(true)}>
                     <h1 className={"md-text" + lg}>{t("basket.order")}</h1>
                     <h1 className={"bracket" + lg}>
                       {storedItems !== null ? (
@@ -613,6 +625,7 @@ export default function Menu() {
   );
 }
 
+//This function used to move the user to the Homepage with the user uid.
 let linkToHome = (value, lgs) => {
   let web = "http://localhost:3000/";
   let path = "/home/";

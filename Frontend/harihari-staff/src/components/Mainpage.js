@@ -1,3 +1,4 @@
+//Import
 import React, { useState, useEffect, useLayoutEffect } from "react";
 import BarcodeScannerComponent from "react-qr-barcode-scanner";
 import tableService from "../services/table.service.js";
@@ -16,23 +17,25 @@ import { faInfoCircle, faBell } from "@fortawesome/free-solid-svg-icons";
 import closeIcon from "../images/Union 12.svg";
 
 export default function Mainpage() {
-  const [link, setLink] = useState();
-  const [order, setOrder] = useState();
-  const [selectedTable, setCurrentTable] = useState(1);
-  const [qrPopup, setQR] = useState(false);
-  const [showCam, setShowCam] = useState(false);
-  const [orderMenu, setOrderMenu] = useState();
-  const [customMenu, setCustomMenu] = useState();
-  const [orderSelect, setOrderSelect] = useState(false);
-  const [selectOrder, setSelectOrder] = useState("");
-  const [showCheckOut, setCheckOut] = useState(false);
-  const [socket, setSocket] = useState(null);
+  const [link, setLink] = useState();                     // received uid_table from API.
+  const [order, setOrder] = useState();                   // used to collect the order history information of the user.
+  const [selectedTable, setCurrentTable] = useState(1);   // used to set the current / selected table.
+  const [qrPopup, setQR] = useState(false);               // used to toggle to open the QR Code of table.
+  const [showCam, setShowCam] = useState(false);          // used to toggle to open the camera to scan the bill.
+  const [orderMenu, setOrderMenu] = useState();           // received information of order from API.
+  const [customMenu, setCustomMenu] = useState();         // received information of customRamen from API.
+  const [orderSelect, setOrderSelect] = useState(false);  // used to toggle to open the orderHistory by order.
+  const [selectOrder, setSelectOrder] = useState("");     // used to set index of order.
+  const [showCheckOut, setCheckOut] = useState(false);    // used to toggle to show that payment status is success.
+  const [socket, setSocket] = useState(null);             // used to set the socket.
 
+  // used to call socket
   useEffect(() => {
     const socketInput = socketIOClient("http://localhost:3030/harihari-staff");
     setSocket(socketInput);
   }, []);
 
+  // used to set order if socket on
   useEffect(() => {
     if (socket) {
       socket.on("order-status", (result) => {
@@ -46,6 +49,7 @@ export default function Mainpage() {
     }
   }, [socket]);
 
+  // used to set callWaiter if socket on
   useEffect(() => {
     if (socket) {
       socket.on("call-waiter", (table) => {
@@ -54,6 +58,7 @@ export default function Mainpage() {
     }
   }, [socket]);
 
+  // used to checkout table
   const checkOut = async (value) => {
     let id = value.split("$");
 
@@ -65,44 +70,52 @@ export default function Mainpage() {
     }
   };
 
+  // used to call function to get uid_table.
   useEffect(() => {
     if (!link) {
       getLink();
     }
   }, [link]);
 
+  // use to set selectedTable before render.
   useLayoutEffect(() => {
     if (link) getOrder(link[selectedTable - 1].guest_uid);
   }, [link, selectedTable]);
 
+  //This function used to open the selected table that staff open the QRCode.
   function openQR(value) {
     let web = "http://localhost:3000/";
     let path = web + "en/table/" + value;
     window.open(path, "_blank");
   }
 
+  // used to call api and get uid_table of all table.
   const getLink = async () => {
     return await tableService.getTables().then((data) => {
       setLink(data);
     });
   };
 
+  // used to call api and get information of order.
   const getOrder = async (value) => {
     return await orderService
       .getOrderHistory(value)
       .then((data) => setOrder(data));
   };
 
+  // this function used to set information of order.
   const orderClick = (menu, custom) => {
     setOrderMenu(menu);
     setCustomMenu(custom);
     setOrderSelect(true);
   };
 
+  // This function used to set the selected order.
   const getIndexStatus = (index) => {
     setSelectOrder(index.order_id);
   };
 
+  // This function used to change the order status of the selected order.
   const changeStatus = async (e) => {
     let order = [];
     order.order_id = selectOrder;
@@ -120,6 +133,7 @@ export default function Mainpage() {
     }
   };
 
+  // This function used to calculate a subtotal of the selected order.
   const subTotal = (order, custom) => {
     var tempSum = 0;
     if (order) {
@@ -135,14 +149,15 @@ export default function Mainpage() {
     return tempSum;
   };
 
+  // This function used to remove the call waiter. (assume that staff has send the waiter to the table)
   const callWaiterClick = async () => {
     let result = await tableService.callWaiter(
       link[selectedTable - 1].guest_uid
     );
     if (result.success) {
-      console.log("success");
+      console.log("send waiter success");
     } else {
-      console.log("unsuccess");
+      console.log("send waiter unsuccess");
     }
   };
 
@@ -400,15 +415,12 @@ export default function Mainpage() {
               <div id="show-cam" className="staff-box ">
                 {showCam && (
                   <BarcodeScannerComponent
-                    //   width={500}
-                    //   height={500}
                     onUpdate={(err, result) => {
                       if (result) checkOut(result.text);
                     }}
                   />
                 )}
               </div>
-              {/* <p className="sm-text">{data}</p> */}
             </div>
           </div>
         </div>

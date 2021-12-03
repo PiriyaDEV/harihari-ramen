@@ -17,7 +17,9 @@ import minusIcon from "../../images/icon/Union 14.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
-//Custom Ramen
+//Images
+
+//WoodenTable Images
 import WoodenTable from "../../images/Custom Ramen Pic/woodentable.png";
 
 //Choice Ramen Icon
@@ -30,23 +32,22 @@ import Pork from "../../images/icon/custom-ramen/icons8-pork-leg-256@2x.png";
 import Soup from "../../images/icon/custom-ramen/icons8-soup-plate-64-2@2x.png";
 import Noodle from "../../images/icon/custom-ramen/noodle.svg";
 
-//Choice Ramen Images
-
-// Default
+// Bowl
 import Bowl from "../../images/Custom Ramen Pic/Bowl.png";
 
 export default function CustomRamen(props) {
-  const { t } = useTranslation();
-  const { lgs } = useParams();
-  const [lg, setLg] = useState(" " + lgs);
-  const [amountNum, setAmount] = useState(1);
-  const [continueClick, setContinue] = useState(false);
-  const [lastChoice, setLastChoice] = useState(false);
-  const [menuRamen, setMenuRamen] = useState("");
-  const [categoryRamen, setCategoryRamen] = useState("");
-  const [ramenIcon, setIcon] = useState(Soup);
-  const [choiceIndex, setIndex] = useState(0);
+  const { t } = useTranslation(); // used for i18n
+  const { lgs } = useParams(); // received languange from the param.
+  const [lg, setLg] = useState(" " + lgs); // used for change the css of the text.
+  const [amountNum, setAmount] = useState(1); // used to set the amount of the custom ramen.
+  const [continueClick, setContinue] = useState(false); // used to move the choice of the custom ramen.
+  const [lastChoice, setLastChoice] = useState(false); // used to check that it was a note choice(last choice) or not.
+  const [menuRamen, setMenuRamen] = useState(""); // recieved an information of custom ramen from the database.
+  const [categoryRamen, setCategoryRamen] = useState(""); // recieved an information of custom ramen choice that user selected.
+  const [ramenIcon, setIcon] = useState(Soup); // set the icon image of the custom ramen choice. Initial to be a soup icon (first choice).
+  const [choiceIndex, setIndex] = useState(0); // set the choice that user selected.
   const [inputCategory, setInput] = useState({
+    // collect the user input for sending into a database via API.
     custom: {
       price: 169,
       quantity: 1,
@@ -70,6 +71,7 @@ export default function CustomRamen(props) {
     },
   });
 
+  // This function used to set the language of the place holder.
   const placeHolderRequest = () => {
     if (lgs === "th") {
       return "กรอกความต้องการ";
@@ -80,6 +82,7 @@ export default function CustomRamen(props) {
     }
   };
 
+  // Used to recieved the information of the custom ramen from the database via API.
   useEffect(() => {
     const getDataRamen = async () => {
       await menuService.customRamen().then((data) => {
@@ -92,6 +95,7 @@ export default function CustomRamen(props) {
     }
   }, [menuRamen]);
 
+  // Set name and icon of the category (Choice) to used in custom ramen.
   let category = [
     {
       name: "Broth",
@@ -127,6 +131,7 @@ export default function CustomRamen(props) {
     },
   ];
 
+  // This function used to sending the custom ramen items into local storage.
   const setLocalCustom = () => {
     var tempCustom = [];
     tempCustom = JSON.parse(localStorage.getItem("customRamen")) || [];
@@ -136,6 +141,7 @@ export default function CustomRamen(props) {
     window.location.reload();
   };
 
+  // This function use to change the user choice.
   function changeCategory(value) {
     if (value !== 7) {
       setLastChoice(false);
@@ -149,20 +155,12 @@ export default function CustomRamen(props) {
     setIndex(value);
   }
 
-  // console.log(categoryRamen);
-  // console.log(menuRamen);
-
+  //Recieved an languages from the param.
   useEffect(() => {
     setLg(" " + lgs);
-    // if (props.menu.quantity) {
-    //   setAmount(props.menu.quantity);
-    // }
-    // if (props.menu.comment) {
-    //   setCommentRequest(props.menu.comment);
-    // }
-    //   }, [lgs, props.menu.quantity, props.menu.comment]);
   }, [lgs]);
 
+  //This function used to add or the minus the amount of the custom ramen.
   function clickAmount(type) {
     if (type === "plus") {
       setAmount(amountNum + 1);
@@ -187,6 +185,7 @@ export default function CustomRamen(props) {
     }
   }
 
+  //This function used to click to the previous choice.
   const clickBack = (value) => {
     if (value === 0) {
       setContinue(false);
@@ -195,10 +194,12 @@ export default function CustomRamen(props) {
     }
   };
 
+  //This function used to click to the next choice.
   const clickNext = (value) => {
     changeCategory(value + 1);
   };
 
+  //This function used to collect the user inputed request / comment of the custom ramen.
   const Request = (e) => {
     setInput({
       ...inputCategory,
@@ -209,6 +210,7 @@ export default function CustomRamen(props) {
     });
   };
 
+  //This function used to set input of the custom ramen.
   const selectChoice = (e, images_url) => {
     if (categoryRamen[0].en.category === "Broth") {
       setInput({
@@ -222,7 +224,6 @@ export default function CustomRamen(props) {
           },
         },
       });
-      // { ...inputCategory.custom.images, soup_type: images_url },,
     } else if (categoryRamen[0].en.category === "Noodle") {
       setInput({
         ...inputCategory,
@@ -298,8 +299,6 @@ export default function CustomRamen(props) {
     }
   };
 
-  // console.log(inputCategory);
-  // console.log(props.menu);
   return (
     <div id="detail-popup-section" className="section popup">
       <div id="detail-popup" className="custom-width page-container">
@@ -382,13 +381,9 @@ export default function CustomRamen(props) {
               <h1 className={"md-text" + lg}>{t("customRamen.title")}</h1>
               <h1 className="sm-text k2d">฿ 169.00</h1>
               <div id="detail-desc">
-                <h1 className={"bracket" + lg}>
-                {t("customRamen.Text")}
-                </h1>
+                <h1 className={"bracket" + lg}>{t("customRamen.Text")}</h1>
               </div>
-              <h1 className={"bracket note" + lg}>
-              {t("customRamen.note")}
-              </h1>
+              <h1 className={"bracket note" + lg}>{t("customRamen.note")}</h1>
             </div>
 
             <div id="add-box-section">
@@ -646,7 +641,9 @@ export default function CustomRamen(props) {
                 </div>
               ) : (
                 <div id="note-section">
-                  <h1 className={"bracket"+ lg}>{t("customRamen.noteCook")}</h1>
+                  <h1 className={"bracket" + lg}>
+                    {t("customRamen.noteCook")}
+                  </h1>
                   <textarea
                     className={"bracket comment-box custom-comment" + lg}
                     rows="6"
@@ -670,7 +667,6 @@ export default function CustomRamen(props) {
                   >
                     <img src={minusIcon} alt=""></img>
                   </div>
-                  {/* {amountNum && <h1>Test</h1>} */}
                   <h1 className="md-text od-amount">{amountNum}</h1>
                   <div
                     className="num-icon section"

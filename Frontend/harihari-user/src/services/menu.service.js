@@ -1,5 +1,6 @@
 import http from "../http-common";
 
+// Call the menu api to get the menu information.
 export default new (class MenuService {
   async getMainMenus(value) {
     return await http

@@ -1,12 +1,12 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
-import './i18n'
-import {BrowserRouter} from 'react-router-dom';
-
-import { createStore } from 'redux'
-import { Provider } from 'react-redux'
-import postReducer from './reducers/postReducer'
+//Import
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./App";
+import "./i18n";
+import { BrowserRouter } from "react-router-dom";
+import { createStore } from "redux";
+import { Provider } from "react-redux";
+import postReducer from "./reducers/postReducer";
 const store = createStore(postReducer);
 
 ReactDOM.render(
@@ -14,8 +14,8 @@ ReactDOM.render(
     <BrowserRouter>
       <Provider store={store}>
         <App />
-      </Provider >
+      </Provider>
     </BrowserRouter>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );

@@ -14,10 +14,12 @@ import "../css/element/languageBtn.css";
 import RamenPic from "../images/Mini Logo.png";
 
 export default function Landing() {
-  const { t, i18n } = useTranslation();
-  const { id, lgs } = useParams();
-  const [link, setLink] = useState();
+  const { t, i18n } = useTranslation();     // used for i18n
+  const { id, lgs } = useParams();          // received uid and languange from the param.
+  const [link, setLink] = useState();       // received uid_table from API.
+  const [lg, setLg] = useState(" " + lgs);  // used for change the css of the text.
 
+  // used to call function and set change languange.
   useEffect(() => {
     if (!link) {
       getLink(id);
@@ -26,17 +28,17 @@ export default function Landing() {
     setLg(" " + lgs);
   }, [i18n, lgs, link, id]);
 
+  // used to call api and set uid_table
   const getLink = async (id) => {
     await tableService.getTableById(id).then((data) => setLink(data));
   };
 
+  // used to change the language of the website.
   const clickChangeLanguage = (lng) => {
     let web = "http://localhost:3000/";
     let path = "/table/";
     window.location = web + lng + path + id;
   };
-
-  const [lg, setLg] = useState(" " + lgs);
 
   return (
     <div id="landing" className="section">
@@ -96,7 +98,9 @@ export default function Landing() {
   );
 }
 
-let linkToHome = async (value, lgs) => {
+// This function used to move the user to the Homepage with the user uid.
+// if ther user entered the page with the invalid uid it will send the user to invalid page.
+async function linkToHome(value, lgs) {
   let web = "http://localhost:3000/";
   let path = "/home/";
 
@@ -107,4 +111,4 @@ let linkToHome = async (value, lgs) => {
   } else {
     window.location = web + "invalid";
   }
-};
+}

@@ -1,13 +1,13 @@
+//Import
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { useTranslation } from "react-i18next";
 import tableService from "../services/table.service.js";
 import BillService from "../services/bill.service.js";
-import ConfirmPopup from "./popup/ConfirmPopup.js";
 
 //JS
-import { numberWithCommas } from "../utilities/Number";
-import { getDateTimes } from "../utilities/Time";
+import { numberWithCommas } from "../utilities/Number"; //import function to create a comma in the number variable.
+import { getDateTimes } from "../utilities/Time";       //import function to get the date time format of the bill.
 
 //CSS
 import "../css/page.css";
@@ -21,13 +21,13 @@ import "../css/element/languageBtn.css";
 import HariLogo from "../images/Full Logo.png";
 
 export default function Bill() {
-  const { t, i18n } = useTranslation();
-  const { id, lgs } = useParams();
-  const [link, setLink] = useState();
-  const [lg, setLg] = useState(" " + lgs);
-  const [checkOut, setCheckOut] = useState("");
-  const [cancel, setCancel] = useState(false);
+  const { t, i18n } = useTranslation();         // used for i18n
+  const { id, lgs } = useParams();              // received uid and languange from the param.
+  const [link, setLink] = useState();           // received uid_table from API.
+  const [lg, setLg] = useState(" " + lgs);      // used for change the css of the text.
+  const [checkOut, setCheckOut] = useState(""); // received uid_bill and information of the bill from API
 
+  // used to call function and set change languange.
   useEffect(() => {
     if (!link && !checkOut) {
       getLink(id);
@@ -37,22 +37,28 @@ export default function Bill() {
     setLg(" " + lgs);
   }, [i18n, lgs, link, checkOut, id]);
 
+  // used to change the language of the website.
   const clickChangeLanguage = (lng) => {
     let web = "http://localhost:3000/";
     let path = "/bill/";
     window.location = web + lng + path + id;
   };
 
+  //used to get the order list from the database.
   const getLink = async (uid) => {
     let id = uid.split("$");
     await tableService.getTableById(id[0]).then((data) => setLink(data));
   };
 
+  //used to get the api path of the bill to generate a QR code.
   const getAPIBill = async (uid) => {
     let id = uid.split("$");
     await BillService.summary(id[0]).then((data) => setCheckOut(data));
   };
 
+  //used to make a QR Code to use in the payment process in staff page.
+  // by using and id variable from the getAPIBill function.
+  // It will return an image of the QR Code.
   function makeQR(uid) {
     let qrlink =
       "https://chart.googleapis.com/chart?cht=qr&chl=" +
@@ -62,6 +68,8 @@ export default function Bill() {
     return qrlink;
   }
 
+  // This function used to calculate a subtotal of the bill.
+  // it will return the subtotal of the bill
   const subTotal = (order, custom) => {
     var tempSum = 0;
     if (order) {
@@ -77,13 +85,8 @@ export default function Bill() {
     return tempSum;
   };
 
-  const cancelClick = (toggle) => {
-    setCancel(toggle);
-  };
-
   return (
     <div>
-      {cancel && <ConfirmPopup cancel={cancelClick} page="bill" />}
       <div id="history" className="section">
         <div id="history-container" className="page-container">
           <div id="menu-header-container" className="section">

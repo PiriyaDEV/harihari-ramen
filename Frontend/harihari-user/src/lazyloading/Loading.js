@@ -1,3 +1,6 @@
+//This file used to show a ramen bowl lottie when the user change the page.
+
+//Import
 import React, { Component } from "react";
 import LottieAnimation from "./Lottie";
 import home from "./loading.json";

@@ -1,3 +1,4 @@
+//Import
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { useTranslation } from "react-i18next";
@@ -14,23 +15,24 @@ import "../css/components/History.css";
 import "../css/element/languageBtn.css";
 
 //JS
-import { getDateTimes, getTimes } from "../utilities/Time";
+import { getDateTimes, getTimes } from "../utilities/Time"; //import function to get the date time format of the order history.
 
 //Icon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 export default function History() {
-  const { t, i18n } = useTranslation();
-  const { id, lgs } = useParams();
-  const [link, setLink] = useState();
-  const [lg, setLg] = useState(" " + lgs);
-  const [orderHistory, setOrderHistory] = useState("");
-  const [cancel, setCancel] = useState(false);
-  const [orderSelect, setOrderSelect] = useState("");
-  const [orderIndex, setOrderIndex] = useState("");
-  const [socket, setSocket] = useState(null);
+  const { t, i18n } = useTranslation();                 // used for i18n.
+  const { id, lgs } = useParams();                      // received uid and languange from the param.
+  const [link, setLink] = useState();                   // received uid_table from API.
+  const [lg, setLg] = useState(" " + lgs);              // used for change the css of the text.
+  const [orderHistory, setOrderHistory] = useState(""); // used to collect the order history information of the user.
+  const [cancel, setCancel] = useState(false);          // used for close popup.
+  const [orderSelect, setOrderSelect] = useState("");   // used to identify the order information.
+  const [orderIndex, setOrderIndex] = useState("");     // used to identify the order that user selected to cancel the order.
+  const [socket, setSocket] = useState(null);           // used to set the socket.
 
+  // used to call socket
   useEffect(() => {
     const socketInput = socketIOClient(
       "http://localhost:3030/harihari-customer",
@@ -41,6 +43,7 @@ export default function History() {
     setSocket(socketInput);
   }, [id]);
 
+  // used to set orderHistory if socket on
   useEffect(() => {
     if (socket) {
       socket.on("order-history", (orders) => {
@@ -49,6 +52,7 @@ export default function History() {
     }
   }, [socket]);
 
+  // used to call function and set change languange.
   useEffect(() => {
     if (!link && !orderHistory) {
       getLink(id);
@@ -58,12 +62,14 @@ export default function History() {
     setLg(" " + lgs);
   }, [i18n, lgs, link, orderHistory, id]);
 
+  // used to change the language of the website.
   const clickChangeLanguage = (lng) => {
     let web = "http://localhost:3000/";
     let path = "/history/";
     window.location = web + lng + path + id;
   };
 
+  // used to change langauge of the order status in history page.
   const orderStatusText = (value) => {
     console.log(lgs)
     if(value === "ordered") {
@@ -122,18 +128,20 @@ export default function History() {
     }
   };
 
+  // This function used to call api and set uid_table
   const getLink = async (id) => {
     await tableService.getTableById(id).then((data) => setLink(data));
   };
 
+  // This function used to call api and set information of orderHistory
   const getAPIOrderHistory = async (id) => {
     await orderService
       .getOrderHistory(id)
       .then((data) => setOrderHistory(data));
   };
 
-  console.log(orderHistory);
-
+  // This function used to calculate a subtotal of the order.
+  // it will return the subtotal of the order.
   const subTotal = (order, custom) => {
     var tempSum = 0;
     if (order) {
@@ -149,6 +157,7 @@ export default function History() {
     return tempSum;
   };
 
+  //used to close the confirmation popup and cancel the selected order.
   const cancelClick = (toggle, orderId, index) => {
     setCancel(toggle);
     setOrderSelect(orderId);
@@ -396,6 +405,7 @@ export default function History() {
   );
 }
 
+//This function used to move the user to the Homepage with the user uid.
 let linkToHome = (value, lgs) => {
   let web = "http://localhost:3000/";
   let path = "/home/";

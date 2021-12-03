@@ -1,6 +1,6 @@
 const Menu = require("../models/menu.model");
 
-// add a new main menu to system
+// add a new main menu to the system
 exports.addMain = async (req, res) => {
   // get menu info
   const menu = {
@@ -46,7 +46,7 @@ exports.addMain = async (req, res) => {
   }
 };
 
-// add a custom ramen choice to system
+// add a new custom ramen choice to the system
 exports.addChoice = async (req, res) => {
   // get custom ramen choice info
   const choice = {
@@ -91,7 +91,7 @@ exports.addChoice = async (req, res) => {
   }
 };
 
-// get all main menus
+// get all main menus and details
 exports.getMainMenus = async (req, res) => {
   // base url for menu image
   const base_url = process.env.BASE_URL;
@@ -114,7 +114,7 @@ exports.getMainMenus = async (req, res) => {
   }
 };
 
-// get all custom ramen choice details
+// get all custom ramen choice and details
 exports.getCustomRamen = async (req, res) => {
   // base url for custom ramen choice image
   const base_url = process.env.BASE_URL;

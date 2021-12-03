@@ -1,5 +1,6 @@
 import http from "../http-common";
 
+// Call the table api to get the table information.
 export default new (class TableService {
   async getTables() {
     return await http

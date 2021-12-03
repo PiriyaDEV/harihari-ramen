@@ -1,5 +1,7 @@
+// initial a Month name.
 const shortMonth = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
+// This function used to return the epoch time in the hours:minutes:second format.
 export function getTimes(epoch) {
   const datetime = new Date(epoch);
 
@@ -10,6 +12,7 @@ export function getTimes(epoch) {
   return `${hours}:${minutes}:${seconds}`;
 }
 
+// This function used to return the epoch time in the date:month:year hours:minutes:second format.
 export function getDateTimes(epoch) {
   const datetime = new Date(epoch);
 

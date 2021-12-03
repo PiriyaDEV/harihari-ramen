@@ -5,6 +5,6 @@ export default axios.create({
   headers: {
     "Content-type": "application/json",
     "Sec-Fetch-Site": "cross-site",
-    'Access-Control-Allow-Origin' : "*"
+    "Access-Control-Allow-Origin": "*",
   },
 });

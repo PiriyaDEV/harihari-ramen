@@ -1,3 +1,4 @@
+//Import
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { useTranslation } from "react-i18next";
@@ -14,20 +15,21 @@ import "../css/components/CheckOut.css";
 import "../css/element/languageBtn.css";
 
 //JS
-import { numberWithCommas } from "../utilities/Number";
+import { numberWithCommas } from "../utilities/Number"; //import function to create a comma in the number variable.
 
 //Icon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 
 export default function CheckOut() {
-  const { t, i18n } = useTranslation();
-  const { id, lgs } = useParams();
-  const [link, setLink] = useState();
-  const [lg, setLg] = useState(" " + lgs);
-  const [checkOut, setCheckOut] = useState("");
-  const [cancel, setCancel] = useState(false);
+  const { t, i18n } = useTranslation();          // used for i18n
+  const { id, lgs } = useParams();               // received uid and languange from the param.
+  const [link, setLink] = useState();            // received uid_table from API.
+  const [lg, setLg] = useState(" " + lgs);       // used for change the css of the text.
+  const [checkOut, setCheckOut] = useState("");  // received uid_bill and information of the bill from API
+  const [cancel, setCancel] = useState(false);   // used for close popup
 
+  // used to call function and set change languange.
   useEffect(() => {
     if (!link && !checkOut) {
       getLink(id);
@@ -37,26 +39,33 @@ export default function CheckOut() {
     setLg(" " + lgs);
   }, [i18n, lgs, link, checkOut, id]);
 
+  // used to change the language of the website.
   const clickChangeLanguage = (lng) => {
     let web = "http://localhost:3000/";
     let path = "/checkout/";
     window.location = web + lng + path + id;
   };
 
+  // used to call api and set uid_table
   const getLink = async (id) => {
     await tableService.getTableById(id).then((data) => setLink(data));
   };
 
+  // used to get uid + bill id of the table to create a unique path that avoid user to entered this page.
   const getAPIBill = async (id) => {
     await BillService.summary(id).then((data) => setCheckOut(data));
   };
 
+  // check that user entered the checkout page with the empty basket.
+  // return user to the invalid page.
   if (checkOut) {
     if (checkOut.bill.items.length === 0) {
       window.location = "http://localhost:3000/invalid";
     }
   }
 
+  // This function used to calculate a subtotal of the checkout page.
+  // it will return the subtotal of the checkout page
   const subTotal = (order, custom) => {
     var tempSum = 0;
     if (order) {
@@ -72,6 +81,7 @@ export default function CheckOut() {
     return tempSum;
   };
 
+  //used to close the confirmation popup
   const cancelClick = (toggle) => {
     setCancel(toggle);
   };
@@ -278,21 +288,8 @@ export default function CheckOut() {
   );
 }
 
+//This function used to move the user to the Homepage with the user uid.
 let linkToHome = (value, lgs, path) => {
   let web = "http://localhost:3000/";
   window.location = web + lgs + path + value;
 };
-
-// function CheckTable(link, id) {
-//   for (const index in link) {
-//     if (link[index].guest_uid === id) {
-//       return link[index].table_id;
-//     }
-//   }
-// }
-
-// function CheckHaveTable(numTable, link) {
-//   if (!numTable && link) {
-//     window.location = "http://localhost:3000/invalid";
-//   }
-// }

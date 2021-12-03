@@ -14,12 +14,13 @@ import plusIcon from "../../images/icon/Union 13.svg";
 import minusIcon from "../../images/icon/Union 14.svg";
 
 export default function DetailPopup(props) {
-  const { t } = useTranslation();
-  const { lgs } = useParams();
-  const [lg, setLg] = useState(" " + lgs);
-  const [amountNum, setAmount] = useState(1);
-  const [commentRequest, setCommentRequest] = useState("");
+  const { t } = useTranslation();                           // used for i18n
+  const { lgs } = useParams();                              // received languange from the param.
+  const [lg, setLg] = useState(" " + lgs);                  // used for change the css of the text.
+  const [amountNum, setAmount] = useState(1);               // used to set the amount of the custom ramen.
+  const [commentRequest, setCommentRequest] = useState(""); //used to collect the request / comment of the order.
 
+  // This function used to set the language of the place holder.
   const placeHolderRequest = () => {
     if (lgs === "th") {
       return "กรอกความต้องการ";
@@ -30,6 +31,8 @@ export default function DetailPopup(props) {
     }
   };
 
+  // Used to recieved and set the information of the order from the parent
+  // and used to recieved an languages from the param.
   useEffect(() => {
     setLg(" " + lgs);
     if (props.menu.quantity) {
@@ -40,6 +43,7 @@ export default function DetailPopup(props) {
     }
   }, [lgs, props.menu.quantity, props.menu.comment]);
 
+  //This function used to add or the minus the amount of the order.
   function clickAmount(type) {
     if (type === "plus") {
       setAmount(amountNum + 1);
@@ -50,11 +54,11 @@ export default function DetailPopup(props) {
     }
   }
 
+  //This function used to collect the user inputed request / comment of the order.
   const Request = (e) => {
     setCommentRequest(e.target.value);
   };
 
-  // console.log(props.menu);
   return (
     <div id="detail-popup-section" className="section popup">
       <div id="detail-popup" className="page-container">
@@ -76,7 +80,9 @@ export default function DetailPopup(props) {
                   {lgs === "en" && <span>{props.menu.en.name}</span>}
                   {lgs === "jp" && <span>{props.menu.jp.name}</span>}
                 </h1>
-                <h1 className="sm-text k2d menu-price bold">฿ {props.menu.price}</h1>
+                <h1 className="sm-text k2d menu-price bold">
+                  ฿ {props.menu.price}
+                </h1>
               </div>
 
               <div id="detail-desc">
@@ -111,7 +117,6 @@ export default function DetailPopup(props) {
               >
                 <img src={minusIcon} alt=""></img>
               </div>
-              {/* {amountNum && <h1>Test</h1>} */}
               <h1 className="md-text od-amount">{amountNum}</h1>
               <div
                 className="num-icon section"

@@ -3,7 +3,6 @@
   width: 100%;
   margin: 40px 0px 0px 0px;
   position: relative;
-  /* background-color: #d0ccd0; */
   border-top: 1px solid #232322;
   border-bottom: 1px solid #232322;
   border-right: 0px;
@@ -20,7 +19,6 @@
   border-radius: 500px;
   position: absolute;
   background-color: #e14842;
-  /* border: 1px solid #232322; */
   border-top: 1px solid #232322;
   border-bottom: 1px solid #232322;
   height: 5px;
@@ -67,7 +65,6 @@
 @-webkit-keyframes pulse {
   0% {
     background-color: #bdbdbf;
-    /* background-color: rgb(165, 81, 78);; */
   }
   100% {
     background-color: #e14842;

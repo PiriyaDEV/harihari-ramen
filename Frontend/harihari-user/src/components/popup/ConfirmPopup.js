@@ -1,6 +1,5 @@
 //Import
 import React, { useState, useEffect } from "react";
-// import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 import OrderService from "../../services/order.service.js";
 import { useTranslation } from "react-i18next";
@@ -15,10 +14,13 @@ import closeImg from "../../images/icon/Cancel Icon.svg";
 import checkImg from "../../images/icon/Check Icon.png";
 
 export default function ConfirmOrder(props) {
-  const { id, lgs } = useParams();
-  const [lg, setLg] = useState(" " + lgs);
-  const { t } = useTranslation();
+  const { id, lgs } = useParams(); // received uid and languange from the param.
+  const [lg, setLg] = useState(" " + lgs); // used for change the css of the text.
+  const { t } = useTranslation(); // used for i18n
 
+  //This function to order the item into the database.
+  // if the result is success it will close the popup and return to website with user uid.
+  // if the result is wrong it will change move the user into invalid page.
   const orderItem = async () => {
     let web = "http://localhost:3000/";
     let path = "/home/";
@@ -49,10 +51,14 @@ export default function ConfirmOrder(props) {
     }
   };
 
+  //Recieved an languages from the param.
   useEffect(() => {
     setLg(" " + lgs);
   }, [lgs]);
 
+  // This function used to cancel the order that belong in "ordered" status.
+  // if the result is success it will close the popup and return to website with user uid.
+  // if the result is wrong it will change move the user into invalid page.
   const cancelOrder = async (orderId) => {
     let web = "http://localhost:3000/";
     let path = "/history/";
@@ -160,6 +166,7 @@ export default function ConfirmOrder(props) {
   );
 }
 
+//This function used to move the user to the Homepage with the user uid.
 let linkToHome = (id, uid, lgs, path) => {
   let web = "http://localhost:3000/";
   window.location = web + lgs + path + id + "$" + uid;
