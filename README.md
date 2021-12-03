@@ -66,7 +66,7 @@ that end by .model.js
 You have to create a new database in MySQL and uses below sql file to build the tables and insert data used in the database.
 
 ```
-- import "harihari_demo.sql" to create a table and demo data in to the application.
+- import "harihari_demo.sql" from Backend Directory to create a table and demo data in to the application.
 ```
 
 ## Created by Hari Hari Ramen Group Member (CPE33 International)
