@@ -1,6 +1,6 @@
 const Bill = require("../models/bill.model");
 
-// summarized bill
+// summarized for that specific bill
 exports.summary = async (req, res) => {
   // get table info
   const table = req.body.table;
@@ -12,7 +12,7 @@ exports.summary = async (req, res) => {
     // get bill info
     let billResult = await Bill.getLatestBillByTable(bill);
 
-    // get bill summary
+    // get bill for main menu and custom menu
     let billSummary = await Bill.getBillSummary(billResult);
     let billCustomSummary = await Bill.getBillCustomSummary(billResult);
 

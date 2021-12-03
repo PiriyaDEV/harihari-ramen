@@ -1,9 +1,5 @@
 -- Hari Hari Ramen Database Foreign Keys --
 
-
-
-
-
 -- Add Foreign Key To Bills Table
 ALTER TABLE bills
   ADD FOREIGN KEY (table_id)    REFERENCES tables(table_id)

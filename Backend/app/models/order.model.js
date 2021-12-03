@@ -135,7 +135,7 @@ exports.getSubtotalByOrder = async (order) => {
   try {
     const [result, fields] = await sql.query(
       `SELECT
-          SUM(O.quantity * M.price) + SUM(O.quantity * C.price) AS subtotal
+        COALESCE(SUM(O.quantity * M.price), 0) + COALESCE(SUM(O.quantity * C.price), 0) AS subtotal
         FROM
           order_menus O
           LEFT JOIN main_menus M ON O.product_id = M.product_id
