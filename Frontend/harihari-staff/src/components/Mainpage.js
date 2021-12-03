@@ -11,23 +11,27 @@ import "../css/text.css";
 import "../css/components/Mainpage.css";
 import "../css/components/Popup.css";
 
+//JS
+import { getTimes } from "../utilities/Time"; //import function to get the date time format.
+
 //Icon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle, faBell } from "@fortawesome/free-solid-svg-icons";
 import closeIcon from "../images/Union 12.svg";
 
 export default function Mainpage() {
-  const [link, setLink] = useState();                     // received uid_table from API.
-  const [order, setOrder] = useState();                   // used to collect the order history information of the user.
-  const [selectedTable, setCurrentTable] = useState(1);   // used to set the current / selected table.
-  const [qrPopup, setQR] = useState(false);               // used to toggle to open the QR Code of table.
-  const [showCam, setShowCam] = useState(false);          // used to toggle to open the camera to scan the bill.
-  const [orderMenu, setOrderMenu] = useState();           // received information of order from API.
-  const [customMenu, setCustomMenu] = useState();         // received information of customRamen from API.
-  const [orderSelect, setOrderSelect] = useState(false);  // used to toggle to open the orderHistory by order.
-  const [selectOrder, setSelectOrder] = useState("");     // used to set index of order.
-  const [showCheckOut, setCheckOut] = useState(false);    // used to toggle to show that payment status is success.
-  const [socket, setSocket] = useState(null);             // used to set the socket.
+  const [link, setLink] = useState(); // received uid_table from API.
+  const [order, setOrder] = useState(); // used to collect the order history information of the user.
+  const [selectedTable, setCurrentTable] = useState(1); // used to set the current / selected table.
+  const [qrPopup, setQR] = useState(false); // used to toggle to open the QR Code of table.
+  const [showCam, setShowCam] = useState(false); // used to toggle to open the camera to scan the bill.
+  const [orderMenu, setOrderMenu] = useState(); // received information of order from API.
+  const [customMenu, setCustomMenu] = useState(); // received information of customRamen from API.
+  const [orderSelect, setOrderSelect] = useState(false); // used to toggle to open the orderHistory by order.
+  const [selectOrder, setSelectOrder] = useState(""); // used to set index of order.
+  const [showCheckOut, setCheckOut] = useState(false); // used to toggle to show that payment status is success.
+  const [socket, setSocket] = useState(null); // used to set the socket.
+  const [checkinTime, setCheckIn] = useState(); // used the collect a check in time.
 
   // used to call socket
   useEffect(() => {
@@ -67,6 +71,7 @@ export default function Mainpage() {
     if (result.success) {
       setCheckOut(true);
       setQR(true);
+      window.location.reload();
     }
   };
 
@@ -79,7 +84,10 @@ export default function Mainpage() {
 
   // use to set selectedTable before render.
   useLayoutEffect(() => {
-    if (link) getOrder(link[selectedTable - 1].guest_uid);
+    if (link) {
+      getOrder(link[selectedTable - 1].guest_uid);
+      getTableById(link[selectedTable - 1].guest_uid);
+    }
   }, [link, selectedTable]);
 
   //This function used to open the selected table that staff open the QRCode.
@@ -93,6 +101,13 @@ export default function Mainpage() {
   const getLink = async () => {
     return await tableService.getTables().then((data) => {
       setLink(data);
+    });
+  };
+
+  // used to call api and get checkin time of selected table.
+  const getTableById = async (uid) => {
+    return await tableService.getTableById(uid).then((data) => {
+      setCheckIn(data.checkin_at);
     });
   };
 
@@ -332,7 +347,14 @@ export default function Mainpage() {
                     <h1 id="myTableId" className="sm-text bold">
                       Table {selectedTable}
                     </h1>
-                    <h1 className="sm-text">Check-in time: 15:45:03</h1>
+                    <h1 className="sm-text">
+                      Check-in time:
+                      {checkinTime ? (
+                        <span> {getTimes(checkinTime)}</span>
+                      ) : (
+                        <span> -</span>
+                      )}
+                    </h1>
                   </div>
                   <div>
                     <div>
@@ -377,19 +399,29 @@ export default function Mainpage() {
                             />
                             {x.order_id}
                           </h1>
-                          <select
-                            onChange={changeStatus}
-                            onClick={() => getIndexStatus(x)}
-                            value={x.status}
-                            className="sm-text"
-                          >
-                            <option value="ordered">Ordered</option>
-                            <option value="received">Received</option>
-                            <option value="preparing">Preparing</option>
-                            <option value="serving">Serving</option>
-                            <option value="served">Served</option>
-                            <option value="cancel">Cancel</option>
-                          </select>
+                          {x.status !== "cancel" ? (
+                            <select
+                              onChange={changeStatus}
+                              onClick={() => getIndexStatus(x)}
+                              value={x.status}
+                              className="sm-text select-choice"
+                            >
+                              <option value="ordered">Ordered</option>
+                              <option value="received">Received</option>
+                              <option value="preparing">Preparing</option>
+                              <option value="serving">Serving</option>
+                              <option value="served">Served</option>
+                            </select>
+                          ) : (
+                            <select
+                              value={x.status}
+                              className="sm-text select-choice"
+                            >
+                              <option value="cancel" disabled>
+                                Cancel
+                              </option>
+                            </select>
+                          )}
                         </div>
                       ))}
                   </div>

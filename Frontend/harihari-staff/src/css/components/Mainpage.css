@@ -394,7 +394,11 @@
   padding: 3px 10px;
 }
 
-.gray-text{
+.select-choice {
+  width: 30%;
+}
+
+.gray-text {
   color: #8e8e8e !important;
 }
 

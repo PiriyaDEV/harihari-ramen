@@ -25,6 +25,10 @@
   z-index: 5;
 }
 
+.cancel-header {
+  background: #cecece 0% 0% no-repeat padding-box !important;
+}
+
 .history-info {
   padding-top: 35px;
   margin-top: -20px;

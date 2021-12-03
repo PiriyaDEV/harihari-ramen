@@ -89,6 +89,7 @@
         },
         "button": {
             "confirm": "Confirm",
+            "add" : "Add to basket",
             "back": "Back",
             "next": "Next",
             "continue":" Continue",

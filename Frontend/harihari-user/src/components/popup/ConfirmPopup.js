@@ -36,15 +36,17 @@ export default function ConfirmOrder(props) {
       });
     }
 
-    props.menuCustom.forEach((custom) => {
-      delete custom.images;
-    });
+    if (props.menuCustom) {
+      props.menuCustom.forEach((custom) => {
+        delete custom.images;
+      });
+    }
 
     let result = await OrderService.createOrder(items, props.menuCustom, id);
 
     if (result.success) {
-      localStorage.removeItem("items");
-      localStorage.removeItem("customRamen");
+      localStorage.setItem("customRamen", JSON.stringify([]));
+      localStorage.setItem("items", JSON.stringify([]));
       window.location = web + lgs + path + id;
     } else {
       window.location = web + "invalid";

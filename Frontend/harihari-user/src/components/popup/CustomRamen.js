@@ -713,7 +713,7 @@ export default function CustomRamen(props) {
                   id="add-box"
                   className="custom-padding continue-box gray-box"
                 >
-                  <h1 className={"sm-text" + lg}>{t("popup.button.order")}</h1>
+                  <h1 className={"sm-text" + lg}>{t("popup.button.add")}</h1>
                 </div>
               ) : (
                 <div
@@ -721,7 +721,7 @@ export default function CustomRamen(props) {
                   className="custom-padding done-box section"
                   onClick={() => setLocalCustom()}
                 >
-                  <h1 className={"sm-text" + lg}>{t("popup.button.order")}</h1>
+                  <h1 className={"sm-text" + lg}>{t("popup.button.add")}</h1>
                 </div>
               )}
             </div>

@@ -89,6 +89,7 @@
         },
         "button": {
             "confirm": "確認",
+            "add" : "バスケットに追加",
             "back": "戻る",
             "next": "次",
             "continue":" 継続する",

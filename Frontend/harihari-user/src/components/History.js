@@ -22,15 +22,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 export default function History() {
-  const { t, i18n } = useTranslation();                 // used for i18n.
-  const { id, lgs } = useParams();                      // received uid and languange from the param.
-  const [link, setLink] = useState();                   // received uid_table from API.
-  const [lg, setLg] = useState(" " + lgs);              // used for change the css of the text.
+  const { t, i18n } = useTranslation(); // used for i18n.
+  const { id, lgs } = useParams(); // received uid and languange from the param.
+  const [link, setLink] = useState(); // received uid_table from API.
+  const [lg, setLg] = useState(" " + lgs); // used for change the css of the text.
   const [orderHistory, setOrderHistory] = useState(""); // used to collect the order history information of the user.
-  const [cancel, setCancel] = useState(false);          // used for close popup.
-  const [orderSelect, setOrderSelect] = useState("");   // used to identify the order information.
-  const [orderIndex, setOrderIndex] = useState("");     // used to identify the order that user selected to cancel the order.
-  const [socket, setSocket] = useState(null);           // used to set the socket.
+  const [cancel, setCancel] = useState(false); // used for close popup.
+  const [orderSelect, setOrderSelect] = useState(""); // used to identify the order information.
+  const [orderIndex, setOrderIndex] = useState(""); // used to identify the order that user selected to cancel the order.
+  const [socket, setSocket] = useState(null); // used to set the socket.
 
   // used to call socket
   useEffect(() => {
@@ -71,59 +71,59 @@ export default function History() {
 
   // used to change langauge of the order status in history page.
   const orderStatusText = (value) => {
-    console.log(lgs)
-    if(value === "ordered") {
-      if(lgs === "en") {
-        return "Ordered"
-      }else if(lgs === "th") {
-        return "สั่งอาหารแล้ว"
+    console.log(lgs);
+    if (value === "ordered") {
+      if (lgs === "en") {
+        return "Ordered";
+      } else if (lgs === "th") {
+        return "สั่งอาหารแล้ว";
       } else {
-        return "順序付けられました"
+        return "順序付けられました";
       }
     }
-    if(value === "received") {
-      if(lgs === "en") {
-        return "Received Ordered"
-      } else if(lgs === "th") {
-        return "รับออร์เดอร์แล้ว"
+    if (value === "received") {
+      if (lgs === "en") {
+        return "Received Ordered";
+      } else if (lgs === "th") {
+        return "รับออร์เดอร์แล้ว";
       } else {
-        return "受注"
+        return "受注";
       }
     }
-    if(value === "cancel") {
-      if(lgs === "en") {
-        return "Cancel"
-      }else if(lgs === "th") {
-        return "ยกเลิกอาหาร"
+    if (value === "cancel") {
+      if (lgs === "en") {
+        return "Cancel";
+      } else if (lgs === "th") {
+        return "ยกเลิกอาหาร";
       } else {
-        return "食べ物をキャンセルする"
+        return "食べ物をキャンセルする";
       }
     }
-    if(value === "served") {
-      if(lgs === "en") {
-        return "Served"
-      }else if(lgs === "th") {
-        return "เสิร์ฟแล้ว"
+    if (value === "served") {
+      if (lgs === "en") {
+        return "Served";
+      } else if (lgs === "th") {
+        return "เสิร์ฟแล้ว";
       } else {
-        return "提供"
+        return "提供";
       }
     }
-    if(value === "preparing") {
-      if(lgs === "en") {
-        return "Preparing Order"
-      }else if(lgs === "th") {
-        return "กำลังทำอาหาร"
+    if (value === "preparing") {
+      if (lgs === "en") {
+        return "Preparing Order";
+      } else if (lgs === "th") {
+        return "กำลังทำอาหาร";
       } else {
-        return "注文の準備"
+        return "注文の準備";
       }
     }
-    if(value === "serving") {
-      if(lgs === "en") {
-        return "Serving"
-      }else if(lgs === "th") {
-        return "กำลังเสิร์ฟ"
+    if (value === "serving") {
+      if (lgs === "en") {
+        return "Serving";
+      } else if (lgs === "th") {
+        return "กำลังเสิร์ฟ";
       } else {
-        return "サービング"
+        return "サービング";
       }
     }
   };
@@ -222,7 +222,11 @@ export default function History() {
             {orderHistory &&
               orderHistory.map((history, order) => (
                 <div>
-                  <div className="history-header">
+                  <div
+                    className={`history-header ${
+                      history.status === "cancel" ? "cancel-header" : null
+                    }`}
+                  >
                     <div>
                       <h1 className={"md-text" + lg}>
                         {t("history.order")} {history.order_id}
@@ -248,7 +252,11 @@ export default function History() {
                     </div>
                   </div>
 
-                  <div className="history-info">
+                  <div
+                    className={`history-info ${
+                      history.status === "cancel" ? "cancel-header" : null
+                    }`}
+                  >
                     <div>
                       <div className="history-box">
                         {history &&
@@ -371,15 +379,21 @@ export default function History() {
                       </div>
 
                       {history && history.status !== "ordered" ? (
-                        <button
-                          className={"cancel-btn disable section md-text" + lg}
-                        >
-                          <FontAwesomeIcon
-                            icon={faTimes}
-                            className="close-fa"
-                          />
-                          <span>{t("history.cancel")}</span>
-                        </button>
+                        <div>
+                          {history.status !== "cancel" && (
+                            <button
+                              className={
+                                "cancel-btn disable section md-text" + lg
+                              }
+                            >
+                              <FontAwesomeIcon
+                                icon={faTimes}
+                                className="close-fa"
+                              />
+                              <span>{t("history.cancel")}</span>
+                            </button>
+                          )}
+                        </div>
                       ) : (
                         <button
                           className={"cancel-btn section md-text" + lg}

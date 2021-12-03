@@ -32,4 +32,15 @@ export default new (class TableService {
         return error.response;
       });
   }
+  async getTableById(uid) {
+    return await http
+      .get("/table/getTableById", { headers: { "x-access-token": uid }})
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        window.location = "http://localhost:3000/invalid";
+        return error.response;
+      });
+  }
 })();

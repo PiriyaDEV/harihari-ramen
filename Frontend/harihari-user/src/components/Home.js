@@ -26,20 +26,20 @@ import { getTimes } from "../utilities/Time"; //import function to get the date 
 import RamenPic from "../images/Mini Logo.png";
 
 export default function Home() {
-  const { id, lgs } = useParams();                                  // received uid and languange from the param.       
-  const [width, setWidth] = useState(0);                            // used to set the width of the order status ball.
-  const intermediaryBalls = 2;                                      // used to initial the order status ball.
-  const calculatedWidth = (width / (intermediaryBalls + 1)) * 100;  // used to calculate a width of the order status ball.
-  const { t, i18n } = useTranslation();                             // used for i18n.
-  const [link, setLink] = useState();                               // received uid_table from API.
-  const [orderHistory, setOrderHistory] = useState("");             // used to collect the order history information of the user.
-  const [callWaiter, setWaiter] = useState(false);                  // used to set css button of call waiter
-  const [lg, setLg] = useState(" " + lgs);                          // used for change the css of the text.
-  const [alertPopup, setAlert] = useState(false);                   // used to check alert and close popup.
-  const [checkOut, setCheckOut] = useState("");                     // received uid_bill and information of the bill from API
-  const [socket, setSocket] = useState(null);                       // used to set the socket.
-  const [checkHistory, setChectHistory] = useState();               // used to collect all of the order history information.
-  const [text, setText] = useState();                               // used to set order text.
+  const { id, lgs } = useParams(); // received uid and languange from the param.
+  const [width, setWidth] = useState(0); // used to set the width of the order status ball.
+  const intermediaryBalls = 2; // used to initial the order status ball.
+  const calculatedWidth = (width / (intermediaryBalls + 1)) * 100; // used to calculate a width of the order status ball.
+  const { t, i18n } = useTranslation(); // used for i18n.
+  const [link, setLink] = useState(); // received uid_table from API.
+  const [orderHistory, setOrderHistory] = useState(""); // used to collect the order history information of the user.
+  const [callWaiter, setWaiter] = useState(false); // used to set css button of call waiter
+  const [lg, setLg] = useState(" " + lgs); // used for change the css of the text.
+  const [alertPopup, setAlert] = useState(false); // used to check alert and close popup.
+  const [checkOut, setCheckOut] = useState(""); // received uid_bill and information of the bill from API
+  const [socket, setSocket] = useState(null); // used to set the socket.
+  const [checkHistory, setChectHistory] = useState(); // used to collect all of the order history information.
+  const [text, setText] = useState(); // used to set order text.
 
   // used to call socket
   useEffect(() => {
@@ -182,7 +182,9 @@ export default function Home() {
 
   return (
     <div>
-      {alertPopup && <ConfirmPopup cancel={cancelClick} text={text} page="home" />}
+      {alertPopup && (
+        <ConfirmPopup cancel={cancelClick} text={text} page="home" />
+      )}
       <div id="home" className="section">
         <div id="home-container" className="page-container">
           <div>
@@ -260,9 +262,15 @@ export default function Home() {
 
               <div className="timeline">
                 <div
-                  className="timeline__progress"
+                  className={`timeline__progress ${
+                    orderHistory &&
+                    orderHistory.every((order) => order.status === "served" || order.status === "cancel")
+                      ? "timeline_inactive"
+                      : null
+                  }`}
                   style={{ width: `${calculatedWidth}%` }}
                 />
+
                 {timeLineBalls(intermediaryBalls + 2, width, orderStatusText)}
               </div>
             </div>
@@ -279,24 +287,26 @@ export default function Home() {
                   {t("orderFood.2")}
                 </h1>
               </div>
-              <div
-                className="menu-box"
-                onClick={() =>
-                  CheckValid(
-                    "history",
-                    id,
-                    lgs,
-                    checkHistory,
-                    getTextToAlert,
-                    checkOut.bill.items
-                  )
-                }
-              >
-                <h1 className={"md-text" + lg}>
-                  {t("orderHistory.1")} <br />
-                  {t("orderHistory.2")}
-                </h1>
-              </div>
+              { checkOut &&
+                <div
+                  className="menu-box"
+                  onClick={() =>
+                    CheckValid(
+                      "history",
+                      id,
+                      lgs,
+                      checkHistory,
+                      getTextToAlert,
+                      checkOut.bill.items
+                    )
+                  }
+                >
+                  <h1 className={"md-text" + lg}>
+                    {t("orderHistory.1")} <br />
+                    {t("orderHistory.2")}
+                  </h1>
+                </div>
+              }
             </div>
 
             <div className="menu-container">
@@ -314,6 +324,7 @@ export default function Home() {
                   {t("callWaiter.2")}
                 </h1>
               </div>
+              { checkOut &&
               <div
                 onClick={() =>
                   CheckValid(
@@ -332,6 +343,7 @@ export default function Home() {
                   {t("checkOut.2")}
                 </h1>
               </div>
+              }
             </div>
           </div>
         </div>
@@ -354,12 +366,18 @@ function MenuSelect(page, value, lgs) {
 function CheckValid(page, value, lgs, orderHistory, getTextToAlert, billItem) {
   let web = "http://localhost:3000/";
   let path = "/" + page + "/";
+
+  
   //Case of the checkout page
   if (page === "checkout") {
-    if (orderHistory.length === 0 && billItem.length !== 0) {
-      window.location = web + lgs + path + value;
-    } else {
-      getTextToAlert("checkOut");
+    if (orderHistory) {
+      if (
+        orderHistory.every((order) => order.status === "served" || order.status === "cancel") 
+      ) {
+        window.location = web + lgs + path + value;
+      } else {
+        getTextToAlert("checkOut");
+      }
     }
   }
 
