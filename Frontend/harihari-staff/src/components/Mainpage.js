@@ -414,7 +414,7 @@ export default function Mainpage() {
                             </select>
                           ) : (
                             <select
-                              value={x.status}
+                              defaultValue={x.status}
                               className="sm-text select-choice"
                             >
                               <option value="cancel" disabled>
